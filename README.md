@@ -20,12 +20,11 @@ This Plugin is not in the Community Applications (yet) so you need to manually i
 
 ## Features
 
-### UI Enhancements
 - **Script Categories**: Organize scripts into collapsible categories
 - **View Modes**: Two view modes can be used List & Panel
 - **Clean Interface**: Hide unwanted elements to reduce page size
 - **Custom CSS**: Adjust the appearance to match your theme
-- **Export**: Export your scripts like they are stored on your drive or directly as usable .sh files
+- **Export**: Export your scripts as they are stored on your drive or directly as usable .sh files
 
 ![UserScripts Page](images/page_userscripts.png)
 *Enhanced Userscripts interface*
