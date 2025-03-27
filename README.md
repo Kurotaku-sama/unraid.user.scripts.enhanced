@@ -15,8 +15,8 @@ This Plugin is not in the Community Applications (yet) so you need to manually i
    ```bash
    cd /boot/config/plugins
    wget https://github.com/Kurotaku-sama/user.scripts.enhanced/raw/main/user.scripts.enhanced.plg
+   plugin install /boot/config/plugins/user.scripts.enhanced.plg
    ```
-4. Install the .plg file via the plugins page
 
 ## Features
 
