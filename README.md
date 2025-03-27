@@ -14,7 +14,7 @@ This Plugin is not in the Community Applications (yet) so you need to manually i
 3. Run:
    ```bash
    cd /boot/config/plugins
-   wget https://github.com/Kurotaku-sama/user.scripts.enhanced/raw/main/user.scripts.enhanced.plg
+   wget https://github.com/Kurotaku-sama/unraid.user.scripts.enhanced/raw/main/user.scripts.enhanced.plg
    plugin install /boot/config/plugins/user.scripts.enhanced.plg
    ```
 
