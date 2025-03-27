@@ -1,0 +1,322 @@
+/* ========================
+   Default Table
+   ======================== */
+
+.content > table {
+    display: none;
+}
+
+/* ========================
+   Categories Container
+   ======================== */
+
+#categories-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+.category .category-header {
+    font-weight: bold;
+    color: #f2f2f2;
+    background: linear-gradient(90deg,#e22828 0,#ff8c2f);
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    border-radius: 5px;
+    user-select: none;
+}
+
+.category-content {
+    border-radius: 5px;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0 0 5px 5px;
+    box-sizing: border-box;
+    background: linear-gradient(90deg,#e22828 0,#ff8c2f) 0 0 no-repeat,
+                linear-gradient(90deg,#e22828 0,#ff8c2f) 0 100% no-repeat,
+                linear-gradient(0deg,#e22828 0,#e22828) 0 100% no-repeat,
+                linear-gradient(0deg,#ff8c2f 0,#ff8c2f) 100% 100% no-repeat;
+    background-size: 100% 2px,100% 2px,2px 100%,2px 100%;
+}
+
+/* ========================
+   Collapse
+   ======================== */
+
+.category:not(.collapsed) .category-header {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.category.collapsed .category-header {
+    transition: border-radius 0s ease 0.5s;
+}
+
+.category-content {
+    transition: max-height 0.5s ease;
+    max-height: 0;
+}
+
+.category:not(.collapsed) .category-content {
+    max-height: unset;
+}
+
+/* ========================
+   Category Controls
+   ======================== */
+
+.category-controls {
+    margin: 10px 0 10px 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.category-controls .category-controls-right {
+    display: flex;
+    gap: 5px;
+}
+
+.category-controls input {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+/* ========================
+   Scripts Container
+   ======================== */
+
+.category-scripts {
+    margin: 10px;
+}
+
+.category-scripts tr td:first-child > font {
+    display: flex;
+    align-items: center;
+}
+
+.category-scripts tr td:first-child > font > b {
+    display: flex;
+    overflow: hidden;
+}
+
+.category-scripts tr td:first-child > font > b > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ========================
+   View Modes: List
+   ======================== */
+
+.category-content.vm-list .category-scripts tr {
+   display: flex;
+   align-items: center;
+}
+
+.category-content.vm-list .category-scripts tr:not(:last-child) {
+    border-bottom: 1px solid var(--base09);
+}
+
+.category-content.vm-list .category-scripts .ca_descEdit {
+    width: 98%;
+}
+
+.category-content.vm-list .category-scripts tr td:first-child > font {
+    margin-top: 5px;
+}
+
+/* ========================
+   View Modes: Panel
+   ======================== */
+
+.category-content.vm-panel .category-scripts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 Panels per row */
+    gap: 10px;
+}
+
+.category-content.vm-panel .category-scripts tr {
+    flex-wrap: wrap;
+    display: flex;
+    border-radius: 5px;
+    padding: 10px;
+    min-width: 0;
+    background: linear-gradient(90deg,#e22828 0,#ff8c2f) 0 0 no-repeat,linear-gradient(90deg,#e22828 0,#ff8c2f) 0 100% no-repeat,linear-gradient(0deg,#e22828 0,#e22828) 0 100% no-repeat,linear-gradient(0deg,#ff8c2f 0,#ff8c2f) 100% 100% no-repeat;
+    background-size: 100% 2px,100% 2px,2px 100%,2px 100%;
+}
+
+.category-content.vm-panel .category-scripts tr td:first-child {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.category-content.vm-panel .category-scripts tr td:not(:first-child) {
+    width: calc(50% - 5px);
+    display: flex;
+    align-items: center;
+}
+
+.category-content.vm-panel .category-scripts tr td:last-child > font {
+    margin-left: auto;
+}
+
+.category-content.vm-panel .category-scripts tr td:nth-child(2) input,
+.category-content.vm-panel .category-scripts tr td:nth-child(3) input {
+    width: 100%;
+    display: block;
+}
+
+.category-content.vm-panel .category-scripts tr td:nth-child(4),
+.category-content.vm-panel .category-scripts tr td:nth-child(5),
+.category-content.vm-panel .category-scripts tr td:nth-child(6),
+.category-content.vm-panel .category-scripts tr td:nth-child(7) {
+    margin-top:15px;
+}
+
+@media (max-width: 1600px) {
+    .category-content.vm-panel .category-scripts {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1200px) {
+    .category-content.vm-panel .category-scripts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .category-content.vm-panel .category-scripts {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+/* ========================
+   SWAL Add Script Dialog
+   ======================== */
+
+.swal-add-script {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.swal-add-script label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#script-selection {
+    list-style: none;
+    padding: 0;
+    min-width:100%;
+    overflow-y: auto;
+    background-image: none;
+}
+
+#add-script-button {
+    width: 200px;
+    margin: 5px auto 10px;
+}
+
+.swal-add-script p {
+    font-weight: bold;
+}
+
+#added-scripts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 100%;
+    overflow-y: auto;
+    max-height: 200px;
+}
+
+#added-scripts li {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+#added-scripts li input {
+    margin-top: 0;
+}
+
+/* ========================
+   Move Buttons
+   ======================== */
+
+input.move-up {
+    margin-right: 5px;
+}
+
+input.move-up,
+input.move-down {
+    width: 40px;
+    min-width: 40px;
+}
+
+/* ========================
+   Description
+   ======================== */
+
+.ca_descEdit {
+    word-break: break-all;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    white-space: normal;
+    display: inline-block;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.ca_descEdit.desc-hidden {
+    color: transparent;
+    background-color: transparent;
+    user-select: none;
+    font-size: 0px;
+}
+
+.ca_descEdit textarea {
+    width: 95%;
+    max-height: 150px;
+}
+
+/* ========================
+   Edit Script
+   ======================== */
+
+#editScriptName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+/* ========================
+   Save Panel
+   ======================== */
+
+#save-panel {
+    position: fixed;
+    left: 10px;
+    bottom: 25px;
+    color: #f2f2f2;
+    background: linear-gradient(90deg,#e22828 0,#ff8c2f);
+    border-radius: 5px;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000;
+    font-size: 14px;
+    font-weight: bold;
+}

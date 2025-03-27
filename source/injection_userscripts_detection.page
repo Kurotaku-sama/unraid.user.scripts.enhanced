@@ -1,0 +1,41 @@
+Menu="Buttons"
+Link="nav-user"
+---
+<?
+require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/config_loader.php";
+
+if($cfg_enabled == "no")
+    return;
+
+$current_url = $_SERVER['REQUEST_URI'];
+
+// Create array of the urls where the script is supposed to run
+$allowed_urls = array_filter([
+    $cfg_url_default,
+    $cfg_url_custom_1 ?: null,
+    $cfg_url_custom_2 ?: null
+]);
+
+// If URL is not in the allowed list do not execute the script
+if(!in_array($current_url, $allowed_urls))
+    return;
+?>
+
+<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/page_userscripts.css")?>">
+
+<script>
+const cfg_plugin = "<?=$plugin?>";
+const cfg_default_view_mode = "<?=$cfg_view_mode?>";
+const cfg_default_collapsed = "<?=$cfg_default_collapsed?>";
+const cfg_uncategorized_collapsed = "<?=$cfg_uncategorized_collapsed?>";
+const cfg_capitalized = "<?=$cfg_capitalized?>";
+const cfg_save_delay = "<?=$cfg_save_delay?>";
+const cfg_custom_css = "<?=$cfg_custom_css?>";
+const cfg_hide_description = "<?=$cfg_hide_description?>";
+const cfg_hide_what_is_cron = "<?=$cfg_hide_what_is_cron?>";
+const cfg_hide_credits = "<?=$cfg_hide_credits?>";
+const cfg_hide_how_to_add_scripts = "<?=$cfg_hide_how_to_add_scripts?>";
+const cfg_hide_help = "<?=$cfg_hide_help?>";
+</script>
+
+<script src="<?=autov("/plugins/$plugin/user.scripts.enhanced.js")?>"></script>

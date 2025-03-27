@@ -1,0 +1,54 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE PLUGIN [
+<!ENTITY name      "user.scripts.enhanced">
+<!ENTITY author    "Kurotaku">
+<!ENTITY version   "2025.03.27">
+<!ENTITY md5       "69aad62bce1c58cad791d5697e989449">
+<!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
+<!ENTITY github    "Kurotaku-sama/user.scripts.enhanced">
+<!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/master/&name;.plg">
+]>
+<PLUGIN name="&name;"
+        author="&author;"
+        version="&version;"
+        pluginURL="&pluginURL;"
+        min="6.9.0">
+
+<CHANGES>
+###2025.03.27 - Initial Release
+- Initial release of User Scripts Enhanced.
+</CHANGES>
+
+    <!-- The 'source' file. -->
+    <FILE Name="/boot/config/plugins/&name;/&name;-&version;.txz" Run="upgradepkg --install-new">
+        <URL>https://raw.githubusercontent.com/&github;/master/archive/&name;-&version;.txz</URL>
+        <MD5>&md5;</MD5>
+    </FILE>
+
+    <!-- Post-Install Script -->
+    <FILE Run="/bin/bash">
+        <INLINE>
+            rm -f $(ls /boot/config/plugins/&name;/&name;*.txz | grep -v '&version;')
+            cp -n &plugdir;/default_config/* /boot/config/plugins/&name;/ 2&gt;/dev/null
+            echo "----------------------------------------------------"
+            echo " User Scripts Enhanced has been installed."
+            echo " Version: &version;"
+            echo "----------------------------------------------------"
+            echo ""
+        </INLINE>
+    </FILE>
+
+    <!-- The 'remove' script. -->
+    <FILE Run="/bin/bash" Method="remove">
+        <INLINE>
+        echo "Removing User Scripts Enhanced..."
+        removepkg /boot/config/plugins/&name;/&name;-&version;
+        rm -rf &plugdir;
+        rm -rf /boot/config/plugins/&name;
+        echo "----------------------------------------------------"
+        echo "User Scripts Enhanced &version; successfully removed."
+        echo "----------------------------------------------------"
+        </INLINE>
+    </FILE>
+
+</PLUGIN>
