@@ -18,7 +18,7 @@
     overflow-x: hidden;
 }
 
-.category .category-header {
+.category-header {
     font-weight: bold;
     color: #f2f2f2;
     background: linear-gradient(90deg,#e22828 0,#ff8c2f);
@@ -319,4 +319,20 @@ input.move-down {
     z-index: 1000;
     font-size: 14px;
     font-weight: bold;
+}
+
+/* ========================
+   Search Function
+   ======================== */
+
+#category-search-input:not(:placeholder-shown) ~ #categories-container .category-controls {
+    display: none;
+}
+
+#category-search-input {
+    margin-bottom: 25px;
+    margin-top: 5px;
+    width: 300px;
+    padding: 8px;
+    box-sizing: border-box;
 }

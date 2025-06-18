@@ -7,6 +7,8 @@ It provides additional features and improved interface for managing user scripts
 
 [![Ko-fi](https://img.shields.io/badge/If%20you%20like%20my%20work%20feel%20free%20to%20support%20me%20on%20Kofi-8A2BE2?style=for-the-badge&logo=ko-fi&labelColor=9370DB&link=https://ko-fi.com/kurotaku1337)](https://ko-fi.com/kurotaku1337)
 
+---
+
 ## Installation
 
 This Plugin is not in the Community Applications (yet) so you need to manually install it.
@@ -20,13 +22,18 @@ This Plugin is not in the Community Applications (yet) so you need to manually i
    plugin install /boot/config/plugins/user.scripts.enhanced.plg
    ```
 
+---
+
 ## Features
 
 - **Script Categories**: Organize scripts into collapsible categories
 - **View Modes**: Two view modes can be used List & Panel
+- **Search**: Search directly within the User Scripts page for your scripts
 - **Clean Interface**: Hide unwanted elements to reduce page size
 - **Custom CSS**: Adjust the appearance to match your theme
 - **Export**: Export your scripts as they are stored on your drive or directly as usable .sh files
+- **Bugfixes**: this fixes some bugs that are in the User Scripts Plugin
+- **And a much more**
 
 ![UserScripts Page](images/page_userscripts.png)
 *Enhanced Userscripts interface*
@@ -34,10 +41,26 @@ This Plugin is not in the Community Applications (yet) so you need to manually i
 ![Settings Page](images/page_settings.png)
 *Settings interface*
 
+---
+
 ## Disclaimer
 
 This plugin is provided as-is without warranty. The developer cannot be held responsible for any data loss or system instability. Always maintain backups of important scripts and configurations.
 
 ---
 
-**Note**: This plugin enhances but does not replace the original User Scripts functionality. All core scripting capabilities remain provided by the original plugin.
+## Notes
+
+- This plugin enhances but does not replace the original User Scripts functionality. <br>All core functions are only provided by the original plugin.
+
+- If you uninstall the plugin, all configuration and category data will be deleted. <br>
+Therefore, it's recommended to back up the config and categories beforehand if you plan to reinstall the plugin later.<br>
+You can restore them by placing the backed-up files into
+<code>/boot/config/plugins/user.scripts.enhanced</code>.
+
+---
+
+## Known Issues
+
+- Rapidly refreshing the page multiple times in a short period can  cause the page to load slow.
+This is due to the PHP script responsible for reading the category data being overwhelmed, which may result in a delay before all scripts and categories are displayed correctly.

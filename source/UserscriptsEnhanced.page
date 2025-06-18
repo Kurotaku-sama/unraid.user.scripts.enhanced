@@ -55,16 +55,19 @@ if (!is_dir("/usr/local/emhttp/plugins/user.scripts")) {
         Uncategorized scripts will always use this mode.</p>
     </blockquote>
 
-    <!-- Collapse Categories by Default -->
+    <!-- Collapse Categories by default -->
     <? render_select_field("Collapse new categories by default", "default_collapsed", $cfg_default_collapsed); ?>
 
     <!-- Collapse unsorted scripts -->
     <? render_select_field("Collapse unsorted scripts", "uncategorized_collapsed", $cfg_uncategorized_collapsed); ?>
 
-    <!-- Capitalized Categories Selection -->
+    <!-- Capitalized category names -->
     <? render_select_field("Capitalized category names", "capitalized", $cfg_capitalized); ?>
 
-    <!-- Save delay Section -->
+    <!-- Enable search function -->
+    <? render_select_field("Enable search function", "enable_search", $cfg_enable_search); ?>
+
+    <!-- Save delay -->
     <? render_select_field("Save delay (in seconds)", "save_delay", $cfg_save_delay, array_combine(range(0, 10), range(0, 10))); ?>
 
     <blockquote class="inline_help">
@@ -93,6 +96,13 @@ if (!is_dir("/usr/local/emhttp/plugins/user.scripts")) {
         "yes" => "Hide all",
         "no" => "No"
     ]); ?>
+
+    <!-- Hide empty lines -->
+    <? render_select_field("Hide empty lines", "cfg_hide_empty_lines", $cfg_cfg_hide_empty_lines); ?>
+
+    <blockquote class="inline_help">
+        <p>This option hides empty <code>&lt;p&gt;</code> and <code>&lt;hr&gt;</code> tags to reduce visual clutter and make the page appear more compact.</p>
+    </blockquote>
 
     <!-- Hide "What is cron" -->
     <? render_select_field("Hide \"What is cron\"", "hide_what_is_cron", $cfg_hide_what_is_cron); ?>
@@ -149,6 +159,10 @@ if (!is_dir("/usr/local/emhttp/plugins/user.scripts")) {
     - <strong>Export Categories</strong>: Downloads the plugin categories configuration.<br>
     <br>
     <strong>Info:</strong> Chromium-based browsers (e.g., Chrome, Edge) might block the download. If the download doesn't start, you might need to allow the download manually.<br>
+    <br>
+    If you uninstall the plugin, all configuration and category data will be deleted. <br>
+    Therefore, it's recommended to back up the config and categories beforehand if you plan to reinstall the plugin later.<br>
+    You can restore them by placing the backed-up files into <code>/boot/config/plugins/user.scripts.enhanced</code>.
 </div>
 <input type="button" id="btn_export_raw" value="Export as Raw" onclick="export_data(this, 'raw')">
 <input type="button" id="btn_export_sh" value="Export as Bash Scripts" onclick="export_data(this, 'bash')">

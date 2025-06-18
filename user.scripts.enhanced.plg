@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "user.scripts.enhanced">
 <!ENTITY author    "Kurotaku">
-<!ENTITY version   "2025.03.27">
-<!ENTITY md5       "69aad62bce1c58cad791d5697e989449">
+<!ENTITY version   "2025.06.18">
+<!ENTITY md5       "91223b8c73db1eef35c0ace57c730496">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Kurotaku-sama/unraid.user.scripts.enhanced">
 <!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/master/&name;.plg">
@@ -15,6 +15,11 @@
         min="6.9.0">
 
 <CHANGES>
+###2025.06.18 - Search Function
+- Added search function.
+- Added some bugfixes for the existing user scripts plugin.
+- Hide empty lines added in Hide default elements that hides unused tags
+
 ###2025.03.27 - Initial Release
 - Initial release of User Scripts Enhanced.
 </CHANGES>
