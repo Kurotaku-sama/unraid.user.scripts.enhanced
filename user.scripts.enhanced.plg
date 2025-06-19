@@ -12,7 +12,8 @@
         author="&author;"
         version="&version;"
         pluginURL="&pluginURL;"
-        min="6.9.0">
+        min="6.9.0"
+        support="https://forums.unraid.net/topic/191294-user-scripts-enhanced/">
 
 <CHANGES>
 ###2025.06.18 - Search Function
