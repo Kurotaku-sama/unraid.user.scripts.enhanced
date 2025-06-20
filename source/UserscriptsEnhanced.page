@@ -78,7 +78,7 @@ require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
     ]); ?>
 
     <!-- Hide empty lines -->
-    <? render_select_field("Hide empty lines", "cfg_hide_empty_lines", $cfg_cfg_hide_empty_lines); ?>
+    <? render_select_field("Hide empty lines", "cfg_hide_empty_lines", $cfg_hide_empty_lines); ?>
 
     <blockquote class="inline_help">
         <p>This option hides empty <code>&lt;p&gt;</code> and <code>&lt;hr&gt;</code> tags to reduce visual clutter and make the page appear more compact.</p>
@@ -162,7 +162,7 @@ require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
 <!-- Reset config to default -->
 <dl class="centered-dt">
     <dt>Reset config to default:</dt>
-    <dd><input type="button" id="btn_reset_config" value="Start" onclick="reset_plugin_data(this, 'config')"></dd>
+    <dd><span><input type="button" id="btn_reset_config" value="Start" onclick="reset_plugin_data(this, 'config')"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will reset all configuration settings on this page to their default values.</p>
@@ -171,7 +171,7 @@ require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
 <!-- Delete all categories -->
 <dl class="centered-dt">
     <dt>Reset all categories:</dt>
-    <dd><input type="button" id="btn_reset_all_categories" value="Start" onclick="reset_plugin_data(this, 'categories')"></dd>
+    <dd><span><input type="button" id="btn_reset_all_categories" value="Start" onclick="reset_plugin_data(this, 'categories')"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will delete the <code>categories.json</code> file, removing all categories from the plugin.<br>
@@ -180,7 +180,7 @@ require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
 <!-- Delete "/tmp/user.scripts/" folder -->
 <dl class="centered-dt">
     <dt>Delete "/tmp/user.scripts/" folder:</dt>
-    <dd><input type="button" id="btn_delete_tmp_userscripts" value="Start" onclick="delete_tmp_userscripts(this)"></dd>
+    <dd><span><input type="button" id="btn_delete_tmp_userscripts" value="Start" onclick="delete_tmp_userscripts(this)"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will delete the "/tmp/user.scripts/" folder and all its contents.<br>
@@ -191,7 +191,7 @@ require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
 <!-- Delete description files without description -->
 <dl class="centered-dt">
     <dt>Delete description files without description:</dt>
-    <dd><input type="button" id="btn_delete_description_files_without_description" value="Start" onclick="delete_description_files_without_description(this)"></dd>
+    <dd><span><input type="button" id="btn_delete_description_files_without_description" value="Start" onclick="delete_description_files_without_description(this)"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will delete all "description" files that contain the default text "No description".</p>
@@ -200,7 +200,7 @@ require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
 <!-- Show not matching script names -->
 <dl class="centered-dt">
     <dt>Show not matching script names:</dt>
-    <dd><input type="button" id="btn_get_not_matching_scriptnames" value="Start" onclick="get_not_matching_scriptnames(this)"></dd>
+    <dd><span><input type="button" id="btn_get_not_matching_scriptnames" value="Start" onclick="get_not_matching_scriptnames(this)"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will check which script folders do not match their corresponding "name" file.</p>
@@ -209,7 +209,7 @@ require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
 <!-- Show duplicate script names -->
 <dl class="centered-dt">
     <dt>Show duplicate script names:</dt>
-    <dd><input type="button" id="btn_get_duplicate_scriptnames" value="Start" onclick="get_duplicate_scriptnames(this)"></dd>
+    <dd><span><input type="button" id="btn_get_duplicate_scriptnames" value="Start" onclick="get_duplicate_scriptnames(this)"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will check for duplicate script names in the "/boot/config/plugins/user.scripts/scripts/" folder.</p>
