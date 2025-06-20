@@ -18,6 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// Update Check
+$(function() {
+    if ( typeof caPluginUpdateCheck === "function" ) {
+        caPluginUpdateCheck("user.scripts.enhanced.plg",{name:"User Scripts Enhanced"});
+    }
+});
+
 function export_data(trigger, type) {
     disable_button(trigger);
     // Trigger the download

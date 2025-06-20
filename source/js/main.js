@@ -9,7 +9,6 @@ let categories = [];
 let content; // For even faster element selection
 let uncategorized_category = null; // Global variable to cache the uncategorized category element
 
-
 (async function() {
     hide_elements();
     original_categories = await categories_load();
@@ -78,3 +77,10 @@ function container_overhaul(table) {
     // Remove the original table
     table.remove();
 }
+
+// Update Check
+$(function() {
+    if ( typeof caPluginUpdateCheck === "function" ) {
+        caPluginUpdateCheck("user.scripts.enhanced.plg",{name:"User Scripts Enhanced"});
+    }
+});

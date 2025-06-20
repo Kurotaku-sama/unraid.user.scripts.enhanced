@@ -40,7 +40,6 @@
     <FILE Run="/bin/bash">
         <INLINE>
             rm -f $(ls /boot/config/plugins/&name;/&name;*.txz | grep -v '&version;')
-            cp -n &plugdir;/default_config/* /boot/config/plugins/&name;/ 2&gt;/dev/null
             echo "----------------------------------------------------"
             echo " User Scripts Enhanced has been installed."
             echo " Version: &version;"
