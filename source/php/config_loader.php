@@ -21,9 +21,4 @@ $cfg_hide_what_is_cron = $cfg['hide_what_is_cron'] ?? "no";
 $cfg_hide_credits = $cfg['hide_credits'] ?? "no";
 $cfg_hide_how_to_add_scripts = $cfg['hide_how_to_add_scripts'] ?? "no";
 $cfg_hide_help = $cfg['hide_help'] ?? "no";
-
-// URLs Section
-$cfg_url_default = $cfg['url_default'] ?? "/Settings/Userscripts";
-$cfg_url_custom_1 = $cfg['url_custom_1'] ?? "";
-$cfg_url_custom_2 = $cfg['url_custom_2'] ?? "";
 ?>

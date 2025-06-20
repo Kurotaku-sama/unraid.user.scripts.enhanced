@@ -3,14 +3,14 @@ Title="User Scripts Enhanced"
 Icon="file-text-o"
 ---
 
+<?
+require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/config_loader.php";
+require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.php";
+?>
+
 <script>const plugin = "<?=$plugin?>";</script>
 <script src="<?=autov("/plugins/$plugin/js/settings_page.js")?>"></script>
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/page_settings.css")?>">
-
-<?
-require_once "/usr/local/emhttp/plugins/$plugin/php/config_loader.php";
-require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
-?>
 
 <!-- Form -->
 <form method="POST" action="/update.php" target="progressFrame">
@@ -95,29 +95,6 @@ require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
 
     <!-- Hide Help -->
     <? render_select_field("Hide \"For help with this plugin\"", "hide_help", $cfg_hide_help); ?>
-
-    <!-- URLs Section -->
-    <div class="title"><span class="left"><i class="fa fa-link title"></i>URLs</span></div>
-
-    <p>Define up to 2 custom URLs where the script should be active in case you use Custom Tab.</p>
-
-    <!-- Default URL (Cannot be changed) -->
-    <dl>
-        <dt>Default URL (Cannot be changed):</dt>
-        <dd><input type="text" id="url_default" name="url_default" value="<?=$cfg_url_default?>" readonly class="narrow setting"></dd>
-    </dl>
-
-    <!-- Custom URL 1 -->
-    <dl>
-        <dt>Custom URL 1:</dt>
-        <dd><input type="text" id="url_custom_1" name="url_custom_1" value="<?=$cfg_url_custom_1?>" class="narrow setting"></dd>
-    </dl>
-
-    <!-- Custom URL 2 -->
-    <dl>
-        <dt>Custom URL 2:</dt>
-        <dd><input type="text" id="url_custom_2" name="url_custom_2" value="<?=$cfg_url_custom_2?>" class="narrow setting"></dd>
-    </dl>
 
     <!-- Apply & Done Buttons -->
     <input id="btnApply" type="submit" value="Apply" disabled>
@@ -214,9 +191,3 @@ require_once "/usr/local/emhttp/plugins/$plugin/php/settings_page.php";
 <blockquote class="inline_help">
     <p>This will check for duplicate script names in the "/boot/config/plugins/user.scripts/scripts/" folder.</p>
 </blockquote>
-
-$(function() {
-    if ( typeof caPluginUpdateCheck === "function" ) {
-        caPluginUpdateCheck("user.scripts.enhanced.plg",{name:"User Scripts Enhanced"});
-    }
-});

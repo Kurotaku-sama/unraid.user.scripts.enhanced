@@ -1,27 +1,9 @@
-Menu="Buttons"
-Link="nav-user"
----
 <?
 require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/config_loader.php";
 
 if($cfg_enabled == "no")
     return;
-
-$current_url = $_SERVER['REQUEST_URI'];
-
-// Create array of the urls where the script is supposed to run
-$allowed_urls = array_filter([
-    $cfg_url_default,
-    $cfg_url_custom_1 ?: null,
-    $cfg_url_custom_2 ?: null
-]);
-
-// If URL is not in the allowed list do not execute the script
-if(!in_array($current_url, $allowed_urls))
-    return;
 ?>
-
-<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/page_userscripts.css")?>">
 
 <script>
 // Use PHP Variables in JavaScript
@@ -41,6 +23,7 @@ const cfg_hide_how_to_add_scripts = "<?=$cfg_hide_how_to_add_scripts?>";
 const cfg_hide_help = "<?=$cfg_hide_help?>";
 </script>
 
+<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/page_userscripts.css")?>">
 
 <? $js_dir = "/plugins/$plugin/js"; ?>
 <script src="<?=autov("$js_dir/category_controls.js")?>"></script>
