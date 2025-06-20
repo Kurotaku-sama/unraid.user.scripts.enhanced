@@ -112,6 +112,12 @@ async function categories_load() {
             swal({title: "Warning", text: data.warning, icon: "warning"});
         return validate_categories_order(Array.isArray(data.data) ? data.data : []);
     } catch (error) {
+        // If the request was canceled by the browser → Do NOT display
+        if (error.status === 0 && error.readyState === 0) {
+            console.warn("⚠️ Load was aborted or interrupted by browser reload.");
+            return [];
+        }
+
         console.error("❌ Load error:", error);
         swal("Load Failed", error || "An unknown error occurred while loading categories.", "error");
         return [];

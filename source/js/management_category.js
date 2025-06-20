@@ -150,18 +150,41 @@ function delete_category(category) {
     }, function(confirm) {
         if (!confirm) return;
 
-        // Remove category from the array
+        // Clear scripts array to trigger moving scripts back to uncategorized
+        category.scripts = [];
+
+        // Reorganize scripts (will move them to uncategorized)
+        organize_userscripts_category(category);
+
+        // Remove category from the categories array
         categories = categories.filter(cat => cat.name !== category.name);
 
-        // Adjust order values for remaining categories
-        categories.forEach((cat, index) => cat.order = index + 1);
+        // Update order of remaining categories
+        categories.forEach((cat, index) => (cat.order = index + 1));
 
-        // Remove category element from the DOM
-        let category_element = $(`.category[data-category="${category.name}"]`);
-        if (category_element.length)
-            category_element.remove();
+        // Safely remove category element from DOM if it exists
+        content.querySelector(`.category[data-category="${category.name}"]`)?.remove();
 
+        // Update UI states
+        update_uncategorized_visibility();
         update_move_buttons();
         categories_prepare_save();
     });
+}
+
+function update_uncategorized_visibility() {
+    // Initialize uncategorized_category only once (if not already cached)
+    if (!uncategorized_category) {
+        uncategorized_category = content.querySelector(".category[data-category='uncategorized']");
+        if (!uncategorized_category)
+            return;
+    }
+
+    const has_scripts = uncategorized_category.querySelectorAll(".category-scripts tr").length > 0;
+
+    // Toggle visibility: show if scripts exist, hide otherwise
+    if (!has_scripts && !uncategorized_category.classList.contains("uncategorized_empty"))
+        uncategorized_category.classList.add("uncategorized_empty");
+    else if (has_scripts && uncategorized_category.classList.contains("uncategorized_empty"))
+        uncategorized_category.classList.remove("uncategorized_empty");
 }

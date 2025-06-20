@@ -44,6 +44,10 @@
     background-size: 100% 2px,100% 2px,2px 100%,2px 100%;
 }
 
+.uncategorized_empty {
+    display: none;
+}
+
 /* ========================
    Collapse
    ======================== */

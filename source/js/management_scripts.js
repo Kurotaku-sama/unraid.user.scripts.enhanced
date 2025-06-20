@@ -139,6 +139,8 @@ function remove_selected_script(event) {
     // Restore scroll position
     selection_box.scrollTop = scroll_top;
     list_item.remove();
+
+    update_uncategorized_visibility();
 }
 
 function move_script(event, direction) {
@@ -170,6 +172,7 @@ function create_list_item(script_id, script_name) {
 function organize_userscripts_category(category) {
     const script_container = content.querySelector(`.category[data-category="${category.name}"] .category-scripts`);
     if (!script_container) return;
+
 
     const uncategorized_scripts_container = content.querySelector(".category[data-category='uncategorized'] .category-scripts");
     if (!uncategorized_scripts_container) return;
@@ -230,4 +233,6 @@ function organize_userscripts_category(category) {
     // Remove non-existent scripts from the category in case a script got deleted, this will be saved whenever the save triggers
     const existing_script_ids = new Set(script_rows.keys());
     category.scripts = category.scripts.filter(script_id => existing_script_ids.has(script_id));
+
+    update_uncategorized_visibility();
 }

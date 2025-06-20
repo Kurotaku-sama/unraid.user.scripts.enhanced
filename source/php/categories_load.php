@@ -9,10 +9,9 @@ $plugin_dir = "/boot/config/plugins/{$plugin}";
 $categories_file = "{$plugin_dir}/categories.json";
 
 // Ensure plugin directory exists
-if (!is_dir($plugin_dir)) {
+if (!is_dir($plugin_dir))
     if (!mkdir($plugin_dir, 0755, true))
         die(json_encode(["error" => "Failed to create plugin directory."]));
-}
 
 // Default value: empty array
 $default_config = [];

@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "user.scripts.enhanced">
 <!ENTITY author    "Kurotaku">
-<!ENTITY version   "2025.06.19">
-<!ENTITY md5       "7a9422bb2a56d220d2400c95d27b9127">
+<!ENTITY version   "2025.06.20">
+<!ENTITY md5       "1eeb05e35ce5e213da35776aa024f558">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Kurotaku-sama/unraid.user.scripts.enhanced">
 <!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/master/&name;.plg">
@@ -13,7 +13,7 @@
         version="&version;"
         pluginURL="&pluginURL;"
         min="6.9.0"
-        support="https://forums.unraid.net/topic/191294-user-scripts-enhanced/">
+        support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
 ###2025.06.18 - Search Function

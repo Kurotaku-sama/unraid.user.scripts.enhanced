@@ -62,5 +62,4 @@ You can restore them by placing the backed-up files into
 
 ## Known Issues
 
-- Rapidly refreshing the page multiple times in a short period can  cause the page to load slow.
-This is due to the PHP script responsible for reading the category data being overwhelmed, which may result in a delay before all scripts and categories are displayed correctly.
+- Rapidly refreshing the page multiple times can cause AJAX requests to be aborted or delayed by the browser. This behavior depends on the browser used — for example, it occurs in Firefox but typically not in Chromium-based browsers. As a result, slower loading times may occur because the PHP backend is briefly overwhelmed handling these requests. Despite this, the categories and scripts will typically load correctly after a short delay.
