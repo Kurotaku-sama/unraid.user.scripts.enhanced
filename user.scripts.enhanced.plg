@@ -6,7 +6,7 @@
 <!ENTITY md5       "1eeb05e35ce5e213da35776aa024f558">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Kurotaku-sama/unraid.user.scripts.enhanced">
-<!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/master/&name;.plg">
+<!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/main/&name;.plg">
 ]>
 <PLUGIN name="&name;"
         author="&author;"
