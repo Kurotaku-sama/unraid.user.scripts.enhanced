@@ -1,23 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("#url_custom_1, #url_custom_2").forEach(input => {
-        // Block backslashes (\) and quotes (") in real-time
-        input.addEventListener("input", () => {
-            input.value = input.value.replace(/^ |[\\"]/g, ""); // Remove leading spaces and unwanted characters
-        });
-
-        // Clean up the input on focusout
-        input.addEventListener("focusout", () => {
-            let value = input.value.trim(); // Trim whitespace
-            if (value === "" || value === "/") { // Reset if empty or just "/"
-                input.value = "";
-                return;
-            }
-            if (!value.startsWith("/")) value = "/" + value; // Ensure it starts with "/"
-            input.value = value.replace(/\/+/g, "/"); // Remove duplicate slashes
-        });
-    });
-});
-
 // Update Check
 $(function() {
     if ( typeof caPluginUpdateCheck === "function" ) {
