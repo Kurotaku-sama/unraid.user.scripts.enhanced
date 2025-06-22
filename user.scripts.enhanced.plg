@@ -20,7 +20,8 @@
 - Injection method changed special thanks to Squid for Including the script
 - URL fields not needed anymore because of that
 
-###2025.06.20 - Search Function
+###2025.06.20 - Prepare for CA
+- Uncategorized is hidden when empty now
 - More code splitting
 - Changed some texts
 - Added Support URL
