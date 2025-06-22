@@ -11,7 +11,7 @@ It provides additional features and improved interface for managing user scripts
 
 ## Installation
 
-This Plugin is not in the Community Applications (yet) so you need to manually install it.
+You can either install it from the Community Applications in your Unraid Server or manually.
 
 1. Ensure you have the [User Scripts plugin](https://forums.unraid.net/topic/48286-plugin-ca-user-scripts/) installed
 2. Connect to your Unraid server via SSH

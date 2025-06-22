@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "user.scripts.enhanced">
 <!ENTITY author    "Kurotaku">
-<!ENTITY version   "2025.06.20">
-<!ENTITY md5       "1eeb05e35ce5e213da35776aa024f558">
+<!ENTITY version   "2025.06.22">
+<!ENTITY md5       "01a40aa9ee6a77dba7b574eb97136bfb">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Kurotaku-sama/unraid.user.scripts.enhanced">
 <!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/main/&name;.plg">
@@ -16,6 +16,10 @@
         support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
+###2025.06.22 - Community Apps Release
+- Injection method changed special thanks to Squid for Including the script
+- URL fields not needed anymore because of that
+
 ###2025.06.20 - Search Function
 - More code splitting
 - Changed some texts
