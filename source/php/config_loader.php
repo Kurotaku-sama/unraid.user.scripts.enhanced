@@ -8,7 +8,7 @@ $cfg_enabled = $cfg['enabled'] ?? "yes";
 // Categories Section
 $cfg_view_mode = $cfg['default_view_mode'] ?? "list";
 $cfg_default_collapsed = $cfg['default_collapsed'] ?? "yes";
-$cfg_uncategorized_collapsed = $cfg['uncategorized_collapsed'] ?? "yes";
+$cfg_uncategorized_collapsed = $cfg['uncategorized_collapsed'] ?? "no";
 $cfg_capitalized = $cfg['capitalized'] ?? "no";
 $cfg_enable_search = $cfg['enable_search'] ?? "yes";
 $cfg_save_delay = $cfg['save_delay'] ?? "5";

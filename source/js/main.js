@@ -69,7 +69,6 @@ function container_overhaul(table) {
         while (tbody.firstChild)
             uncategorized_userscripts_scripts_container.appendChild(tbody.firstChild);
 
-
     // Make the header clickable
     uncategorized_category.querySelector(".category-header")?.addEventListener("click", toggle_category_visibility);
     update_uncategorized_visibility();

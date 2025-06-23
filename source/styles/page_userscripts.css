@@ -29,6 +29,7 @@
     white-space: nowrap;
     border-radius: 5px;
     user-select: none;
+    position: relative;
 }
 
 .category-content {
@@ -49,7 +50,7 @@
 }
 
 /* ========================
-   Collapse
+   Categories Container Collapse
    ======================== */
 
 .category:not(.collapsed) .category-header {
@@ -68,6 +69,30 @@
 
 .category:not(.collapsed) .category-content {
     max-height: unset;
+}
+
+/* ========================
+   Categories Container Header Icon
+   ======================== */
+
+.category-header::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.category.collapsed .category-header::before {
+    border-top: 8px solid #f2f2f2;
+    border-bottom: 0;
+}
+.category:not(.collapsed) .category-header::before {
+    border-bottom: 8px solid #f2f2f2;
+    border-top: 0;
 }
 
 /* ========================

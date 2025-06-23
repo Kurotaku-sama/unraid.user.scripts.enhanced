@@ -17,6 +17,10 @@ require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.
     <input type="hidden" name="#file" value="<?=$plugin?>/<?=$plugin?>.cfg">
     <input type="hidden" id="command" name="#command" value="">
 
+    <b style="font-size:20px;">If the User Scripts page doesn't change its appearance, read this:</b><br>
+    1. You need version 2025.06.21 or newer of User Scripts, as the injection feature is integrated starting with that version.<br>
+    2. If you're using the Custom Tab for Scripts, the .page files aren't updated instantly. After installing the new User Scripts version, you may need to select a different page instead of Userscripts.page, save it, and then switch back to Userscripts.page.<br><br>
+
     <!-- Enable Categories -->
     <? render_select_field("Enable Plugin", "enabled", $cfg_enabled); ?>
 
@@ -38,8 +42,8 @@ require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.
     <!-- Collapse Categories by default -->
     <? render_select_field("Collapse new categories by default", "default_collapsed", $cfg_default_collapsed); ?>
 
-    <!-- Collapse unsorted scripts -->
-    <? render_select_field("Collapse unsorted scripts", "uncategorized_collapsed", $cfg_uncategorized_collapsed); ?>
+    <!-- Collapse uncategorized scripts -->
+    <? render_select_field("Collapse uncategorized scripts", "uncategorized_collapsed", $cfg_uncategorized_collapsed); ?>
 
     <!-- Capitalized category names -->
     <? render_select_field("Capitalized category names", "capitalized", $cfg_capitalized); ?>
@@ -71,7 +75,7 @@ require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.
     <div class="title"><span class="left"><i class="fa fa-eye-slash title"></i>Hide default Elements</span></div>
 
     <!-- Hide Description Option -->
-    <? render_select_field("Hide description", "hide_description", $cfg_hide_description, [
+    <? render_select_field("Hide script descriptions", "hide_description", $cfg_hide_description, [
         "without" => "Only without description",
         "yes" => "Hide all",
         "no" => "No"
@@ -139,7 +143,7 @@ require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.
 <!-- Reset config to default -->
 <dl class="centered-dt">
     <dt>Reset config to default:</dt>
-    <dd><span><input type="button" id="btn_reset_config" value="Start" onclick="reset_plugin_data(this, 'config')"></span></dd>
+    <dd><span><input type="button" id="btn_reset_config" value="Reset" onclick="reset_plugin_data(this, 'config')"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will reset all configuration settings on this page to their default values.</p>
@@ -148,7 +152,7 @@ require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.
 <!-- Delete all categories -->
 <dl class="centered-dt">
     <dt>Reset all categories:</dt>
-    <dd><span><input type="button" id="btn_reset_all_categories" value="Start" onclick="reset_plugin_data(this, 'categories')"></span></dd>
+    <dd><span><input type="button" id="btn_reset_all_categories" value="Reset" onclick="reset_plugin_data(this, 'categories')"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will delete the <code>categories.json</code> file, removing all categories from the plugin.<br>
@@ -157,7 +161,7 @@ require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.
 <!-- Delete "/tmp/user.scripts/" folder -->
 <dl class="centered-dt">
     <dt>Delete "/tmp/user.scripts/" folder:</dt>
-    <dd><span><input type="button" id="btn_delete_tmp_userscripts" value="Start" onclick="delete_tmp_userscripts(this)"></span></dd>
+    <dd><span><input type="button" id="btn_delete_tmp_userscripts" value="Delete" onclick="delete_tmp_userscripts(this)"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will delete the "/tmp/user.scripts/" folder and all its contents.<br>
@@ -168,7 +172,7 @@ require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.
 <!-- Delete description files without description -->
 <dl class="centered-dt">
     <dt>Delete description files without description:</dt>
-    <dd><span><input type="button" id="btn_delete_description_files_without_description" value="Start" onclick="delete_description_files_without_description(this)"></span></dd>
+    <dd><span><input type="button" id="btn_delete_description_files_without_description" value="Delete" onclick="delete_description_files_without_description(this)"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will delete all "description" files that contain the default text "No description".</p>
@@ -177,7 +181,7 @@ require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.
 <!-- Show not matching script names -->
 <dl class="centered-dt">
     <dt>Show not matching script names:</dt>
-    <dd><span><input type="button" id="btn_get_not_matching_scriptnames" value="Start" onclick="get_not_matching_scriptnames(this)"></span></dd>
+    <dd><span><input type="button" id="btn_get_not_matching_scriptnames" value="Show" onclick="get_not_matching_scriptnames(this)"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will check which script folders do not match their corresponding "name" file.</p>
@@ -186,7 +190,7 @@ require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/settings_page.
 <!-- Show duplicate script names -->
 <dl class="centered-dt">
     <dt>Show duplicate script names:</dt>
-    <dd><span><input type="button" id="btn_get_duplicate_scriptnames" value="Start" onclick="get_duplicate_scriptnames(this)"></span></dd>
+    <dd><span><input type="button" id="btn_get_duplicate_scriptnames" value="Show" onclick="get_duplicate_scriptnames(this)"></span></dd>
 </dl>
 <blockquote class="inline_help">
     <p>This will check for duplicate script names in the "/boot/config/plugins/user.scripts/scripts/" folder.</p>
