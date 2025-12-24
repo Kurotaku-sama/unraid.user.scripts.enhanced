@@ -1,4 +1,4 @@
-<?php
+<?
 // Define directories
 $dir_userscripts = "/boot/config/plugins/user.scripts";
 $dir_scripts = "$dir_userscripts/scripts";

@@ -60,6 +60,13 @@ You can restore them by placing the backed-up files into
 
 ---
 
+## Libraries Used
+
+- **[CodeMirror](https://codemirror.net/)**
+  Used to provide a clean, responsive, syntax-highlighted editor for the *Custom CSS* field, making it easier to write and maintain custom styles directly within the plugin settings.
+
+---
+
 ## Known Issues
 
 - Rapidly refreshing the page multiple times can cause AJAX requests to be aborted or delayed by the browser. This behavior depends on the browser used — for example, it occurs in Firefox but typically not in Chromium-based browsers. As a result, slower loading times may occur because the PHP backend is briefly overwhelmed handling these requests. Despite this, the categories and scripts will typically load correctly after a short delay.

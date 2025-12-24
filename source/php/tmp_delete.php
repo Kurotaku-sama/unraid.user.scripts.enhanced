@@ -1,4 +1,4 @@
-<?php
+<?
 // Define the target directory
 $tmp_directory = "/tmp/user.scripts";
 $running_directory = "{$tmp_directory}/running";

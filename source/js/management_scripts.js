@@ -33,7 +33,8 @@ function manage_scripts(category) {
         html: true,
         showCancelButton: true,
         confirmButtonText: "Save",
-        cancelButtonText: "Cancel"
+        cancelButtonText: "Cancel",
+        customClass: "swal-user-scripts-enhanced",
     }, function(is_confirmed) {
         if (!is_confirmed) return;
 
@@ -161,9 +162,9 @@ function create_list_item(script_id, script_name) {
 
     return `
         <li data-script-id="${script_id}" data-script-name="${script_name}">
-            <input type="button" class="remove-script" data-id="${script_id}" value="Remove" onclick="remove_selected_script(event)">
-            <input type="button" class="move-up" value="↑" onclick="move_script(event, 'up')">
-            <input type="button" class="move-down" value="↓" onclick="move_script(event, 'down')">
+            <input type="button" class="manager-remove-script" data-id="${script_id}" value="Remove" onclick="remove_selected_script(event)">
+            <input type="button" class="manager-move-up" value="↑" onclick="move_script(event, 'up')">
+            <input type="button" class="manager-move-down" value="↓" onclick="move_script(event, 'down')">
             <span class="truncate-text" title="${script_name}">${truncated_text}</span>
         </li>
     `;

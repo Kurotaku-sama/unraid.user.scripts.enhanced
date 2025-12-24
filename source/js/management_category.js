@@ -4,20 +4,28 @@
 
 function create_category(category) {
     const category_container = document.getElementById("categories-container");
+
+    // Determine style attribute
+    const style_attr = category.collapsed === "yes" ? 'style="max-height: 0px;"' : "";
+
+    // Determine optional view classes
+    const extra_classes = [
+        (category.view_mode === "list" && cfg_list_view_separators === "yes") ? "vo-separator" : "",
+        (category.view_mode && cfg_view_mode_highlighting.includes(category.view_mode)) ? "vo-highlight" : ""
+    ].filter(Boolean).join(" ");
+
     const html = `
         <div class="category ${category.collapsed === "yes" ? "collapsed" : ""}" data-category="${category.name}" data-order="${category.order}">
             <div class="category-header">${cfg_capitalized === "yes" ? category.name.toUpperCase() : category.name}</div>
-            <div class="category-content vm-${category.view_mode}" ${category.collapsed === "yes" ? "style=\"max-height: 0px;\"": ""}>
+            <div class="category-content vm-${category.view_mode} ${extra_classes}" ${style_attr}>
                 <div class="category-controls">
-                    <input type="button" class="manage-scripts" data-category="${category.name}" value="Manage Scripts">
-                    <div class="category-controls-right">
-                        <input type="button" class="rename-category" data-category="${category.name}" value="Rename">
-                        <input type="button" class="collapse-toggle" data-category="${category.name}" value="Collapsed: ${category.collapsed}">
-                        <input type="button" class="view-mode-toggle" data-category="${category.name}" value="View: ${category.view_mode === "list" ? "List" : "Panel"}">
-                        <input type="button" class="move-up" data-category="${category.name}" value="↑" ${category.order === 1 ? "disabled" : ""}>
-                        <input type="button" class="move-down" data-category="${category.name}" value="↓" ${category.order === categories.length ? "disabled" : ""}>
-                        <input type="button" class="delete-category" data-category="${category.name}" value="Delete">
-                    </div>
+                    <input type="button" class="ctrl-manage-scripts" data-category="${category.name}" value="Manage Scripts">
+                    <input type="button" class="ctrl-rename-category" data-category="${category.name}" value="Rename">
+                    <input type="button" class="ctrl-collapse-toggle" data-category="${category.name}" value="Collapsed: ${category.collapsed}">
+                    <input type="button" class="ctrl-view-mode-toggle" data-category="${category.name}" value="View: ${category.view_mode === "list" ? "List" : "Panel"}">
+                    <input type="button" class="ctrl-move-up" data-category="${category.name}" value="↑" ${category.order === 1 ? "disabled" : ""}>
+                    <input type="button" class="ctrl-move-down" data-category="${category.name}" value="↓" ${category.order === categories.length ? "disabled" : ""}>
+                    <input type="button" class="ctrl-delete-category" data-category="${category.name}" value="Delete">
                 </div>
                 <div class="category-scripts"></div>
             </div>
@@ -38,13 +46,13 @@ function initialize_category_controls(category) {
     header.addEventListener("click", toggle_category_visibility);
 
     const controls = {
-        ".manage-scripts": () => manage_scripts(category),
-        ".rename-category": () => rename_category(category),
-        ".collapse-toggle": () => toggle_collapsed(category),
-        ".view-mode-toggle": () => toggle_view_mode(category),
-        ".move-up": () => move_category(category, "up"),
-        ".move-down": () => move_category(category, "down"),
-        ".delete-category": () => delete_category(category)
+        ".ctrl-manage-scripts": () => manage_scripts(category),
+        ".ctrl-rename-category": () => rename_category(category),
+        ".ctrl-collapse-toggle": () => toggle_collapsed(category),
+        ".ctrl-view-mode-toggle": () => toggle_view_mode(category),
+        ".ctrl-move-up": () => move_category(category, "up"),
+        ".ctrl-move-down": () => move_category(category, "down"),
+        ".ctrl-delete-category": () => delete_category(category)
     };
 
     Object.entries(controls).forEach(([selector, handler]) => {
@@ -85,8 +93,7 @@ function add_category() {
 
         categories.push(new_category);
         let success = await perform_save(categories)
-        if(success) {
-            // console.log(`✅ Category "${category_name}" added successfully.`);
+        if (success) {
             create_category(new_category);
             swal.close();
         }

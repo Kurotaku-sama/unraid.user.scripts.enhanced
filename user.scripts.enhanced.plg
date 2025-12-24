@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "user.scripts.enhanced">
 <!ENTITY author    "Kurotaku">
-<!ENTITY version   "2025.06.23">
-<!ENTITY md5       "d89c5c7d97b65c16abe9461d5d868d6d">
+<!ENTITY version   "2025.12.24">
+<!ENTITY md5       "58d4717c923bcf0e5ceb63e0d6fbb1aa">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Kurotaku-sama/unraid.user.scripts.enhanced">
 <!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/main/&name;.plg">
@@ -16,6 +16,15 @@
         support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
+###2025.12.24 - New Features and improvements
+- List View Separators: Adds line between each script in List View (optional)
+- View Mode Highlighting: Hover effect on scripts; choose for list view, panel, or both (optional)
+- CodeMirror is now used for Custom CSS field (Multi-line CSS now possible)
+- Some responsive fixes for the 7.2 update
+- "Saving in" moved to the right side for theme compatibility
+- Search now includes a magnifier icon
+- About Plugin Button added
+
 ###2025.06.23 - Text Changes
 - Added a Icon that implies if categories are expanded or collapsed
 - Uncategorized are now Expanded by default

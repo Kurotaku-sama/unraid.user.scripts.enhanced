@@ -48,15 +48,23 @@ function container_overhaul(table) {
 
     let categories_container = document.getElementById("categories-container");
 
-    // Header
+    // Style
+    const style_attr = cfg_uncategorized_collapsed === "yes" ? 'style="max-height: 0px;"' : "";
+    // Determine optional extra classes for uncategorized section
+    const extra_classes = [
+        (cfg_default_view_mode === "list" && cfg_list_view_separators === "yes") ? "vo-separator" : "",
+        (cfg_view_mode_highlighting.includes(cfg_default_view_mode)) ? "vo-highlight" : ""
+    ].filter(Boolean).join(" ");
+
     let uncategorized_userscripts_header_html = `
-        <div class="category ${cfg_uncategorized_collapsed === "yes" ? "collapsed uncategorized_empty" : ""}" data-category="uncategorized"">
+        <div class="category ${cfg_uncategorized_collapsed === "yes" ? "collapsed uncategorized_empty" : ""}" data-category="uncategorized">
             <div class="category-header">${cfg_capitalized === "yes" ? "UNCATEGORIZED USERSCRIPTS" : "Uncategorized Userscripts"}</div>
-            <div class="category-content vm-${cfg_default_view_mode}" ${cfg_uncategorized_collapsed === "yes" ? "style=\"max-height: 0px;\"": ""}>
+            <div class="category-content vm-${cfg_default_view_mode} ${extra_classes}" ${style_attr}>
                 <div class="category-scripts"></div>
             </div>
         </div>
     `;
+
     categories_container.insertAdjacentHTML("beforeend", uncategorized_userscripts_header_html);
 
     // Get the uncategorized scripts container
@@ -77,9 +85,8 @@ function container_overhaul(table) {
     table.remove();
 }
 
-// Update Check
 $(function() {
-    if ( typeof caPluginUpdateCheck === "function" ) {
+    // Update Check
+    if (typeof caPluginUpdateCheck === "function")
         caPluginUpdateCheck("user.scripts.enhanced.plg",{name:"User Scripts Enhanced"});
-    }
 });

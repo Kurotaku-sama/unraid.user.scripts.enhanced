@@ -25,7 +25,7 @@ async function categories_prepare_save(categories_to_save) {
     if (is_saving) return;
     is_saving = true;
 
-    if(can_save == false) {
+    if (can_save == false) {
         swal("Save not possible", "The categories had changed on another instance, reload the page to be able to save again!", "error");
         is_saving = false;
         return false;
@@ -64,7 +64,7 @@ async function categories_prepare_save(categories_to_save) {
 async function perform_save(categories_to_save) {
     stop_saving();
 
-    if(can_save == false) {
+    if (can_save == false) {
         swal("Save not possible", "The categories had changed on another instance, reload the page to be able to save again!", "error");
         return false;
     }
@@ -125,7 +125,7 @@ async function categories_load() {
 }
 
 async function categories_save(categories_to_save) {
-    if(can_save == false) {
+    if (can_save == false) {
         swal("Save not possible", "The categories had changed on another instance, reload the page to be able to save again!", "error");
         return false;
     }

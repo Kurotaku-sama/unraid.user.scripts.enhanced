@@ -1,7 +1,7 @@
 <?
 require_once "/usr/local/emhttp/plugins/user.scripts.enhanced/php/config_loader.php";
 
-if($cfg_enabled == "no")
+if ($cfg_enabled == "no")
     return;
 ?>
 
@@ -12,9 +12,11 @@ const cfg_default_view_mode = "<?=$cfg_view_mode?>";
 const cfg_default_collapsed = "<?=$cfg_default_collapsed?>";
 const cfg_uncategorized_collapsed = "<?=$cfg_uncategorized_collapsed?>";
 const cfg_capitalized = "<?=$cfg_capitalized?>";
+const cfg_list_view_separators = "<?=$cfg_list_view_separators?>";
+const cfg_view_mode_highlighting = <?=json_encode($cfg_view_mode_highlighting ?? [])?>;
 const cfg_enable_search = "<?=$cfg_enable_search?>";
 const cfg_save_delay = "<?=$cfg_save_delay?>";
-const cfg_custom_css = "<?=$cfg_custom_css?>";
+const cfg_custom_css = <?=json_encode($cfg_custom_css)?>;
 const cfg_hide_description = "<?=$cfg_hide_description?>";
 const cfg_hide_empty_lines = "<?=$cfg_hide_empty_lines?>";
 const cfg_hide_what_is_cron = "<?=$cfg_hide_what_is_cron?>";

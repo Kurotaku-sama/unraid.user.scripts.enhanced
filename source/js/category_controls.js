@@ -4,7 +4,7 @@
 
 function toggle_collapsed(category) {
     const category_element = content.querySelector(`.category[data-category="${category.name}"]`);
-    const collapse_button = category_element.querySelector(".collapse-toggle");
+    const collapse_button = category_element.querySelector(".ctrl-collapse-toggle");
     category.collapsed = category.collapsed === "yes" ? "no" : "yes";
     collapse_button.value = "Collapsed: " + category.collapsed;
     categories_prepare_save();
@@ -13,19 +13,38 @@ function toggle_collapsed(category) {
 function toggle_view_mode(category) {
     const category_element = content.querySelector(`.category[data-category="${category.name}"]`);
     const category_content = category_element.querySelector(".category-content");
-    const view_button = category_element.querySelector(".view-mode-toggle");
+    const view_button = category_element.querySelector(".ctrl-view-mode-toggle");
 
-    if (category.view_mode === "list") {
-        category.view_mode = "panel";
-        category_content.classList.remove("vm-list");
-        category_content.classList.add("vm-panel");
-        view_button.value = "View: Panel";
-    } else {
-        category.view_mode = "list";
-        category_content.classList.remove("vm-panel");
-        category_content.classList.add("vm-list");
-        view_button.value = "View: List";
+    // Remove all mode-related classes
+    category_content.classList.remove("vm-list", "vm-panel", "vo-separator", "vo-highlight");
+
+    switch (category.view_mode) {
+        case "list":
+            category.view_mode = "panel";
+            category_content.classList.add("vm-panel");
+            view_button.value = "View: Panel";
+
+            // Highlighting for panel
+            if (cfg_view_mode_highlighting.includes("panel"))
+                category_content.classList.add("vo-highlight");
+            break;
+
+        case "panel":
+        default:
+            category.view_mode = "list";
+            category_content.classList.add("vm-list");
+            view_button.value = "View: List";
+
+            // Add separator if enabled in settings
+            if (cfg_list_view_separators === "yes")
+                category_content.classList.add("vo-separator");
+
+            // Highlighting for list
+            if (cfg_view_mode_highlighting.includes("list"))
+                category_content.classList.add("vo-highlight");
+            break;
     }
+
     categories_prepare_save();
 }
 
@@ -69,8 +88,8 @@ function update_move_buttons() {
         if (!category_element) return;
 
         // Get move buttons
-        const move_up_button = category_element.querySelector(".move-up");
-        const move_down_button = category_element.querySelector(".move-down");
+        const move_up_button = category_element.querySelector(".ctrl-move-up");
+        const move_down_button = category_element.querySelector(".ctrl-move-down");
 
         // Update button states based on category position
         if (move_up_button)

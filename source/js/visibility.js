@@ -60,7 +60,7 @@ function hide_elements() {
     let css_rules = "";
 
     // Hide empty lines
-    if(cfg_hide_empty_lines === "yes") {
+    if (cfg_hide_empty_lines === "yes") {
         css_rules += ".content > p:first-of-type { display: none !important; } ";
         css_rules += ".content > p:nth-of-type(3) { display: none !important; } ";
         css_rules += ".content > hr { display: none !important; } ";

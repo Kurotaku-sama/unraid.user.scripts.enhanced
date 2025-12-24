@@ -40,3 +40,137 @@
 #ul-output .li-headline {
     font-weight: bold;
 }
+
+#hide_description {
+    min-width: max-content;
+}
+
+#ddcl-view_mode_highlighting {
+    max-width: 80px;
+}
+
+/* ========================
+   CodeMirror
+   ======================== */
+
+.CodeMirror {
+    resize: both;
+    overflow: auto;
+}
+
+/* ========================
+   Responsive Fixes
+   ======================== */
+
+.swal-user-scripts-enhanced > p {
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+}
+
+/* ========================
+   Info Panel
+   ======================== */
+
+@media (min-width: 922px) {
+    .panel-info-wrapper {
+        display: flex;
+    }
+}
+
+.panel-info-button-wrapper {
+    flex-grow: 1;
+}
+
+.panel-info-button-wrapper input {
+    margin-left: auto;
+    display: block;
+}
+
+/* ========================
+   About Container
+   ======================== */
+
+.kofi-button {
+    margin-top: 15px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    background: linear-gradient(135deg, #6a1292, #c850c0);
+    border-radius: 12px;
+    padding: 10px 20px;
+    color: white;
+    font-size: 13px;
+    font-family: "Segoe UI", sans-serif;
+    font-weight: bold;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.kofi-button:visited {
+    text-decoration: none;
+    color: white;
+}
+
+.kofi-button:hover {
+    transform: translateY(-4px) scale(1.03) rotateX(5deg);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+    text-decoration: none;
+    color: white;
+}
+
+.kofi-icon {
+    height: 32px;
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+    transition: transform 0.3s ease-in-out;
+}
+
+.kofi-text {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.kofi-shine {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(120deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+    transform: rotate(25deg);
+    pointer-events: none;
+    animation: kofi_shine 3s infinite linear;
+}
+
+@keyframes kofi_shine {
+    0% { transform: translateX(-100%) rotate(25deg); }
+    100% { transform: translateX(100%) rotate(25deg); }
+}
+
+@keyframes kofi_shake_icon {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    50% { transform: rotate(10deg); }
+    75% { transform: rotate(-10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.kofi-button:hover .kofi-icon {
+    animation: kofi_shake_icon 2s ease-in-out infinite;
+}
+
+@keyframes kofi_shake_icon {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(-10deg); }
+    20% { transform: rotate(10deg); }
+    30% { transform: rotate(-10deg); }
+    40% { transform: rotate(10deg); }
+    50% { transform: rotate(0deg); }
+    60% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}

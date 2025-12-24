@@ -13,10 +13,14 @@ function add_settings_button(reference_button) {
 }
 
 function add_search_input(table) {
-    if(cfg_enable_search === "yes") {
-        let search_input_field_html = `<div><input type="text" id="category-search-input" placeholder="Search"></div>`;
+    if (cfg_enable_search === "yes") {
+        let search_input_field_html = `
+            <div class="category-search-wrapper">
+                <b class="icon-u-search system category-search-icon"></b>
+                <input type="text" id="category-search-input" class="category-search-input" placeholder="Search">
+            </div>
+        `;
         table.insertAdjacentHTML("beforebegin", search_input_field_html);
-        // Add search function if enabled
-        document.getElementById("category-search-input")?.addEventListener("input", function(e) { search_script(e.target.value); });
+        document.getElementById("category-search-input")?.addEventListener("input", e => search_script(e.target.value));
     }
 }
