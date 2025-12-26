@@ -25,7 +25,7 @@ let uncategorized_category = null; // Global variable to cache the uncategorized
 function main() {
     let main_table = content.querySelector("table");
     if (!main_table) return;
-    if (cfg_custom_css.trim() != "")
+    if (cfg_custom_css?.trim() != "")
         insert_custom_css();
 
     handle_description_visibility();

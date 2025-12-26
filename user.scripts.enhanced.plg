@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "user.scripts.enhanced">
 <!ENTITY author    "Kurotaku">
-<!ENTITY version   "2025.12.24">
-<!ENTITY md5       "58d4717c923bcf0e5ceb63e0d6fbb1aa">
+<!ENTITY version   "2025.12.26">
+<!ENTITY md5       "fb840377a0763644d3a7293420cdf46c">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Kurotaku-sama/unraid.user.scripts.enhanced">
 <!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/main/&name;.plg">
@@ -16,6 +16,10 @@
         support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
+###2025.12.26 - Hotfix
+- Fixed an issue where the 'user.scripts.enhanced.cfg' file was missing, causing the JS script to crash and preventing the page from being properly adjusted.
+- Fixed the size of View Mode Highlighting Setting on Unraid systems older than 7.2
+
 ###2025.12.24 - New Features and improvements
 - List View Separators: Adds line between each script in List View (optional)
 - View Mode Highlighting: Hover effect on scripts; choose for list view, panel, or both (optional)

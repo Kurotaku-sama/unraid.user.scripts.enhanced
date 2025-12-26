@@ -16,9 +16,11 @@ $cfg_view_mode_highlighting = isset($cfg['view_mode_highlighting'])
     : ["list"];
 $cfg_enable_search = $cfg['enable_search'] ?? "yes";
 $cfg_save_delay = $cfg['save_delay'] ?? "5";
-$cfg_custom_css = $cfg['custom_css'] && base64_encode(base64_decode($cfg['custom_css'], true)) === $cfg['custom_css']
-    ? base64_decode($cfg['custom_css']) // decode only if string is valid base64
-    : $cfg['custom_css'];
+$cfg_custom_css = isset($cfg['custom_css']) && $cfg['custom_css'] !== null
+    ? (base64_encode(base64_decode($cfg['custom_css'], true)) === $cfg['custom_css']
+        ? base64_decode($cfg['custom_css']) // decode only if string is valid base64
+        : $cfg['custom_css'])
+    : ""; // Default if NULL
 
 // Hide default Elements Section
 $cfg_hide_description = $cfg['hide_description'] ?? "without";
