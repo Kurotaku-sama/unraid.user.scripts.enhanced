@@ -69,8 +69,8 @@ function generate_zip_file_path() {
 // Function to send a file to the browser
 function send_file($file_path, $content_type) {
     if (!file_exists($file_path)) {
-        http_response_code(500);
-        die("Error: File not found.");
+        http_response_code(404);
+        die(json_encode(["error" => "File not found."]));
     }
     header("Content-Type: {$content_type}");
     header("Content-Disposition: attachment; filename=" . basename($file_path));

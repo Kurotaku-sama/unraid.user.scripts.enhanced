@@ -19,10 +19,22 @@ $(function() {
     custom_css.setSize(300, 100);
 });
 
-function export_data(trigger, type) {
+async function export_data(trigger, type) {
     disable_button(trigger);
-    // Trigger the download
-    window.location.href = `/plugins/${plugin}/php/export.php?plugin=${plugin}&type=${type}`;
+    const url = `/plugins/${plugin}/php/export.php?plugin=${plugin}&type=${type}`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) return;
+        const blob = await response.blob();
+        const object_url = URL.createObjectURL(blob);
+        const filename = response.headers.get("Content-Disposition")?.split("filename=")[1] ?? `export_${type}`;
+        document.body.insertAdjacentHTML("beforeend", `<a id="tmp-export-link" href="${object_url}" download="${filename}" style="display:none;"></a>`);
+        document.getElementById("tmp-export-link").click();
+        document.getElementById("tmp-export-link").remove();
+        URL.revokeObjectURL(object_url);
+    } catch (error) {
+        console.error("❌ Export error:", error);
+    }
 }
 
 function confirmation_swal(title, text, callback) {
@@ -36,7 +48,7 @@ function confirmation_swal(title, text, callback) {
         cancelButtonText: "No",
         closeOnConfirm: false,
         dangerMode: true,
-        customClass: "swal-user-scripts-enhanced",
+        customClass: "swal-responsive-fix",
     }, function(confirm) {
         if (!confirm) return;
         callback();
@@ -127,7 +139,7 @@ async function delete_description_files_without_description(trigger) {
                     title: icon === "success" ? "Success" : "Info",
                     text: message,
                     type: icon,
-                    customClass: "swal-user-scripts-enhanced",
+                    customClass: "swal-responsive-fix",
                 });
             } catch (error) {
                 console.error("❌ Error:", error);
@@ -164,7 +176,7 @@ async function get_not_matching_scriptnames(trigger) {
                 `,
                 html: true,
                 type: "info",
-                customClass: "swal-user-scripts-enhanced",
+                customClass: "swal-responsive-fix",
             });
         }
         else
@@ -227,33 +239,4 @@ function disable_button(trigger) {
     const btn = $(trigger);
     btn.prop("disabled", true);
     btn.removeAttr("onclick");
-}
-
-function about_plugin() {
-    const ko_fi = `
-        <a href="https://ko-fi.com/kurotaku1337" target="_blank" rel="noopener" class="kofi-button">
-            <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Ko-fi cup" class="kofi-icon" />
-            <span class="kofi-text">If you like my work feel free<br>to support me on Ko-fi</span>
-            <div class="kofi-shine"></div>
-        </a>
-    `;
-
-    const html = `
-        <strong>Author:</strong> Kurotaku<br>
-        <strong>Homepage:</strong> <a href="https://kurotaku.de" target="_blank">kurotaku.de</a><br><br>
-        <strong>More Projects:</strong> <a href="https://github.com/Kurotaku-sama" target="_blank">GitHub</a><br><br>
-        <em>If you enjoy my work, please consider leaving a star!</em><br>
-        <em>For support or bug reports, check out the <a href="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/" target="_blank">Unraid forum thread.</a>.</em><br><br>
-        <b>Contact:</b> Discord – <strong>Kurotaku</strong><br><br>
-        ${ko_fi}
-    `;
-
-    swal({
-        title: "User Scripts Enhanced",
-        html: true,
-        text: html,
-        type: "success",
-        confirmButtonText: "Close",
-        customClass: "swal-user-scripts-enhanced",
-    });
 }

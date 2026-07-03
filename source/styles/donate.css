@@ -1,0 +1,102 @@
+/* ========================
+   About Container & Donation Buttons
+   ======================== */
+
+input.about-button {
+    display: block;
+    margin-left: auto;
+    margin-right: unset;
+}
+
+.donation-wrapper {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.donation-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    border-radius: 12px;
+    padding: 0 20px;
+    height: 50px;
+    box-sizing: border-box;
+    color: white !important;
+    font-size: 13px;
+    font-family: "Segoe UI", sans-serif;
+    font-weight: bold;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.donation-button:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+    text-decoration: none;
+    color: white !important;
+}
+
+.donation-icon {
+    display: block;
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+    transition: transform 0.3s ease-in-out;
+}
+
+.donation-text {
+    font-size: 16px;
+    position: relative;
+    line-height: 1;
+}
+
+/* Shine Effect */
+.donation-shine {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(120deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+    transform: rotate(25deg);
+    pointer-events: none;
+    animation: donation_shine_anim 3s infinite linear;
+}
+
+@keyframes donation_shine_anim {
+    0% { transform: translateX(-100%) rotate(25deg); }
+    100% { transform: translateX(100%) rotate(25deg); }
+}
+
+/* PayPal Specific */
+.link-paypal {
+    background: linear-gradient(135deg, #003087, #009cde);
+}
+
+.link-paypal .donation-icon {
+    height: 22px;
+    filter: brightness(0) invert(1);
+}
+
+/* Ko-fi Specific */
+.link-kofi {
+    background: linear-gradient(135deg, #6a1292, #c850c0);
+}
+
+.link-kofi .donation-icon {
+    height: 28px;
+}
+
+.link-kofi:hover .donation-icon {
+    animation: kofi_shake 2s ease-in-out infinite;
+}
+
+@keyframes kofi_shake {
+    0%, 50%, 100% { transform: rotate(0deg); }
+    10%, 30% { transform: rotate(-10deg); }
+    20%, 40% { transform: rotate(10deg); }
+}

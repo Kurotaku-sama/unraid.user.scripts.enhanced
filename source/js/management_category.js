@@ -5,31 +5,35 @@
 function create_category(category) {
     const category_container = document.getElementById("categories-container");
 
+    // Escaped safe_name
+    const safe_name = escape_html(category.name);
+
     // Determine style attribute
     const style_attr = category.collapsed === "yes" ? 'style="max-height: 0px;"' : "";
 
     // Determine optional view classes
     const extra_classes = [
-        (category.view_mode === "list" && cfg_list_view_separators === "yes") ? "vo-separator" : "",
-        (category.view_mode && cfg_view_mode_highlighting.includes(category.view_mode)) ? "vo-highlight" : ""
+        (category.view_mode === "list" && cfg_use['list_view_separators'] === "yes") ? "vo-separator" : "",
+        (category.view_mode && cfg_use['view_mode_highlighting'].includes(category.view_mode)) ? "vo-highlight" : ""
     ].filter(Boolean).join(" ");
 
     const html = `
-        <div class="category ${category.collapsed === "yes" ? "collapsed" : ""}" data-category="${category.name}" data-order="${category.order}">
-            <div class="category-header">${cfg_capitalized === "yes" ? category.name.toUpperCase() : category.name}</div>
+        <div class="category ${category.collapsed === "yes" ? "collapsed" : ""}" data-category="${safe_name}" data-order="${category.order}">
+            <div class="category-header">${cfg_use['capitalized'] === "yes" ? safe_name.toUpperCase() : safe_name}</div>
             <div class="category-content vm-${category.view_mode} ${extra_classes}" ${style_attr}>
                 <div class="category-controls">
-                    <input type="button" class="ctrl-manage-scripts" data-category="${category.name}" value="Manage Scripts">
-                    <input type="button" class="ctrl-rename-category" data-category="${category.name}" value="Rename">
-                    <input type="button" class="ctrl-collapse-toggle" data-category="${category.name}" value="Collapsed: ${category.collapsed}">
-                    <input type="button" class="ctrl-view-mode-toggle" data-category="${category.name}" value="View: ${category.view_mode === "list" ? "List" : "Panel"}">
-                    <input type="button" class="ctrl-move-up" data-category="${category.name}" value="↑" ${category.order === 1 ? "disabled" : ""}>
-                    <input type="button" class="ctrl-move-down" data-category="${category.name}" value="↓" ${category.order === categories.length ? "disabled" : ""}>
-                    <input type="button" class="ctrl-delete-category" data-category="${category.name}" value="Delete">
+                    <input type="button" class="ctrl-manage-scripts" data-category="${safe_name}" value="Manage Scripts">
+                    <input type="button" class="ctrl-rename-category" data-category="${safe_name}" value="Rename">
+                    <input type="button" class="ctrl-collapse-toggle" data-category="${safe_name}" value="Collapsed: ${category.collapsed}">
+                    <input type="button" class="ctrl-view-mode-toggle" data-category="${safe_name}" value="View: ${category.view_mode === "list" ? "List" : "Panel"}">
+                    <input type="button" class="ctrl-move-up" data-category="${safe_name}" value="↑" ${category.order === 1 ? "disabled" : ""}>
+                    <input type="button" class="ctrl-move-down" data-category="${safe_name}" value="↓" ${category.order === categories.length ? "disabled" : ""}>
+                    <input type="button" class="ctrl-delete-category" data-category="${safe_name}" value="Delete">
                 </div>
                 <div class="category-scripts"></div>
             </div>
         </div>`;
+
 
     const uncategorized = category_container.querySelector(".category[data-category='uncategorized']");
     uncategorized
@@ -40,7 +44,7 @@ function create_category(category) {
 }
 
 function initialize_category_controls(category) {
-    const element = content.querySelector(`.category[data-category="${category.name}"]`);
+    const element = get_category_element(category.name);
     const header = element.querySelector(".category-header");
 
     header.addEventListener("click", toggle_category_visibility);
@@ -86,8 +90,8 @@ function add_category() {
         let new_category = {
             name: category_name,
             order: categories.length + 1,
-            view_mode: cfg_default_view_mode,
-            collapsed: cfg_default_collapsed,
+            view_mode: cfg_use['default_view_mode'],
+            collapsed: cfg_use['default_collapsed'],
             scripts: []
         };
 
@@ -104,7 +108,7 @@ function add_category() {
 
 function rename_category(category) {
     let original_name = category.name;
-    const category_element = content.querySelector(`.category[data-category="${original_name}"]`);
+    const category_element = get_category_element(original_name);
     if (!category_element) return;
 
     swal({
@@ -130,14 +134,14 @@ function rename_category(category) {
         category.name = new_name;
 
         // Update all relevant HTML elements dynamically based on data-category attribute
-        content.querySelectorAll(`[data-category="${original_name}"]`).forEach(el => {
+        get_elements_by_category(original_name).forEach(el => {
             el.setAttribute("data-category", new_name);
         });
 
         // Ensure category-header text is also updated
         let header_element = category_element.querySelector(".category-header");
         if (header_element)
-            header_element.textContent = cfg_capitalized === "yes" ? new_name.toUpperCase() : new_name;
+            header_element.textContent = cfg_use['capitalized'] === "yes" ? new_name.toUpperCase() : new_name;
 
         categories_prepare_save();
         swal.close();
@@ -147,7 +151,7 @@ function rename_category(category) {
 function delete_category(category) {
     swal({
         title: "Are you sure?",
-        text: `Do you really want to delete the category "${category.name}"?<br>This action cannot be undone!`,
+        text: `Do you really want to delete the category "${escape_html(category.name)}"?<br>This action cannot be undone!`,
         html: true,
         type: "warning",
         showCancelButton: true,
@@ -170,7 +174,7 @@ function delete_category(category) {
         categories.forEach((cat, index) => (cat.order = index + 1));
 
         // Safely remove category element from DOM if it exists
-        content.querySelector(`.category[data-category="${category.name}"]`)?.remove();
+        get_category_element(category.name)?.remove();
 
         // Update UI states
         update_uncategorized_visibility();

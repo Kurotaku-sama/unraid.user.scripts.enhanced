@@ -16,6 +16,14 @@
         support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
+###2026.06.XX - Hotfix
+- Every character is now allowed for the category name
+- Fixed several HTML injections
+- Fixed the redirect to "Error: File not found" page when attempting to export a non-existent config or categories file.
+- Removed config_loader.php, its now using the default.cfg
+- Removed ability to hide Credits
+- Added PayPal donation link and About U.S.E Button into Scripts page
+
 ###2025.12.26 - Hotfix
 - Fixed an issue where the 'user.scripts.enhanced.cfg' file was missing, causing the JS script to crash and preventing the page from being properly adjusted.
 - Fixed the size of View Mode Highlighting Setting on Unraid systems older than 7.2

@@ -3,7 +3,7 @@
 // ========================
 
 function toggle_collapsed(category) {
-    const category_element = content.querySelector(`.category[data-category="${category.name}"]`);
+    const category_element = get_category_element(category.name);
     const collapse_button = category_element.querySelector(".ctrl-collapse-toggle");
     category.collapsed = category.collapsed === "yes" ? "no" : "yes";
     collapse_button.value = "Collapsed: " + category.collapsed;
@@ -11,7 +11,7 @@ function toggle_collapsed(category) {
 }
 
 function toggle_view_mode(category) {
-    const category_element = content.querySelector(`.category[data-category="${category.name}"]`);
+    const category_element = get_category_element(category.name);
     const category_content = category_element.querySelector(".category-content");
     const view_button = category_element.querySelector(".ctrl-view-mode-toggle");
 
@@ -25,7 +25,7 @@ function toggle_view_mode(category) {
             view_button.value = "View: Panel";
 
             // Highlighting for panel
-            if (cfg_view_mode_highlighting.includes("panel"))
+            if (cfg_use['view_mode_highlighting'].includes("panel"))
                 category_content.classList.add("vo-highlight");
             break;
 
@@ -36,11 +36,11 @@ function toggle_view_mode(category) {
             view_button.value = "View: List";
 
             // Add separator if enabled in settings
-            if (cfg_list_view_separators === "yes")
+            if (cfg_use['list_view_separators'] === "yes")
                 category_content.classList.add("vo-separator");
 
             // Highlighting for list
-            if (cfg_view_mode_highlighting.includes("list"))
+            if (cfg_use['view_mode_highlighting'].includes("list"))
                 category_content.classList.add("vo-highlight");
             break;
     }
@@ -68,8 +68,8 @@ function move_category(category, direction) {
     categories.sort((a, b) => a.order - b.order);
 
     // Get DOM elements for both categories
-    const category_element = content.querySelector(`.category[data-category="${category.name}"]`);
-    const swap_element = content.querySelector(`.category[data-category="${swap_category.name}"]`);
+    const category_element = get_category_element(category.name);
+    const swap_element = get_category_element(swap_category.name);
     if (!category_element || !swap_element) return;
 
     if (direction === "up")
@@ -84,7 +84,7 @@ function move_category(category, direction) {
 function update_move_buttons() {
     // Iterate through all categories
     categories.forEach(category => {
-        const category_element = content.querySelector(`.category[data-category="${category.name}"]`);
+        const category_element = get_category_element(category.name);
         if (!category_element) return;
 
         // Get move buttons

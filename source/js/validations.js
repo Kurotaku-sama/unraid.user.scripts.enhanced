@@ -25,10 +25,6 @@ function validate_category_name(input, original_name = null) {
         swal.showInputError("❌ A category with this name already exists!");
         return false;
     }
-    if (/["\\]/.test(category_name)) {
-        swal.showInputError("❌ The category name cannot contain double quotes (\") or backslashes (\\)!");
-        return false;
-    }
     return category_name;
 }
 

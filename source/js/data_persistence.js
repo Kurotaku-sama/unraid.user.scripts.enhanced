@@ -12,7 +12,7 @@ function stop_saving() {
         countdown_interval = null;
     }
 
-    const save_panel = document.getElementById('save-panel');
+    const save_panel = document.getElementById("save-panel");
     if (save_panel) {
         save_panel.style.opacity = 0;
         setTimeout(() => save_panel.remove(), 300);
@@ -31,7 +31,7 @@ async function categories_prepare_save(categories_to_save) {
         return false;
     }
 
-    let delay = parseInt(cfg_save_delay);
+    let delay = parseInt(cfg_use['save_delay']);
 
     if (delay === 0) {
         await perform_save(categories_to_save);
@@ -102,7 +102,7 @@ async function perform_save(categories_to_save) {
 
 async function categories_load() {
     try {
-        const data = await $.getJSON(`/plugins/${cfg_plugin}/php/categories_load.php?plugin=${cfg_plugin}`);
+        const data = await $.getJSON(`/plugins/${plugin}/php/categories_load.php?plugin=${plugin}`);
         // Check if the response contains an error
         if (data.error)
             throw new Error(data.error); // Throw an error with the server error message
@@ -133,8 +133,8 @@ async function categories_save(categories_to_save) {
     try {
         // Use the passed categories or fall back to the global `categories` variable
         const categories_data = JSON.stringify(categories_to_save || categories);
-        const response = JSON.parse(await $.post(`/plugins/${cfg_plugin}/php/categories_save.php`, {
-            plugin: cfg_plugin,
+        const response = JSON.parse(await $.post(`/plugins/${plugin}/php/categories_save.php`, {
+            plugin: plugin,
             categories: categories_data
         }));
 

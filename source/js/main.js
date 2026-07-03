@@ -25,7 +25,7 @@ let uncategorized_category = null; // Global variable to cache the uncategorized
 function main() {
     let main_table = content.querySelector("table");
     if (!main_table) return;
-    if (cfg_custom_css?.trim() != "")
+    if (cfg_use['custom_css']?.trim() != "")
         insert_custom_css();
 
     handle_description_visibility();
@@ -39,7 +39,15 @@ function main() {
         add_category_button(add_script_button);
     }
 
+    let done_button = content.querySelector("input[type='button'][value='Done']");
+    if (done_button) {
+        done_button.parentNode.style.display = "flex";
+        done_button.parentNode.style.flexWrap = 'wrap';
+        add_about_button(done_button);
+    }
+
     categories.forEach(cat => {create_category(cat)});
+
 }
 
 function container_overhaul(table) {
@@ -49,17 +57,17 @@ function container_overhaul(table) {
     let categories_container = document.getElementById("categories-container");
 
     // Style
-    const style_attr = cfg_uncategorized_collapsed === "yes" ? 'style="max-height: 0px;"' : "";
+    const style_attr = cfg_use['uncategorized_collapsed'] === "yes" ? 'style="max-height: 0px;"' : "";
     // Determine optional extra classes for uncategorized section
     const extra_classes = [
-        (cfg_default_view_mode === "list" && cfg_list_view_separators === "yes") ? "vo-separator" : "",
-        (cfg_view_mode_highlighting.includes(cfg_default_view_mode)) ? "vo-highlight" : ""
+        (cfg_use['default_view_mode'] === "list" && cfg_use['list_view_separators'] === "yes") ? "vo-separator" : "",
+        (cfg_use['view_mode_highlighting'].includes(cfg_use['default_view_mode'])) ? "vo-highlight" : ""
     ].filter(Boolean).join(" ");
 
     let uncategorized_userscripts_header_html = `
-        <div class="category ${cfg_uncategorized_collapsed === "yes" ? "collapsed uncategorized_empty" : ""}" data-category="uncategorized">
-            <div class="category-header">${cfg_capitalized === "yes" ? "UNCATEGORIZED USERSCRIPTS" : "Uncategorized Userscripts"}</div>
-            <div class="category-content vm-${cfg_default_view_mode} ${extra_classes}" ${style_attr}>
+        <div class="category ${cfg_use['uncategorized_collapsed'] === "yes" ? "collapsed uncategorized_empty" : ""}" data-category="uncategorized">
+            <div class="category-header">${escape_html(cfg_use['capitalized'] === "yes" ? cfg_use['uncategorized_name'].toUpperCase() : cfg_use['uncategorized_name'])}</div>
+            <div class="category-content vm-${cfg_use['default_view_mode']} ${extra_classes}" ${style_attr}>
                 <div class="category-scripts"></div>
             </div>
         </div>

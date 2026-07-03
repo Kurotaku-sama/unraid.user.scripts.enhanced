@@ -11,7 +11,7 @@ function manage_scripts(category) {
 
     // Create the options for the dropdown list (only uncategorized scripts)
     let script_options = uncategorized_scripts.map(script =>
-        `<option value="${script.id}">${script.name}</option>`
+        `<option value="${escape_html(script.id)}">${escape_html(script.name)}</option>`
     ).join("");
 
     // Create the list of already assigned scripts
@@ -34,7 +34,7 @@ function manage_scripts(category) {
         showCancelButton: true,
         confirmButtonText: "Save",
         cancelButtonText: "Cancel",
-        customClass: "swal-user-scripts-enhanced",
+        customClass: "swal-responsive-fix",
     }, function(is_confirmed) {
         if (!is_confirmed) return;
 
@@ -76,10 +76,11 @@ function get_uncategorized_userscripts() {
 
 function get_scripts_from_category(category) {
     let scripts = [];
-    const category_container = content.querySelector(`.category[data-category="${category.name}"] .category-scripts`);
-    if (!category_container) return scripts;
+    const category_element = get_category_element(category.name);
+    const script_container = category_element ? category_element.querySelector(".category-scripts") : null;
+    if (!script_container) return scripts;
 
-    category_container.querySelectorAll("tr").forEach(row => {
+    script_container.querySelectorAll("tr").forEach(row => {
         let script_span = row.querySelector("span.ca_nameEdit");
         let script_name = row.querySelector("font > b > span")?.textContent?.trim();
 
@@ -156,24 +157,29 @@ function move_script(event, direction) {
 
 function create_list_item(script_id, script_name) {
     const max_length = 30;
+    // Truncate based on the raw name length, escaping happens afterwards when inserted into the HTML
     const truncated_text = script_name.length > max_length
         ? script_name.substring(0, max_length) + "..."
         : script_name;
+
+    // Only escape values that get rendered as HTML text or attributes, script_id and script_name in data-* stay raw since they get read back later for comparisons and option creation
+    const safe_title = escape_html(script_name);
+    const safe_truncated_text = escape_html(truncated_text);
 
     return `
         <li data-script-id="${script_id}" data-script-name="${script_name}">
             <input type="button" class="manager-remove-script" data-id="${script_id}" value="Remove" onclick="remove_selected_script(event)">
             <input type="button" class="manager-move-up" value="↑" onclick="move_script(event, 'up')">
             <input type="button" class="manager-move-down" value="↓" onclick="move_script(event, 'down')">
-            <span class="truncate-text" title="${script_name}">${truncated_text}</span>
+            <span class="truncate-text" title="${safe_title}">${safe_truncated_text}</span>
         </li>
     `;
 }
 
 function organize_userscripts_category(category) {
-    const script_container = content.querySelector(`.category[data-category="${category.name}"] .category-scripts`);
+    const category_element = get_category_element(category.name);
+    const script_container = category_element ? category_element.querySelector(".category-scripts") : null;
     if (!script_container) return;
-
 
     const uncategorized_scripts_container = content.querySelector(".category[data-category='uncategorized'] .category-scripts");
     if (!uncategorized_scripts_container) return;

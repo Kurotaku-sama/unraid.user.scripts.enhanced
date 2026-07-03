@@ -48,6 +48,34 @@ function toggle_category_visibility(event) {
 
 function insert_custom_css() {
     let style = document.createElement("style");
-    style.textContent = cfg_custom_css;
+    style.textContent = cfg_use['custom_css'];
     document.head.appendChild(style);
+}
+
+function escape_html(string) {
+    const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    };
+    return string.replace(/[&<>"']/g, character => map[character]);
+}
+
+// Finds the DOM element of a category by its name without relying on CSS attribute selectors, since category names can contain characters that would break selector syntax (quotes, brackets, etc.)
+function get_category_element(category_name) {
+    for (const element of content.querySelectorAll(".category"))
+        if (element.dataset.category === category_name)
+            return element;
+    return null;
+}
+
+// Returns all elements (category container and its control buttons) that share the given category name in their data-category attribute, used when renaming a category to update every related element at once
+function get_elements_by_category(category_name) {
+    const elements = [];
+    for (const element of content.querySelectorAll("[data-category]"))
+        if (element.dataset.category === category_name)
+            elements.push(element);
+    return elements;
 }

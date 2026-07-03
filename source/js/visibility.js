@@ -1,10 +1,9 @@
-
 // ========================
 // Description visibility & Hidden Elements
 // ========================
 
 async function handle_description_visibility() {
-    if (cfg_hide_description !== "no") {
+    if (cfg_use['hide_description'] !== "no") {
         const description_elements = content.querySelectorAll(".ca_descEdit");
         description_elements.forEach(element => {
             // Apply initial visibility rules
@@ -20,7 +19,7 @@ async function handle_description_visibility() {
 function update_description_visibility(element) {
     const description_text = element.textContent.trim();
 
-    switch (cfg_hide_description) {
+    switch (cfg_use['hide_description']) {
         case "yes":
             // Add the .desc-hidden class to hide the text
             element.classList.add("desc-hidden");
@@ -60,29 +59,23 @@ function hide_elements() {
     let css_rules = "";
 
     // Hide empty lines
-    if (cfg_hide_empty_lines === "yes") {
+    if (cfg_use['hide_empty_lines'] === "yes") {
         css_rules += ".content > p:first-of-type { display: none !important; } ";
         css_rules += ".content > p:nth-of-type(3) { display: none !important; } ";
         css_rules += ".content > hr { display: none !important; } ";
         css_rules += ".content > p:nth-of-type(4) > br { display: none !important; } ";
     }
 
-    // What is cron and credits
-    if (cfg_hide_what_is_cron === "yes" && cfg_hide_credits === "yes")
-        css_rules += ".content > p:nth-of-type(2) { display: none !important; }";
-    else {
-        if (cfg_hide_what_is_cron === "yes")
-            css_rules += ".ca_cron { display: none !important; }";
-        if (cfg_hide_credits === "yes")
-            css_rules += ".ca_credits { display: none !important; }";
-    }
+    // What is cron
+    if (cfg_use['hide_what_is_cron'] === "yes")
+        css_rules += ".ca_cron { display: none !important; }";
 
     // How to add scripts button
-    if (cfg_hide_how_to_add_scripts === "yes")
+    if (cfg_use['hide_how_to_add_scripts'] === "yes")
         css_rules += ".content > center:first-of-type { display: none !important; }";
 
     // Help section
-    if (cfg_hide_help === "yes")
+    if (cfg_use['hide_help'] === "yes")
         css_rules += ".content > center:nth-of-type(2) { display: none !important; }";
 
 

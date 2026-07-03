@@ -435,7 +435,7 @@ input.manager-move-down {
 .category-search-wrapper {
     position: relative;
     display: inline-block;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     width: 300px;
 }
 
@@ -477,7 +477,7 @@ input.manager-move-down {
    Responsive Fixes
    ======================== */
 
-.swal-user-scripts-enhanced > p {
+.swal-responsive-fix > p {
     white-space: normal !important;
     overflow-wrap: normal !important;
 }

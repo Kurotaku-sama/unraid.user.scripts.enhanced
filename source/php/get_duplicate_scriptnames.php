@@ -28,15 +28,15 @@ foreach ($scripts as $script_folder) {
         $script_names[$cleaned_name_content]['folders'][] = $script_folder;
     } else {
         $script_names[$cleaned_name_content] = [
-            'folders' => [$script_folder]
+            "folders" => [$script_folder]
         ];
     }
 }
 
 // Find duplicates
 foreach ($script_names as $name => $data) {
-    if (count($data['folders']) > 1) {
-        $duplicates[$name] = $data['folders'];
+    if (count($data["folders"]) > 1) {
+        $duplicates[$name] = $data["folders"];
     }
 }
 
