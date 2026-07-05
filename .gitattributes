@@ -1,0 +1,11 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+* text eol=lf
+
+# Treat all image formats as binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
