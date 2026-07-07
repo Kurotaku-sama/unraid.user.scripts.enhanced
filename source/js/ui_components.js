@@ -7,6 +7,11 @@ function add_category_button(reference_button) {
     reference_button.insertAdjacentHTML("afterend", html);
 }
 
+function add_change_order_button(reference_button) {
+    const html = `<input type="button" id="change-category-order" value="Change Order" onclick="open_change_order_dialog();">`;
+    reference_button.insertAdjacentHTML("afterend", html);
+}
+
 function add_settings_button(reference_button) {
     const html = `<input type="button" id="add-settings" value="Settings" onclick="window.location.href='/Settings/UserscriptsEnhanced';">`;
     reference_button.insertAdjacentHTML("afterend", html);

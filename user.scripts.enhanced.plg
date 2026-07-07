@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "user.scripts.enhanced">
 <!ENTITY author    "Kurotaku">
-<!ENTITY version   "2025.12.26">
+<!ENTITY version   "2025.07.26">
 <!ENTITY md5       "fb840377a0763644d3a7293420cdf46c">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Kurotaku-sama/unraid.user.scripts.enhanced">
@@ -16,8 +16,13 @@
         support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
-###2026.06.XX - Hotfix
+###2026.07.XX - 
+- Removed the individual category buttons, replaced with a gear icon in the category header that opens a settings dialog
+- Removed the Move Up & Down Buttons, Order can be now changed with the "Change Order" Button
+- Removed ability to set save delay, it's now instant
+- Added a Custom Class input field under Advanced Options, allowing a category to be assigned its own CSS class for individual styling via Plugin Settings
 - Every character is now allowed for the category name
+- Category header text now truncates with ellipsis instead of overflowing when the name is too long to fit
 - Fixed several HTML injections
 - Fixed the redirect to "Error: File not found" page when attempting to export a non-existent config or categories file.
 - Removed config_loader.php, its now using the default.cfg

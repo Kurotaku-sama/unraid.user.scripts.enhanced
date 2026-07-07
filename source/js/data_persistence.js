@@ -2,72 +2,20 @@
 // Data Persistence
 // ========================
 
-let is_saving = false;
 let can_save = true;
-let countdown_interval = null;
-
-function stop_saving() {
-    if (countdown_interval) {
-        clearInterval(countdown_interval);
-        countdown_interval = null;
-    }
-
-    const save_panel = document.getElementById("save-panel");
-    if (save_panel) {
-        save_panel.style.opacity = 0;
-        setTimeout(() => save_panel.remove(), 300);
-    }
-
-    is_saving = false;
-}
-
-async function categories_prepare_save(categories_to_save) {
-    if (is_saving) return;
-    is_saving = true;
-
-    if (can_save == false) {
-        swal("Save not possible", "The categories had changed on another instance, reload the page to be able to save again!", "error");
-        is_saving = false;
-        return false;
-    }
-
-    let delay = parseInt(cfg_use['save_delay']);
-
-    if (delay === 0) {
-        await perform_save(categories_to_save);
-        return;
-    }
-
-    const html = `
-        <div id="save-panel">
-            Saving in: <span id="save-timer">${delay}</span> Seconds
-        </div>
-    `;
-
-    content.insertAdjacentHTML("beforeend", html);
-    const save_panel = document.getElementById("save-panel");
-    save_panel.style.opacity = 0;
-    setTimeout(() => save_panel.style.opacity = 1, 10);
-
-    const timer_element = document.getElementById("save-timer");
-    countdown_interval = setInterval(async () => {
-        delay--;
-        timer_element.textContent = delay;
-
-        if (delay <= 0) {
-            await perform_save(categories_to_save);
-            stop_saving();
-        }
-    }, 1000);
-}
+let is_saving = false;
 
 async function perform_save(categories_to_save) {
-    stop_saving();
+    // If another save is already running, wait until it finishes before starting this one
+    while (is_saving)
+        await new Promise(resolve => setTimeout(resolve, 100));
 
     if (can_save == false) {
         swal("Save not possible", "The categories had changed on another instance, reload the page to be able to save again!", "error");
         return false;
     }
+
+    is_saving = true;
 
     let save_success;
     try {
@@ -91,18 +39,23 @@ async function perform_save(categories_to_save) {
         }
 
         save_success = await categories_save(categories_to_save);
+
         if (save_success)
             original_categories = $.extend(true, [], categories_to_save || categories);
+
         return save_success;
     } catch (error) {
         console.error("❌ Save preparation error:", error);
         return false;
+    } finally {
+        is_saving = false;
     }
 }
 
 async function categories_load() {
     try {
         const data = await $.getJSON(`/plugins/${plugin}/php/categories_load.php?plugin=${plugin}`);
+
         // Check if the response contains an error
         if (data.error)
             throw new Error(data.error); // Throw an error with the server error message
@@ -110,6 +63,7 @@ async function categories_load() {
         // Handle warnings if present
         if (data.warning)
             swal({title: "Warning", text: data.warning, icon: "warning"});
+
         return validate_categories_order(Array.isArray(data.data) ? data.data : []);
     } catch (error) {
         // If the request was canceled by the browser → Do NOT display

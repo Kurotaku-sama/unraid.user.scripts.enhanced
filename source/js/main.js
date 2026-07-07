@@ -23,7 +23,7 @@ let uncategorized_category = null; // Global variable to cache the uncategorized
 })();
 
 function main() {
-    let main_table = content.querySelector("table");
+    const main_table = content.querySelector("table");
     if (!main_table) return;
     if (cfg_use['custom_css']?.trim() != "")
         insert_custom_css();
@@ -33,13 +33,14 @@ function main() {
     add_search_input(main_table);
     container_overhaul(main_table);
 
-    let add_script_button = content.querySelector("input[type='button'][value='Add New Script']");
+    const add_script_button = content.querySelector("input[type='button'][value='Add New Script']");
     if (add_script_button) {
         add_settings_button(add_script_button);
+        add_change_order_button(add_script_button);
         add_category_button(add_script_button);
     }
 
-    let done_button = content.querySelector("input[type='button'][value='Done']");
+    const done_button = content.querySelector("input[type='button'][value='Done']");
     if (done_button) {
         done_button.parentNode.style.display = "flex";
         done_button.parentNode.style.flexWrap = 'wrap';
@@ -51,10 +52,10 @@ function main() {
 }
 
 function container_overhaul(table) {
-    let categories_container_html = "<div id='categories-container'></div>";
+    const categories_container_html = "<div id='categories-container'></div>";
     table.insertAdjacentHTML("beforebegin", categories_container_html);
 
-    let categories_container = document.getElementById("categories-container");
+    const categories_container = document.getElementById("categories-container");
 
     // Style
     const style_attr = cfg_use['uncategorized_collapsed'] === "yes" ? 'style="max-height: 0px;"' : "";
@@ -64,23 +65,26 @@ function container_overhaul(table) {
         (cfg_use['view_mode_highlighting'].includes(cfg_use['default_view_mode'])) ? "vo-highlight" : ""
     ].filter(Boolean).join(" ");
 
-    let uncategorized_userscripts_header_html = `
+    const uncategorized_name = escape_html(cfg_use['capitalized'] === "yes" ? cfg_use['uncategorized_name'].toUpperCase() : cfg_use['uncategorized_name'])
+    const uncategorized_userscripts_header_html = `
         <div class="category ${cfg_use['uncategorized_collapsed'] === "yes" ? "collapsed uncategorized_empty" : ""}" data-category="uncategorized">
-            <div class="category-header">${escape_html(cfg_use['capitalized'] === "yes" ? cfg_use['uncategorized_name'].toUpperCase() : cfg_use['uncategorized_name'])}</div>
-            <div class="category-content vm-${cfg_use['default_view_mode']} ${extra_classes}" ${style_attr}>
-                <div class="category-scripts"></div>
+            <div class="category-header">
+                <span class="category-header-text">${uncategorized_name}</span>
+            </div>
+            <div class="category-content" ${style_attr}>
+                <div class="category-subcategories"></div>
+                <div class="category-scripts vm-${cfg_use['default_view_mode']} ${extra_classes}"></div>
             </div>
         </div>
     `;
-
     categories_container.insertAdjacentHTML("beforeend", uncategorized_userscripts_header_html);
 
     // Get the uncategorized scripts container
-    let uncategorized_category = categories_container.querySelector(".category[data-category='uncategorized']");
-    let uncategorized_userscripts_scripts_container = uncategorized_category.querySelector(".category-scripts");
+    const uncategorized_category = categories_container.querySelector(".category[data-category='uncategorized']");
+    const uncategorized_userscripts_scripts_container = uncategorized_category.querySelector(".category-scripts");
 
     // Move all rows from the table into the uncategorized scripts container
-    let tbody = table.querySelector("tbody");
+    const tbody = table.querySelector("tbody");
     if (tbody)
         while (tbody.firstChild)
             uncategorized_userscripts_scripts_container.appendChild(tbody.firstChild);

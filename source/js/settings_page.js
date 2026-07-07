@@ -164,9 +164,11 @@ async function get_not_matching_scriptnames(trigger) {
 
         // Create list items for not matching script names
         if (response.not_matching.length > 0) {
-            let not_matching = response.not_matching.map(folder =>
-                `<li>"${folder.old_name}" <span class="li-arrow">→</span> "${folder.new_name}"</li>`
-            ).join("");
+            let not_matching = response.not_matching.map(folder => {
+                const safe_old_name = escape_html(folder.old_name);
+                const safe_new_name = escape_html(folder.new_name);
+                return `<li>"${safe_old_name}" <span class="li-arrow">→</span> "${safe_new_name}"</li>`;
+            }).join("");
 
             swal({
                 title: "Not Matching Script Names",
@@ -213,14 +215,15 @@ async function get_duplicate_scriptnames(trigger) {
         // Build the message with script names and folder names
         if (Object.keys(response.duplicates).length > 0) {
             message += `<ul id="ul-output">`;
-            for (const [scriptName, folders] of Object.entries(response.duplicates)) {
-                message += `<ul><li class="li-headline">Name: ${scriptName}</li>`;
+            for (const [script_name, folders] of Object.entries(response.duplicates)) {
+                const safe_script_name = escape_html(script_name);
+                message += `<ul><li class="li-headline">Name: ${safe_script_name}</li>`;
                 folders.forEach(folder => {
-                    message += `<li>&nbsp;- ${folder}</li>`;
+                    const safe_folder = escape_html(folder);
+                    message += `<li>&nbsp;- ${safe_folder}</li>`;
                 });
                 message += `</ul></li>`;
             }
-            message += `</ul>`;
         }
 
         swal({

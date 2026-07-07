@@ -24,24 +24,24 @@ function wait_for_element(selector) {
 
 function toggle_category_visibility(event) {
     let category = event.target.closest(".category");
-    let content = category.querySelector(".category-content");
+    let content_element = category.querySelector(".category-content");
 
-    if (content.dataset.animating) return; // Block spam clicks
+    if (content_element.dataset.animating) return; // Block spam clicks
 
-    content.dataset.animating = "true"; // Lock for animation
-    setTimeout(() => delete content.dataset.animating, 500); // Unlock after 0.5s
+    content_element.dataset.animating = "true"; // Lock for animation
+    setTimeout(() => delete content_element.dataset.animating, 500); // Unlock after 0.5s
 
     if (category.classList.contains("collapsed")) {
         // Open the category with animation if it's collapsed
         category.classList.remove("collapsed");
-        content.style.maxHeight = content.scrollHeight + "px"; // Initial opening
-        setTimeout(() => content.style.maxHeight = null, 500); // Reset max-height after animation
+        content_element.style.maxHeight = `${content_element.scrollHeight}px`; // Initial opening
+        setTimeout(() => content_element.style.maxHeight = null, 500); // Reset max-height after animation
     } else {
         // Collapse the category with animation if it's open
-        content.style.maxHeight = content.scrollHeight + "px";
+        content_element.style.maxHeight = `${content_element.scrollHeight}px`;
         setTimeout(() => {
             category.classList.add("collapsed");
-            content.style.maxHeight = "0"; // Collapse with animation
+            content_element.style.maxHeight = "0"; // Collapse with animation
         }, 10);
     }
 }

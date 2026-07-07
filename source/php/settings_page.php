@@ -1,5 +1,5 @@
 <?
-function render_select_field($title, $id, $variable, $options = ["yes" => "Yes", "no" => "No"], $class = "narrow setting") {
+function render_select_field($title, $id, $variable, $options = ["yes" => "Yes", "no" => "No"], $class = "narrow") {
     echo "
     <dl>
         <dt>{$title}:</dt>

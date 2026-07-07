@@ -37,7 +37,7 @@ function validate_categories_order(data) {
             break;
         }
     }
-    // If not sequential, reorder the categories
+    // If not sequential, reorder the categories    
     if (!is_sequential) {
         console.log("🔄 Reordering categories to maintain correct order...");
         // Sort the categories by their current order
@@ -47,9 +47,16 @@ function validate_categories_order(data) {
         sorted_categories.forEach((category, index) => {
             category.order = index + 1;
         });
-        categories_prepare_save(sorted_categories);
+        perform_save(sorted_categories);
         return sorted_categories;
     }
     // If already sequential, return the original data
     return data;
+}
+
+// Sanitizes a space separated list of custom CSS classes: keeps only letters, numbers, hyphens, underscores and spaces, then strips leading digits from every individual class name since CSS class names cannot start with a number, also enforces the 30 character limit
+function sanitize_category_classes(input) {
+    const cleaned = input.replace(/[^a-zA-Z0-9_\- ]/g, "");
+    const classes = cleaned.split(" ").map(class_name => class_name.replace(/^[0-9]+/, ""));
+    return classes.join(" ").substring(0, 30);
 }

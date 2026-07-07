@@ -14,9 +14,11 @@ require_once "$php_path/settings_page.php";
 <script>const plugin = "<?=$plugin?>";</script>
 
 <script src="<?=autov("/plugins/$plugin/js/settings_page.js")?>"></script>
+<script src="<?=autov("/plugins/$plugin/js/helper.js")?>"></script>
 <script src="<?=autov("/plugins/$plugin/js/about.js")?>"></script>
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/page_settings.css")?>">
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/donate.css")?>">
+
 
 <!-- CodeMirror -->
 <script src="<?=autov("/plugins/$plugin/codemirror/js/codemirror.min.js")?>"></script>
@@ -98,20 +100,11 @@ require_once "$php_path/settings_page.php";
     <!-- Enable search function -->
     <? render_select_field("Enable search function", "enable_search", $cfg_use['enable_search']); ?>
 
-    <!-- Save delay -->
-    <? render_select_field("Save delay (in seconds)", "save_delay", $cfg_use['save_delay'], array_combine(range(0, 10), range(0, 10))); ?>
-
-    <blockquote class="inline_help">
-        <p>Recommended: 3-5 seconds. Instant saving (0) is not recommended.<br>
-        The delay prevents saving on every minor action.<br>
-        Keep the script page open when the saving panel appears in the bottom left, unless you want to undo changes like deleting a category!</p>
-    </blockquote>
-
     <!-- Custom Uncategorized Name -->
     <dl>
         <dt>Custom Uncategorized Name:</dt>
         <dd>
-            <input type="text" id="uncategorized_name" name="uncategorized_name" class="setting" maxlength="40" value="<?=htmlspecialchars(cfg_base64_decode($cfg_use['uncategorized_name']))?>">
+            <input type="text" id="uncategorized_name" name="uncategorized_name" maxlength="40" value="<?=htmlspecialchars(cfg_base64_decode($cfg_use['uncategorized_name']))?>">
         </dd>
     </dl>
 
@@ -124,7 +117,7 @@ require_once "$php_path/settings_page.php";
     <dl>
         <dt>Custom CSS:</dt>
         <dd>
-            <textarea id="custom_css" name="custom_css" class="narrow setting"><?=htmlspecialchars(cfg_base64_decode($cfg_use['custom_css']))?></textarea>
+            <textarea id="custom_css" name="custom_css" class="narrow"><?=htmlspecialchars(cfg_base64_decode($cfg_use['custom_css']))?></textarea>
         </dd>
     </dl>
 
