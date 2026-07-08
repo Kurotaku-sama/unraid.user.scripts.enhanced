@@ -24,8 +24,9 @@ function get_uncategorized_userscripts() {
 
 function get_scripts_from_category(category) {
     let scripts = [];
-    const category_element = get_category_element(category.name);
-    const script_container = category_element ? category_element.querySelector(".category-scripts") : null;
+    const category_element = get_category_element(category.id);
+    // Scoped to the category's own scripts container, since a category can contain nested subcategories with their own .category-scripts
+    const script_container = category_element ? category_element.querySelector(":scope > .category-content > .category-scripts") : null;
     if (!script_container) return scripts;
 
     script_container.querySelectorAll("tr").forEach(row => {
@@ -106,8 +107,9 @@ function attach_script_drag_events(lists) {
 
 // Moves scripts in the DOM to reflect the category's saved script order, also moves scripts back to uncategorized when removed from a category
 function organize_userscripts_category(category) {
-    const category_element = get_category_element(category.name);
-    const script_container = category_element ? category_element.querySelector(".category-scripts") : null;
+    const category_element = get_category_element(category.id);
+    // Scoped to the category's own scripts container, since a category can contain nested subcategories with their own .category-scripts
+    const script_container = category_element ? category_element.querySelector(":scope > .category-content > .category-scripts") : null;
     if (!script_container) return;
 
     const uncategorized_scripts_container = content.querySelector(".category[data-category='uncategorized'] .category-scripts");

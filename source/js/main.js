@@ -2,6 +2,9 @@
 // Initialization & Core Functions
 // ========================
 
+// Maximum allowed nesting depth of categories, top level categories are depth 1, referenced by every depth check across the plugin
+const max_category_depth = 3;
+
 // Categories
 let original_categories = []; // Backup to check if page has already changed on another Tab / Browser
 let categories = [];
@@ -13,6 +16,7 @@ let uncategorized_category = null; // Global variable to cache the uncategorized
     hide_elements();
     original_categories = await categories_load();
     categories = $.extend(true, [], original_categories); // Deep copy using jQuery
+
     await Promise.all([
         wait_for_element(".content > table"),
         wait_for_element("input[type='button'][value='Add New Script']")

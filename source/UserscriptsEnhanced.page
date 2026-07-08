@@ -53,6 +53,17 @@ require_once "$php_path/settings_page.php";
     <!-- Categories Section -->
     <div class="title"><span class="left"><i class="fa fa-folder-o title"></i>Categories</span></div>
 
+    <!-- Default subcategory position -->
+    <? render_select_field("Default subcategory position", "default_subcategory_position", $cfg_use['default_subcategory_position'], [
+        "above" => "Above",
+        "below" => "Below"
+    ]); ?>
+
+    <blockquote class="inline_help">
+        <p>Determines whether subcategories are displayed above or below the scripts of their parent category by default.<br>
+        This can be adjusted individually for each category in the Category Settings dialog.</p>
+    </blockquote>
+
     <!-- View Mode Selection -->
     <? render_select_field("Default view mode", "default_view_mode", $cfg_use['default_view_mode'], [
         "list" => "List View",

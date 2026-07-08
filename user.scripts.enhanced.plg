@@ -17,10 +17,11 @@
 
 <CHANGES>
 ###2026.07.XX - 
+- Added ability to create subcategories (up to 3 layers)
+- Added a Custom Class input field under Advanced Options, allowing a category to be assigned its own CSS class for individual styling via Plugin Settings
 - Removed the individual category buttons, replaced with a gear icon in the category header that opens a settings dialog
 - Removed the Move Up & Down Buttons, Order can be now changed with the "Change Order" Button
 - Removed ability to set save delay, it's now instant
-- Added a Custom Class input field under Advanced Options, allowing a category to be assigned its own CSS class for individual styling via Plugin Settings
 - Every character is now allowed for the category name
 - Category header text now truncates with ellipsis instead of overflowing when the name is too long to fit
 - Fixed several HTML injections
@@ -82,6 +83,7 @@
             echo "Version: &version;"
             echo "----------------------------------------------------"
             echo ""
+            php /usr/local/emhttp/plugins/&name;/php/migrate_categories.php
         </INLINE>
     </FILE>
 

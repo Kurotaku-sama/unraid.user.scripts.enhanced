@@ -2,48 +2,58 @@
 // Category Management
 // ========================
 
-function create_category(category) {
-    const category_container = document.getElementById("categories-container");
-
-    // Escaped safe_name
+// Renders a category element, recursively rendering its subcategories afterward, parent_id is null for top level categories
+function create_category(category, parent_id = null) {
     const safe_name = escape_html(category.name);
-
-    // Determine style attribute
     const style_attr = category.collapsed === "yes" ? 'style="max-height: 0px;"' : "";
-
-    // Custom class applied to the category container, already sanitized on save
     const custom_class = category.custom_class || "";
 
-    // Determine optional view classes
     const extra_classes = [
         (category.view_mode === "list" && cfg_use['list_view_separators'] === "yes") ? "vo-separator" : "",
         (category.view_mode && cfg_use['view_mode_highlighting'].includes(category.view_mode)) ? "vo-highlight" : ""
     ].filter(Boolean).join(" ");
 
+    const subcategories_html = `<div class="category-subcategories"></div>`;
+    const scripts_html = `<div class="category-scripts vm-${category.view_mode} ${extra_classes}"></div>`;
+
+    // The subcategories container is placed above or below the category's own scripts container based on the resolved subcategory position
+    const content_inner_html = resolve_subcategory_position(category) === "below"
+        ? `${scripts_html}${subcategories_html}`
+        : `${subcategories_html}${scripts_html}`;
+
     const html = `
-        <div class="category ${category.collapsed === "yes" ? "collapsed" : ""} ${custom_class}" data-category="${safe_name}" data-order="${category.order}">
+        <div class="category ${category.collapsed === "yes" ? "collapsed" : ""} ${custom_class}" data-category="${category.id}" data-order="${category.order}">
             <div class="category-header">
                 <span class="category-header-text">${cfg_use['capitalized'] === "yes" ? safe_name.toUpperCase() : safe_name}</span>
-                <i class="fa fa-cog category-settings-cog" data-category="${safe_name}"></i>
+                <i class="fa fa-cog category-settings-cog" data-category="${category.id}"></i>
             </div>
             <div class="category-content" ${style_attr}>
-                <div class="category-subcategories"></div>
-                <div class="category-scripts vm-${category.view_mode} ${extra_classes}"></div>
+                ${content_inner_html}
             </div>
         </div>`;
 
-    const uncategorized = category_container.querySelector(".category[data-category='uncategorized']");
-    uncategorized
-        ? uncategorized.insertAdjacentHTML("beforebegin", html)
-        : category_container.insertAdjacentHTML("beforeend", html);
+    if (parent_id) {
+        const parent_element = get_category_element(parent_id);
+        const parent_subcategories_container = parent_element.querySelector(":scope > .category-content > .category-subcategories");
+        parent_subcategories_container.insertAdjacentHTML("beforeend", html.trim());
+    } else {
+        const category_container = document.getElementById("categories-container");
+        const uncategorized = category_container.querySelector(":scope > .category[data-category='uncategorized']");
+        uncategorized
+            ? uncategorized.insertAdjacentHTML("beforebegin", html.trim())
+            : category_container.insertAdjacentHTML("beforeend", html.trim());
+    }
 
     initialize_category_controls(category);
+
+    // Recursively render already existing subcategories, e.g. right after loading from storage
+    category.subcategories.forEach(subcategory => create_category(subcategory, category.id));
 }
 
 function initialize_category_controls(category) {
-    const element = get_category_element(category.name);
-    const header = element.querySelector(".category-header");
-    const settings_cog = element.querySelector(".category-settings-cog");
+    const element = get_category_element(category.id);
+    const header = element.querySelector(":scope > .category-header");
+    const settings_cog = element.querySelector(":scope > .category-header > .category-settings-cog");
 
     header.addEventListener("click", toggle_category_visibility);
 
@@ -56,7 +66,22 @@ function initialize_category_controls(category) {
     organize_userscripts_category(category);
 }
 
-function add_category() {
+// Adds a new category, if parent_id is provided the new category is added as a subcategory of that category instead of at the top level
+function add_category(parent_id = null) {
+    let sibling_list;
+
+    if (parent_id) {
+        const parent_category = find_category_by_id(parent_id);
+        if (!parent_category) return;
+
+        const parent_depth = get_category_depth(parent_id);
+        if (parent_depth >= max_category_depth) return; // Safety guard, the UI already hides this option at max depth
+
+        sibling_list = parent_category.subcategories;
+    } else {
+        sibling_list = categories;
+    }
+
     swal({
         title: "Add New Category",
         text: "Enter a name for the new category:",
@@ -74,46 +99,54 @@ function add_category() {
             return;
         }
 
-        let category_name = validate_category_name(input);
+        let category_name = validate_category_name(input, sibling_list);
         if (!category_name) return false;
 
         let new_category = {
+            id: generate_unique_category_id(),
             name: category_name,
-            order: categories.length + 1,
+            order: sibling_list.length + 1,
             view_mode: cfg_use['default_view_mode'],
             collapsed: cfg_use['default_collapsed'],
             custom_class: "",
-            scripts: []
+            subcategory_position: "default",
+            scripts: [],
+            subcategories: []
         };
 
-        categories.push(new_category);
+        sibling_list.push(new_category);
         const success = await perform_save(categories);
         if (success) {
-            create_category(new_category);
+            create_category(new_category, parent_id);
             swal.close();
         }
         else
-            categories.pop();
+            sibling_list.pop();
     });
 }
 
+// Deletes a category, cascading into every nested subcategory, all affected scripts are moved back to the top level uncategorized section
 function delete_category(category) {
-    // Clear scripts array to trigger moving scripts back to uncategorized
     category.scripts = [];
-
-    // Reorganize scripts (will move them to uncategorized)
     organize_userscripts_category(category);
 
-    // Remove category from the categories array
-    categories = categories.filter(cat => cat.name !== category.name);
+    flatten_subcategories(category).forEach(subcategory => {
+        subcategory.scripts = [];
+        organize_userscripts_category(subcategory);
+    });
 
-    // Update order of remaining categories
-    categories.forEach((cat, index) => (cat.order = index + 1));
+    const siblings = get_category_siblings(category.id);
+    if (!siblings) return;
 
-    // Safely remove category element from DOM if it exists
-    get_category_element(category.name)?.remove();
+    const index = siblings.findIndex(cat => cat.id === category.id);
+    if (index === -1) return;
 
-    // Update UI states
+    siblings.splice(index, 1);
+    siblings.forEach((cat, i) => (cat.order = i + 1));
+
+    // Removes the category element and every nested subcategory element along with it
+    get_category_element(category.id)?.remove();
+
     update_uncategorized_visibility();
     perform_save();
     swal.close();
@@ -140,7 +173,7 @@ function update_uncategorized_visibility() {
 // Category Settings Dialog
 // ========================
 
-// Opens the settings dialog for a category, containing renaming, collapsed state, view mode, script assignment via drag and drop, advanced options and deletion
+// Opens the settings dialog for a category, containing renaming, collapsed state, view mode, subcategory position, script assignment via drag and drop, subcategory creation, advanced options and deletion
 function open_category_settings(category) {
     const category_scripts = get_scripts_from_category(category);
     const uncategorized_scripts = get_uncategorized_userscripts();
@@ -150,6 +183,27 @@ function open_category_settings(category) {
 
     const safe_name = escape_html(category.name);
     const safe_custom_class = escape_html(category.custom_class || "");
+
+    const current_depth = get_category_depth(category.id);
+    const can_have_subcategories = current_depth < max_category_depth;
+
+    // The subcategory position option is only meaningful, and therefore only shown, when this category is still allowed to have subcategories
+    const subcategory_position_html = can_have_subcategories ? `
+            <dl>
+                <dt>Subcategory Position:</dt>
+                <dd>
+                    <select id="cs-subposition-select" class="narrow">
+                        <option value="default" ${category.subcategory_position === "default" ? "selected" : ""}>Default</option>
+                        <option value="above" ${category.subcategory_position === "above" ? "selected" : ""}>Above Scripts</option>
+                        <option value="below" ${category.subcategory_position === "below" ? "selected" : ""}>Below Scripts</option>
+                    </select>
+                </dd>
+            </dl>` : "";
+
+    const add_subcategory_html = `
+            <div class="category-settings-add-subcategory">
+                <input type="button" id="cs-add-subcategory-button" value="Add Subcategory" ${can_have_subcategories ? "" : "disabled"}>
+            </div>`;
 
     const html = `
         <div class="category-settings">
@@ -175,6 +229,7 @@ function open_category_settings(category) {
                     </select>
                 </dd>
             </dl>
+            ${subcategory_position_html}
             <div class="category-settings-scripts">
                 <div class="category-settings-scripts-column">
                     <p>Scripts in Category</p>
@@ -185,6 +240,7 @@ function open_category_settings(category) {
                     <ul id="cs-uncategorized-scripts-list" class="category-settings-script-list">${uncategorized_scripts_html}</ul>
                 </div>
             </div>
+            ${add_subcategory_html}
             <div class="category-settings-advanced">
                 <div class="category-settings-advanced-toggle">Advanced Options ▾</div>
                 <div class="category-settings-advanced-content">
@@ -227,6 +283,8 @@ function open_category_settings(category) {
 
     document.getElementById("cs-delete-button").addEventListener("click", () => request_delete_category(category));
 
+    document.getElementById("cs-add-subcategory-button")?.addEventListener("click", () => add_category(category.id));
+
     document.getElementById("cs-class-input").addEventListener("input", event => {
         const cursor_position = event.target.selectionStart;
         const original_length = event.target.value.length;
@@ -242,6 +300,7 @@ async function save_category_settings(category) {
     const name_input = document.getElementById("cs-name-input");
     const collapsed_select = document.getElementById("cs-collapsed-select");
     const viewmode_select = document.getElementById("cs-viewmode-select");
+    const subposition_select = document.getElementById("cs-subposition-select");
     const class_input = document.getElementById("cs-class-input");
     const category_list = document.getElementById("cs-category-scripts-list");
 
@@ -250,11 +309,12 @@ async function save_category_settings(category) {
     const name_changed = new_name !== original_name;
 
     if (name_changed) {
-        const validated_name = validate_category_name(new_name, original_name);
+        const siblings = get_category_siblings(category.id);
+        const validated_name = validate_category_name(new_name, siblings, original_name);
         if (!validated_name) return false;
     }
 
-    const category_element = get_category_element(original_name);
+    const category_element = get_category_element(category.id);
     const new_scripts = [...category_list.querySelectorAll(".category-settings-script-item")].map(item => item.dataset.scriptId);
     const new_custom_class = sanitize_category_classes(class_input.value);
 
@@ -263,6 +323,7 @@ async function save_category_settings(category) {
         name: category.name,
         collapsed: category.collapsed,
         view_mode: category.view_mode,
+        subcategory_position: category.subcategory_position,
         scripts: [...category.scripts],
         custom_class: category.custom_class
     };
@@ -272,6 +333,7 @@ async function save_category_settings(category) {
     category.view_mode = viewmode_select.value;
     category.scripts = new_scripts;
     category.custom_class = new_custom_class;
+    if (subposition_select) category.subcategory_position = subposition_select.value;
 
     const success = await perform_save();
     if (!success) {
@@ -279,9 +341,9 @@ async function save_category_settings(category) {
         return false;
     }
 
+    // The category id never changes on rename, so only the displayed text needs updating, not any data-category attribute
     if (name_changed) {
-        get_elements_by_category(original_name).forEach(element => element.setAttribute("data-category", new_name));
-        const header_text = category_element.querySelector(".category-header-text");
+        const header_text = category_element.querySelector(":scope > .category-header > .category-header-text");
         if (header_text) header_text.textContent = cfg_use['capitalized'] === "yes" ? new_name.toUpperCase() : new_name;
     }
 
@@ -290,6 +352,7 @@ async function save_category_settings(category) {
 
     apply_collapsed_state(category);
     apply_view_mode(category);
+    apply_subcategory_position(category);
     organize_userscripts_category(category);
     update_uncategorized_visibility();
 
@@ -300,7 +363,7 @@ async function save_category_settings(category) {
 function request_delete_category(category) {
     swal({
         title: "Are you sure?",
-        text: `Do you really want to delete the category "${escape_html(category.name)}"?<br>This action cannot be undone!`,
+        text: `Do you really want to delete the category "${escape_html(category.name)}"?<br>This will also delete all its subcategories.<br>This action cannot be undone!`,
         html: true,
         type: "warning",
         showCancelButton: true,
@@ -317,11 +380,11 @@ function request_delete_category(category) {
 // Category Order Dialog
 // ========================
 
-// Opens a drag and drop dialog that lets the user rearrange the order of all categories at once, replacing the old move up/down buttons
+// Opens a drag and drop dialog that lets the user rearrange the order of all top level categories at once, replacing the old move up/down buttons
 function open_change_order_dialog() {
     let order_items_html = "";
     for (const category of [...categories].sort((a, b) => a.order - b.order))
-        order_items_html += build_order_item_html(category.name);
+        order_items_html += build_order_item_html(category);
 
     const html = `<ul id="category-order-list" class="category-order-list">${order_items_html}</ul>`;
 
@@ -342,10 +405,10 @@ function open_change_order_dialog() {
         for (const item of order_list.querySelectorAll(".category-order-item"))
             new_order.push(item.dataset.category);
 
-        for (const category_name of new_order) {
-            const category = categories.find(cat => cat.name === category_name);
+        for (const category_id of new_order) {
+            const category = categories.find(cat => cat.id === category_id);
             if (category)
-                category.order = new_order.indexOf(category_name) + 1;
+                category.order = new_order.indexOf(category_id) + 1;
         }
 
         categories.sort((a, b) => a.order - b.order);
@@ -360,19 +423,19 @@ function open_change_order_dialog() {
     attach_order_drag_events();
 }
 
-// Builds a single draggable list item representing one category inside the change order dialog
-function build_order_item_html(category_name) {
-    const safe_name = escape_html(category_name);
-    return `<li class="category-order-item" draggable="true" data-category="${safe_name}"><span class="category-order-handle">⋮⋮</span>${safe_name}</li>`;
+// Builds a single draggable list item representing one top level category inside the change order dialog
+function build_order_item_html(category) {
+    const safe_name = escape_html(category.name);
+    return `<li class="category-order-item" draggable="true" data-category="${category.id}"><span class="category-order-handle">⋮⋮</span>${safe_name}</li>`;
 }
 
-// Moves every category element in the DOM to match the current order property, called after the change order dialog is confirmed
+// Moves every top level category element in the DOM to match the current order property, called after the change order dialog is confirmed
 function reorder_category_elements() {
     const category_container = document.getElementById("categories-container");
     const uncategorized = category_container.querySelector(".category[data-category='uncategorized']");
 
     for (const category of categories) {
-        const category_element = get_category_element(category.name);
+        const category_element = get_category_element(category.id);
         if (category_element)
             category_container.insertBefore(category_element, uncategorized);
     }
