@@ -60,15 +60,6 @@
 }
 
 /* ========================
-   Responsive Fixes
-   ======================== */
-
-.swal-responsive-fix > p {
-    white-space: normal !important;
-    overflow-wrap: normal !important;
-}
-
-/* ========================
    Info Panel
    ======================== */
 
@@ -80,4 +71,22 @@
 
 .panel-info-button-wrapper {
     flex-grow: 1;
+}
+
+/* ========================
+   Responsive Fixes
+   ======================== */
+
+.sweet-alert input.swal-force-visible {
+    display: block !important;
+}
+
+.swal-responsive-fix > p {
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+}
+
+#categories-container tr > td > select {
+    line-height: 2rem;
+    max-width: 90%;
 }
