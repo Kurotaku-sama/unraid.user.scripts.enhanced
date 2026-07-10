@@ -52,7 +52,6 @@ function main() {
     }
 
     categories.forEach(cat => {create_category(cat)});
-
 }
 
 function container_overhaul(table) {

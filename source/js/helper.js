@@ -129,6 +129,22 @@ function flatten_subcategories(category) {
     return result;
 }
 
+// Recursively calculates how many additional levels a category's deepest nested subcategory occupies relative to the category itself, a category without subcategories returns 0
+function get_subtree_relative_depth(category) {
+    if (!category.subcategories.length) return 0;
+    return 1 + Math.max(...category.subcategories.map(get_subtree_relative_depth));
+}
+
+// Recursively flattens the entire category tree into a Map keyed by category id, used to look up the full category object while rebuilding the tree from a DOM structure
+function build_category_id_map(list, map = new Map()) {
+    for (const category of list) {
+        map.set(category.id, category);
+        if (category.subcategories.length)
+            build_category_id_map(category.subcategories, map);
+    }
+    return map;
+}
+
 // Resolves the effective subcategory position of a category, falling back to the global plugin default when set to "default"
 function resolve_subcategory_position(category) {
     return category.subcategory_position === "default" ? cfg_use['default_subcategory_position'] : category.subcategory_position;
@@ -151,4 +167,20 @@ function generate_unique_category_id() {
     while (is_id_taken(new_id))
         new_id = `${Date.now()}`;
     return new_id;
+}
+
+// Recursively calculates how many additional levels a category's deepest nested subcategory occupies relative to the category itself, a category without subcategories returns 0
+function get_subtree_relative_depth(category) {
+    if (!category.subcategories.length) return 0;
+    return 1 + Math.max(...category.subcategories.map(get_subtree_relative_depth));
+}
+
+// Recursively flattens the entire category tree into a Map keyed by category id, used to look up the full category object while rebuilding the tree from a DOM structure
+function build_category_id_map(list, map = new Map()) {
+    for (const category of list) {
+        map.set(category.id, category);
+        if (category.subcategories.length)
+            build_category_id_map(category.subcategories, map);
+    }
+    return map;
 }

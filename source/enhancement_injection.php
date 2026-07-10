@@ -25,6 +25,8 @@ const cfg_use = <?=json_encode($cfg_use)?>;
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/page_userscripts.css")?>">
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/donate.css")?>">
 
+<script src="<?=autov("/plugins/$plugin/vendor/Sortable.min.js")?>"></script>
+
 <? $js_dir = "/plugins/$plugin/js"; ?>
 <script src="<?=autov("$js_dir/about.js")?>"></script>
 <script src="<?=autov("$js_dir/category_controls.js")?>"></script>

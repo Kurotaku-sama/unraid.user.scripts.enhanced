@@ -43,7 +43,7 @@ function get_scripts_from_category(category) {
     return scripts;
 }
 
-// Builds a single draggable list item representing one script inside the category settings dialog
+// Builds a single draggable list item representing one script inside the category settings dialog, dragging itself is handled by SortableJS via the dedicated handle element
 function build_script_item_html(script_id, script_name) {
     const max_length = 30;
     const truncated_text = script_name.length > max_length
@@ -53,56 +53,40 @@ function build_script_item_html(script_id, script_name) {
     const safe_title = escape_html(script_name);
     const safe_truncated_text = escape_html(truncated_text);
 
-    return `
-    <li class="category-settings-script-item" draggable="true" data-script-id="${script_id}" data-script-name="${safe_title}">
-        <span class="category-settings-script-handle">⋮⋮</span>
-        <span class="truncate-text" title="${safe_title}">${safe_truncated_text}</span>
-    </li>
-`;
+    const html = `
+        <div class="category-settings-script-item" data-script-id="${script_id}" data-script-name="${safe_title}">
+            <span class="category-settings-script-handle">⋮ ⋮</span>
+            <span class="category-settings-script-name" title="${safe_title}">${safe_truncated_text}</span>
+        </div>
+    `;
+
+    return html.trim();
 }
 
-// Native HTML5 drag and drop reordering and cross list moving for the script lists inside the category settings dialog
-function attach_script_drag_events(lists) {
-    let dragged_item = null;
+// Sortable instances currently active inside the category settings dialog's script lists, tracked so they can be destroyed once the dialog closes
+let script_sortable_instances = [];
 
-    function bind_script_item_events(item) {
-        item.addEventListener("dragstart", () => {
-            dragged_item = item;
-            item.classList.add("category-settings-script-dragging");
-        });
-
-        item.addEventListener("dragend", () => {
-            item.classList.remove("category-settings-script-dragging");
-            dragged_item = null;
-        });
-    }
+// Creates one Sortable instance per script list inside the category settings dialog, both lists share the same group so scripts can be dragged between the category list and the uncategorized list, the entire item is draggable rather than only the handle
+function initialize_script_sortables(lists) {
+    script_sortable_instances = [];
 
     lists.forEach(list => {
-        list.querySelectorAll(".category-settings-script-item").forEach(bind_script_item_events);
-
-        list.addEventListener("dragover", event => {
-            event.preventDefault();
-            if (!dragged_item) return;
-
-            // If the cursor is over a gap between items, determine the nearest item based on the Y position instead of appending it to the end
-            const items = [...list.querySelectorAll(".category-settings-script-item")].filter(item => item !== dragged_item);
-            let closest_item = null;
-            let closest_offset = Number.NEGATIVE_INFINITY;
-
-            for (const item of items) {
-                const rect = item.getBoundingClientRect();
-                const offset = event.clientY - rect.top - (rect.height / 2);
-                if (offset < 0 && offset > closest_offset) {
-                    closest_offset = offset;
-                    closest_item = item;
-                }
-            }
-
-            closest_item
-                ? list.insertBefore(dragged_item, closest_item)
-                : list.appendChild(dragged_item);
+        const instance = new Sortable(list, {
+            group: "category-settings-scripts",
+            animation: 150,
+            forceFallback: true,
+            fallbackOnBody: true,
+            swapThreshold: 0.65,
+            ghostClass: "category-settings-script-dragging"
         });
+        script_sortable_instances.push(instance);
     });
+}
+
+// Destroys every active Sortable instance from the category settings dialog's script lists, called once the dialog closes to avoid leaking instances bound to removed elements
+function destroy_script_sortables() {
+    script_sortable_instances.forEach(instance => instance.destroy());
+    script_sortable_instances = [];
 }
 
 // Moves scripts in the DOM to reflect the category's saved script order, also moves scripts back to uncategorized when removed from a category

@@ -21,10 +21,10 @@ require_once "$php_path/settings_page.php";
 
 
 <!-- CodeMirror -->
-<script src="<?=autov("/plugins/$plugin/codemirror/js/codemirror.min.js")?>"></script>
-<script src="<?=autov("/plugins/$plugin/codemirror/js/css.min.js")?>"></script>
-<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/codemirror/css/codemirror.min.css")?>">
-<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/codemirror/css/dracula.min.css")?>">
+<script src="<?=autov("/plugins/$plugin/vendor/codemirror/js/codemirror.min.js")?>"></script>
+<script src="<?=autov("/plugins/$plugin/vendor/codemirror/js/css.min.js")?>"></script>
+<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/vendor/codemirror/css/codemirror.min.css")?>">
+<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/vendor/codemirror/css/dracula.min.css")?>">
 
 
 <div class="panel-info-wrapper">
