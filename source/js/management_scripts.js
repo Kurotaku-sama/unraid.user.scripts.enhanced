@@ -2,12 +2,12 @@
 // Script Management
 // ========================
 
-function get_uncategorized_userscripts() {
+// Extracts the id and name of every script row inside the given scripts container, shared by both the uncategorized and the category specific lookups
+function get_scripts_from_container(script_container) {
     let scripts = [];
-    const uncategorized_scripts_container = content.querySelector(".category[data-category='uncategorized'] .category-scripts");
-    if (!uncategorized_scripts_container) return scripts;
+    if (!script_container) return scripts;
 
-    uncategorized_scripts_container.querySelectorAll("tr").forEach(row => {
+    script_container.querySelectorAll("tr").forEach(row => {
         let script_span = row.querySelector("span.ca_nameEdit");
         let script_name = row.querySelector("font > b > span")?.textContent?.trim();
 
@@ -22,25 +22,16 @@ function get_uncategorized_userscripts() {
     return scripts;
 }
 
+function get_uncategorized_userscripts() {
+    const uncategorized_scripts_container = content.querySelector(".category[data-category='uncategorized'] .category-scripts");
+    return get_scripts_from_container(uncategorized_scripts_container);
+}
+
 function get_scripts_from_category(category) {
-    let scripts = [];
     const category_element = get_category_element(category.id);
     // Scoped to the category's own scripts container, since a category can contain nested subcategories with their own .category-scripts
     const script_container = category_element ? category_element.querySelector(":scope > .category-content > .category-scripts") : null;
-    if (!script_container) return scripts;
-
-    script_container.querySelectorAll("tr").forEach(row => {
-        let script_span = row.querySelector("span.ca_nameEdit");
-        let script_name = row.querySelector("font > b > span")?.textContent?.trim();
-
-        if (script_span && script_name) {
-            scripts.push({
-                id: script_span.id,
-                name: script_name
-            });
-        }
-    });
-    return scripts;
+    return get_scripts_from_container(script_container);
 }
 
 // Builds a single draggable list item representing one script inside the category settings dialog, dragging itself is handled by SortableJS via the dedicated handle element

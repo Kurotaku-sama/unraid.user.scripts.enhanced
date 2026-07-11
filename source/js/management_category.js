@@ -7,14 +7,11 @@ function create_category(category, parent_id = null) {
     const safe_name = escape_html(category.name);
     const style_attr = category.collapsed === "yes" ? 'style="max-height: 0px;"' : "";
     const custom_class = category.custom_class || "";
-
-    const extra_classes = [
-        (category.view_mode === "list" && cfg_use['list_view_separators'] === "yes") ? "vo-separator" : "",
-        (category.view_mode && cfg_use['view_mode_highlighting'].includes(category.view_mode)) ? "vo-highlight" : ""
-    ].filter(Boolean).join(" ");
+    const effective_view_mode = resolve_effective_view_mode(category.view_mode);
+    const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
 
     const subcategories_html = `<div class="category-subcategories"></div>`;
-    const scripts_html = `<div class="category-scripts vm-${category.view_mode} ${extra_classes}"></div>`;
+    const scripts_html = `<div class="category-scripts ${view_mode_classes}"></div>`;
 
     // The subcategories container is placed above or below the category's own scripts container based on the resolved subcategory position
     const content_inner_html = resolve_subcategory_position(category) === "below"
@@ -200,11 +197,6 @@ function open_category_settings(category) {
                 </dd>
             </dl>` : "";
 
-    const add_subcategory_html = `
-            <div class="category-settings-add-subcategory">
-                <input type="button" id="cs-add-subcategory-button" value="Add Subcategory" ${can_have_subcategories ? "" : "disabled"}>
-            </div>`;
-
     const html = `
         <div class="category-settings">
             <dl>
@@ -239,8 +231,10 @@ function open_category_settings(category) {
                     <p>Uncategorized Scripts</p>
                     <div id="cs-uncategorized-scripts-list" class="category-settings-script-list">${uncategorized_scripts_html}</div>
                 </div>
+            </div>            
+            <div class="category-settings-create-subcategory">
+                <input type="button" id="cs-create-subcategory-button" value="Create Subcategory" ${can_have_subcategories ? "" : "disabled"}>
             </div>
-            ${add_subcategory_html}
             <div class="category-settings-advanced">
                 <div class="category-settings-advanced-toggle">Advanced Options ▾</div>
                 <div class="category-settings-advanced-content">
@@ -249,10 +243,10 @@ function open_category_settings(category) {
                         <dd><input type="text" id="cs-class-input" class="swal-force-visible" maxlength="30" value="${safe_custom_class}"></dd>
                     </dl>
                     <small class="category-settings-info">This classes are applied to the category container. You can add custom styling for it in the User Scripts Enhanced settings, for example to change the gradient color only for this category.</small>
+                    <div class="category-settings-delete">
+                        <input type="button" id="cs-delete-button" value="Delete Category">
+                    </div>
                 </div>
-            </div>
-            <div class="category-settings-delete">
-                <input type="button" id="cs-delete-button" value="Delete Category">
             </div>
         </div>
     `;
@@ -292,7 +286,7 @@ function open_category_settings(category) {
         request_delete_category(category);
     });
 
-    document.getElementById("cs-add-subcategory-button")?.addEventListener("click", () => {
+    document.getElementById("cs-create-subcategory-button")?.addEventListener("click", () => {
         destroy_script_sortables();
         add_category(category.id);
     });
@@ -359,8 +353,9 @@ async function save_category_settings(category) {
         if (header_text) header_text.textContent = cfg_use['capitalized'] === "yes" ? new_name.toUpperCase() : new_name;
     }
 
-    if (backup.custom_class) category_element.classList.remove(...backup.custom_class.split(" "));
-    if (new_custom_class) category_element.classList.add(...new_custom_class.split(" "));
+    // Split on whitespace and filter out empty strings, otherwise a class string with multiple consecutive spaces would produce empty entries and classList.add/remove would throw a DOMException
+    if (backup.custom_class) category_element.classList.remove(...backup.custom_class.split(" ").filter(Boolean));
+    if (new_custom_class) category_element.classList.add(...new_custom_class.split(" ").filter(Boolean));
 
     apply_collapsed_state(category);
     apply_view_mode(category);

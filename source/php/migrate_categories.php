@@ -12,7 +12,7 @@ $backup_file = "{$plugin_dir}/categories_before_id_migration.json";
 
 // Nothing to migrate on a fresh install, categories.json does not exist yet
 if (!file_exists($categories_file)) {
-    echo "User Scripts Enhanced: No categories.json found, nothing to migrate.\n";
+    // echo "User Scripts Enhanced: No categories.json found, nothing to migrate.\n";
     exit(0);
 }
 

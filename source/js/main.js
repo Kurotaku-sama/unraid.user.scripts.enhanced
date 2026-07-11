@@ -2,8 +2,9 @@
 // Initialization & Core Functions
 // ========================
 
-// Maximum allowed nesting depth of categories, top level categories are depth 1, referenced by every depth check across the plugin
-const max_category_depth = 3;
+// Maximum allowed nesting depth of categories, top level categories are depth 1, referenced by every depth check across the plugin, configurable via the plugin settings page, validated here in case the cfg file was edited manually, falls back to 3 if not a whole number between 1 and 10
+const raw_max_category_depth = parseInt(cfg_use['max_category_depth'], 10);
+const max_category_depth = (Number.isInteger(raw_max_category_depth) && raw_max_category_depth >= 1 && raw_max_category_depth <= 10) ? raw_max_category_depth : 3;
 
 // Categories
 let original_categories = []; // Backup to check if page has already changed on another Tab / Browser
@@ -62,11 +63,8 @@ function container_overhaul(table) {
 
     // Style
     const style_attr = cfg_use['uncategorized_collapsed'] === "yes" ? 'style="max-height: 0px;"' : "";
-    // Determine optional extra classes for uncategorized section
-    const extra_classes = [
-        (cfg_use['default_view_mode'] === "list" && cfg_use['list_view_separators'] === "yes") ? "vo-separator" : "",
-        (cfg_use['view_mode_highlighting'].includes(cfg_use['default_view_mode'])) ? "vo-highlight" : ""
-    ].filter(Boolean).join(" ");
+    const effective_view_mode = resolve_effective_view_mode(cfg_use['default_view_mode']);
+    const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
 
     const uncategorized_name = escape_html(cfg_use['capitalized'] === "yes" ? cfg_use['uncategorized_name'].toUpperCase() : cfg_use['uncategorized_name'])
     const uncategorized_userscripts_header_html = `
@@ -76,7 +74,7 @@ function container_overhaul(table) {
             </div>
             <div class="category-content" ${style_attr}>
                 <div class="category-subcategories"></div>
-                <div class="category-scripts vm-${cfg_use['default_view_mode']} ${extra_classes}"></div>
+                <div class="category-scripts ${view_mode_classes}"></div>
             </div>
         </div>
     `;

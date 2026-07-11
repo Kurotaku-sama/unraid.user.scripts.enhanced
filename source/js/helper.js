@@ -2,24 +2,24 @@
 // Helper Functions
 // ========================
 
-function wait_for_element(selector) {
+function wait_for_element(selector, container = document.documentElement) {
     return new Promise(resolve => {
-        const node = document.querySelector(selector);
-        if (node) return resolve(node);
+        const node = container.querySelector(selector)
+        if (node) return resolve(node)
 
         const observer = new MutationObserver(() => {
-            const el = document.querySelector(selector);
+            const el = container.querySelector(selector)
             if (el) {
-                observer.disconnect();
-                resolve(el);
+                observer.disconnect()
+                resolve(el)
             }
-        });
+        })
 
-        observer.observe(document.body, {
+        observer.observe(container, {
             childList: true,
             subtree: true
-        });
-    });
+        })
+    })
 }
 
 function toggle_category_visibility(event) {
@@ -167,20 +167,4 @@ function generate_unique_category_id() {
     while (is_id_taken(new_id))
         new_id = `${Date.now()}`;
     return new_id;
-}
-
-// Recursively calculates how many additional levels a category's deepest nested subcategory occupies relative to the category itself, a category without subcategories returns 0
-function get_subtree_relative_depth(category) {
-    if (!category.subcategories.length) return 0;
-    return 1 + Math.max(...category.subcategories.map(get_subtree_relative_depth));
-}
-
-// Recursively flattens the entire category tree into a Map keyed by category id, used to look up the full category object while rebuilding the tree from a DOM structure
-function build_category_id_map(list, map = new Map()) {
-    for (const category of list) {
-        map.set(category.id, category);
-        if (category.subcategories.length)
-            build_category_id_map(category.subcategories, map);
-    }
-    return map;
 }

@@ -13,4 +13,11 @@ if (isset($_POST["uncategorized_name"])) {
 // Convert Custom CSS to base64
 if (isset($_POST["custom_css"]))
     $_POST["custom_css"] = base64_encode(trim($_POST["custom_css"]));
+
+// Validate max_category_depth: must be a whole number between 1 and 10, otherwise fallback to 3
+if (isset($_POST["max_category_depth"])) {
+    $raw_depth = $_POST["max_category_depth"];
+    $is_valid_depth = is_numeric($raw_depth) && intval($raw_depth) == $raw_depth && $raw_depth >= 1 && $raw_depth <= 10;
+    $_POST["max_category_depth"] = $is_valid_depth ? intval($raw_depth) : 3;
+}
 ?>

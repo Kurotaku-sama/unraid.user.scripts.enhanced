@@ -2,6 +2,38 @@
 // Category Controls
 // ========================
 
+// Tracks the current mobile breakpoint, matches the max-width used by the Panel View responsive grid in the CSS
+const mobile_force_panel_media_query = window.matchMedia("(max-width: 800px)");
+
+// Resolves the view mode that should actually be rendered, forcing panel view when mobile_force_panel is enabled and the viewport is currently at or below the mobile breakpoint, since the List View table layout can overflow on small screens
+function resolve_effective_view_mode(view_mode) {
+    if (cfg_use['mobile_force_panel'] === "yes" && mobile_force_panel_media_query.matches) return "panel";
+    return view_mode;
+}
+
+// Computes the full class list (view mode plus separator and highlighting modifiers) for a scripts container, single source of truth shared by initial rendering and every later reapply
+function compute_view_mode_classes(effective_view_mode) {
+    const classes = [`vm-${effective_view_mode}`];
+
+    if (effective_view_mode === "list" && cfg_use['list_view_separators'] === "yes")
+        classes.push("vo-separator");
+
+    if (cfg_use['view_mode_highlighting'].includes(effective_view_mode))
+        classes.push("vo-highlight");
+
+    return classes;
+}
+
+// Applies the resolved view mode classes to a given scripts container, shared by both category specific and uncategorized containers
+function apply_view_mode_to_container(scripts_container, view_mode) {
+    if (!scripts_container) return;
+
+    scripts_container.classList.remove("vm-list", "vm-panel", "vo-separator", "vo-highlight");
+
+    const effective_view_mode = resolve_effective_view_mode(view_mode);
+    scripts_container.classList.add(...compute_view_mode_classes(effective_view_mode));
+}
+
 // Applies the collapsed state to a category element based on the category's current collapsed value
 function apply_collapsed_state(category) {
     const category_element = get_category_element(category.id);
@@ -12,30 +44,38 @@ function apply_collapsed_state(category) {
         : category_element.classList.remove("collapsed");
 }
 
-// Applies the view mode classes (list or panel) together with the separator and highlighting modifiers to a category element
+// Applies the view mode classes together with the separator and highlighting modifiers to a category's own scripts container
 function apply_view_mode(category) {
     const category_element = get_category_element(category.id);
     if (!category_element) return;
 
     // Scoped to the category's own scripts container, since a category can contain nested subcategories that have their own .category-scripts
     const category_scripts = category_element.querySelector(":scope > .category-content > .category-scripts");
-    category_scripts.classList.remove("vm-list", "vm-panel", "vo-separator", "vo-highlight");
-
-    if (category.view_mode === "panel") {
-        category_scripts.classList.add("vm-panel");
-
-        if (cfg_use['view_mode_highlighting'].includes("panel"))
-            category_scripts.classList.add("vo-highlight");
-    } else {
-        category_scripts.classList.add("vm-list");
-
-        if (cfg_use['list_view_separators'] === "yes")
-            category_scripts.classList.add("vo-separator");
-
-        if (cfg_use['view_mode_highlighting'].includes("list"))
-            category_scripts.classList.add("vo-highlight");
-    }
+    apply_view_mode_to_container(category_scripts, category.view_mode);
 }
+
+// Recursively reapplies the view mode to every category and its subcategories, used when the mobile force panel breakpoint is crossed so all categories switch between list and panel view immediately without a page reload
+function reapply_all_view_modes(list = categories) {
+    list.forEach(category => {
+        apply_view_mode(category);
+
+        if (category.subcategories.length)
+            reapply_all_view_modes(category.subcategories);
+    });
+}
+
+// Reapplies the view mode classes to the uncategorized section, using the same shared logic as apply_view_mode
+function update_uncategorized_view_mode() {
+    const uncategorized_scripts = content.querySelector(".category[data-category='uncategorized'] > .category-content > .category-scripts");
+    apply_view_mode_to_container(uncategorized_scripts, cfg_use['default_view_mode']);
+}
+
+// Reapplies every view mode across categories and the uncategorized section whenever the mobile breakpoint is crossed, only relevant while mobile_force_panel is enabled
+mobile_force_panel_media_query.addEventListener("change", () => {
+    if (cfg_use['mobile_force_panel'] !== "yes") return;
+    reapply_all_view_modes();
+    update_uncategorized_view_mode();
+});
 
 // Moves the subcategories container before or after the category's own scripts container based on the resolved subcategory position, without needing to recreate the whole category element
 function apply_subcategory_position(category) {

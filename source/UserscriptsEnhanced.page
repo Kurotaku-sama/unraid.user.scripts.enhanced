@@ -53,6 +53,14 @@ require_once "$php_path/settings_page.php";
     <!-- Categories Section -->
     <div class="title"><span class="left"><i class="fa fa-folder-o title"></i>Categories</span></div>
 
+    <!-- Maximum subcategory depth -->
+    <? render_select_field("Maximum subcategory depth", "max_category_depth", $cfg_use['max_category_depth'], array_combine(range(1, 10), range(1, 10))); ?>
+
+    <blockquote class="inline_help">
+        <p><strong>Warning:</strong> Increasing the maximum nesting depth beyond the default of 3 can cause layout issues with deeply nested subcategories, especially on smaller screens.<br>
+        Only change this if you actually plan to use deeper nesting.</p>
+    </blockquote>
+
     <!-- Default subcategory position -->
     <? render_select_field("Default subcategory position", "default_subcategory_position", $cfg_use['default_subcategory_position'], [
         "above" => "Above",
@@ -76,22 +84,6 @@ require_once "$php_path/settings_page.php";
         Uncategorized scripts will always use this mode.</p>
     </blockquote>
 
-    <!-- Collapse Categories by default -->
-    <? render_select_field("Collapse new categories by default", "default_collapsed", $cfg_use['default_collapsed']); ?>
-
-    <!-- Collapse uncategorized scripts -->
-    <? render_select_field("Collapse uncategorized scripts", "uncategorized_collapsed", $cfg_use['uncategorized_collapsed']); ?>
-
-    <!-- Capitalized category names -->
-    <? render_select_field("Capitalized category names", "capitalized", $cfg_use['capitalized']); ?>
-
-    <!-- List View Separators -->
-    <? render_select_field("List View Separators", "list_view_separators", $cfg_use['list_view_separators']); ?>
-
-    <blockquote class="inline_help">
-        <p>When enabled, separators are displayed between scripts in List View mode for better visual separation.</p>
-    </blockquote>
-
     <!-- View Mode Highlighting -->
     <? $vmode_hl = explode(",", $cfg_use['view_mode_highlighting']); ?>
     <dl>
@@ -103,10 +95,36 @@ require_once "$php_path/settings_page.php";
             </select>
         </dd>
     </dl>
+    
+    <!-- Force panel view on mobile -->
+    <? render_select_field("Force panel view on mobile", "mobile_force_panel", $cfg_use['mobile_force_panel']); ?>
+
+    <blockquote class="inline_help">
+        <p>List View uses a table based layout that can overflow on small screens.<br>
+        This option ensures a responsive design so List View also works properly on mobile devices without layout issues.<br>
+        It is not recommended to turn this off, since the view automatically switches to a Panel View like layout below 800px width.</p>
+    </blockquote>
+
+    <!-- List View Separators -->
+    <? render_select_field("List View Separators", "list_view_separators", $cfg_use['list_view_separators']); ?>
+
+    <blockquote class="inline_help">
+        <p>When enabled, separators are displayed between scripts in List View mode for better visual separation.</p>
+    </blockquote>
+
 
     <blockquote class="inline_help">
         <p>Select which view modes should have hover highlighting enabled.</p>
     </blockquote>
+
+    <!-- Collapse Categories by default -->
+    <? render_select_field("Collapse new categories by default", "default_collapsed", $cfg_use['default_collapsed']); ?>
+
+    <!-- Collapse uncategorized scripts -->
+    <? render_select_field("Collapse uncategorized scripts", "uncategorized_collapsed", $cfg_use['uncategorized_collapsed']); ?>
+
+    <!-- Capitalized category names -->
+    <? render_select_field("Capitalized category names", "capitalized", $cfg_use['capitalized']); ?>
 
     <!-- Enable search function -->
     <? render_select_field("Enable search function", "enable_search", $cfg_use['enable_search']); ?>

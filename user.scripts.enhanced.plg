@@ -16,8 +16,9 @@
         support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
-###2026.07.XX - 
-- Added ability to create subcategories (up to 3 layers)
+###2026.07.XX - Subcategories & UI Overhaul
+- Added ability to create subcategories
+- Added an option to enable panel view always for mobile devices, enabled by default, not recommended to disable (Breakpoint is: 800px)
 - Added a Custom Class input field under Advanced Options, allowing a category to be assigned its own CSS class for individual styling via Plugin Settings
 - Removed the individual category buttons, replaced with a gear icon in the category header that opens a settings dialog
 - Removed the Move Up & Down Buttons, Order can be now changed with the "Change Order" Button

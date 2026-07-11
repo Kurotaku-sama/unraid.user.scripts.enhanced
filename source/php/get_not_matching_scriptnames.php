@@ -1,4 +1,6 @@
 <?
+require_once __DIR__ . "/script_helper.php";
+
 // Define directories
 $dir_userscripts = "/boot/config/plugins/user.scripts";
 $dir_scripts = "$dir_userscripts/scripts";
@@ -7,13 +9,7 @@ $dir_scripts = "$dir_userscripts/scripts";
 $not_matching = [];
 
 // Iterate through all script folders
-$scripts = scandir($dir_scripts);
-foreach ($scripts as $script_folder) {
-    if ($script_folder === "." || $script_folder === "..") continue;
-
-    $script_path = "$dir_scripts/$script_folder";
-    if (!is_dir($script_path)) continue;
-
+iterate_script_folders($dir_scripts, function($script_folder, $script_path) use (&$not_matching) {
     // Check if "name" file exists
     $name_file = "$script_path/name";
     if (!file_exists($name_file)) {
@@ -21,7 +17,7 @@ foreach ($scripts as $script_folder) {
             "old_name" => $script_folder,
             "new_name" => "No 'name' file found"
         ];
-        continue;
+        return;
     }
 
     // Read and clean the name from the "name" file
@@ -29,13 +25,12 @@ foreach ($scripts as $script_folder) {
     $cleaned_name_content = preg_replace('/\s+/', ' ', $name_content); // Replace multiple spaces with a single space
 
     // If folder name does not match the cleaned name, add to the list
-    if ($script_folder !== $cleaned_name_content) {
+    if ($script_folder !== $cleaned_name_content)
         $not_matching[] = [
             "old_name" => $script_folder,
             "new_name" => $cleaned_name_content
         ];
-    }
-}
+});
 
 // Return the results
 echo json_encode([
