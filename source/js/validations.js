@@ -29,42 +29,48 @@ function validate_category_name(input, sibling_list, original_name = null) {
     return category_name;
 }
 
-// Recursively normalizes the order field at every level of the category tree, reordering and persisting only if a level was not sequential
+// Normalizes the order field at every level of the category tree, reordering and persisting only if any level was not sequential
 function validate_categories_order(data) {
-    let needs_save = false;
+    const { list, changed } = normalize_category_level(data);
 
-    function normalize_level(list) {
-        let is_sequential = true;
-        for (let i = 0; i < list.length; i++) {
-            if (list[i].order !== i + 1) {
-                is_sequential = false;
-                break;
-            }
-        }
-
-        let sorted_list = list;
-        if (!is_sequential) {
-            sorted_list = [...list].sort((a, b) => a.order - b.order);
-            sorted_list.forEach((category, index) => (category.order = index + 1));
-            needs_save = true;
-        }
-
-        sorted_list.forEach(category => {
-            if (Array.isArray(category.subcategories) && category.subcategories.length)
-                category.subcategories = normalize_level(category.subcategories);
-        });
-
-        return sorted_list;
-    }
-
-    const result = normalize_level(data);
-
-    if (needs_save) {
+    if (changed) {
         console.log("🔄 Reordering categories to maintain correct order...");
-        perform_save(result);
+        perform_save(list);
     }
 
-    return result;
+    return list;
+}
+
+
+// Recursively normalizes the order field for a single level of the category tree, returns the sorted list together with whether that level needed reordering
+function normalize_category_level(list) {
+    let is_sequential = true;
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].order !== i + 1) {
+            is_sequential = false;
+            break;
+        }
+    }
+
+    let sorted_list = list;
+    let level_changed = false;
+
+    if (!is_sequential) {
+        sorted_list = [...list].sort((a, b) => a.order - b.order);
+        sorted_list.forEach((category, index) => (category.order = index + 1));
+        level_changed = true;
+    }
+
+    // Recurse into every subcategory list, a child level being reordered also counts as a change on the overall tree
+    sorted_list.forEach(category => {
+        if (Array.isArray(category.subcategories) && category.subcategories.length) {
+            const child_result = normalize_category_level(category.subcategories);
+            category.subcategories = child_result.list;
+            if (child_result.changed) level_changed = true;
+        }
+    });
+
+    return { list: sorted_list, changed: level_changed };
 }
 
 // Sanitizes a space separated list of custom CSS classes: keeps only letters, numbers, hyphens, underscores and spaces, then strips leading digits from every individual class name since CSS class names cannot start with a number, also enforces the 30 character limit

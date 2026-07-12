@@ -34,6 +34,31 @@ function apply_view_mode_to_container(scripts_container, view_mode) {
     scripts_container.classList.add(...compute_view_mode_classes(effective_view_mode));
 }
 
+// Toggles a category's collapsed state with an animated max-height transition, triggered by clicking anywhere on the category header
+function toggle_category_visibility(event) {
+    let category = event.target.closest(".category");
+    let content_element = category.querySelector(":scope > .category-content");
+
+    if (content_element.dataset.animating) return; // Block spam clicks
+
+    content_element.dataset.animating = "true"; // Lock for animation
+    setTimeout(() => delete content_element.dataset.animating, 500); // Unlock after 0.5s
+
+    if (category.classList.contains("collapsed")) {
+        // Open the category with animation if it's collapsed
+        category.classList.remove("collapsed");
+        content_element.style.maxHeight = `${content_element.scrollHeight}px`; // Initial opening
+        setTimeout(() => content_element.style.maxHeight = null, 500); // Reset max-height after animation
+    } else {
+        // Collapse the category with animation if it's open
+        content_element.style.maxHeight = `${content_element.scrollHeight}px`;
+        setTimeout(() => {
+            category.classList.add("collapsed");
+            content_element.style.maxHeight = "0"; // Collapse with animation
+        }, 10);
+    }
+}
+
 // Applies the collapsed state to a category element based on the category's current collapsed value
 function apply_collapsed_state(category) {
     const category_element = get_category_element(category.id);

@@ -55,6 +55,12 @@ function main() {
     categories.forEach(cat => {create_category(cat)});
 }
 
+function insert_custom_css() {
+    let style = document.createElement("style");
+    style.textContent = cfg_use['custom_css'];
+    document.head.appendChild(style);
+}
+
 function container_overhaul(table) {
     const categories_container_html = "<div id='categories-container'></div>";
     table.insertAdjacentHTML("beforebegin", categories_container_html);
