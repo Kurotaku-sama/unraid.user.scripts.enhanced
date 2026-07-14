@@ -167,36 +167,27 @@ function open_cron_info() {
 // Rebuilds the original "User Scripts" credits popup as a native styled swal, content is static and mirrors the original plugin's tooltip exactly
 function open_credits() {
     const html = `
-        <center>
-            <img src="/plugins/user.scripts/images/user.scripts.png" width="96px"><br>
-            <h2>CA User Scripts</h2><br>
-            <center>
-                <table align="center" style="background-color:initial;">
-                    <tbody>
-                        <tr>
-                            <td><img src="https://github.com/Squidly271/plugin-repository/raw/master/Chode_300.gif" width="50px" height="48px"></td>
-                            <td style="background-color:initial;"><strong>Andrew Zawadzki</strong></td>
-                            <td>Main Development</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </center>
-            <br>
-            <center><em><font size="1">Copyright 2016-2024 Andrew Zawadzki</font></em></center>
-            <center>
-                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG" target="_blank">
-                    <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif">
-                </a>
-            </center>
-            <br>
-            <center><a href="https://forums.lime-technology.com/topic/48286-plugin-ca-user-scripts/" target="_blank">Plugin Support Thread</a></center>
-        </center>
+        <table align="center" style="background-color:initial;">
+            <tr>
+                <td><img src="https://github.com/Squidly271/plugin-repository/raw/master/Chode_300.gif" width="50px" height="48px"></td>
+                <td style="background-color:initial;"><strong>Andrew Zawadzki</strong></td>
+                <td>Main Development</td>
+            </tr>
+        </table>
+        <br>
+        <em><font size="1">Copyright 2016-2024 Andrew Zawadzki</font></em><br>
+        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG" target="_blank">
+            <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif">
+        </a>
+        <br><br>
+        <a href="https://forums.lime-technology.com/topic/48286-plugin-ca-user-scripts/" target="_blank">Plugin Support Thread</a>
     `;
 
     swal({
-        title: "",
+        title: "CA User Scripts",
         text: html,
         html: true,
+        imageUrl: `/plugins/user.scripts/images/user.scripts.png`,
         customClass: "swal-responsive-fix",
     });
 }

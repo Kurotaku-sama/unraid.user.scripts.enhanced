@@ -11,7 +11,10 @@ $php_path = "/usr/local/emhttp/plugins/user.scripts.enhanced/php";
 require_once "$php_path/settings_page.php";
 ?>
 
-<script>const plugin = "<?=$plugin?>";</script>
+<script>
+const plugin = "<?=$plugin?>";
+const plugin_name = "User Scripts Enhanced";
+</script>
 
 <script src="<?=autov("/plugins/$plugin/js/settings_page.js")?>"></script>
 <script src="<?=autov("/plugins/$plugin/js/helper.js")?>"></script>
