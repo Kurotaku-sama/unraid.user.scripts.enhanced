@@ -18,17 +18,26 @@
 <CHANGES>
 ###2026.07.XX - Subcategories & UI Overhaul
 - Added ability to create subcategories
+- Category identifiers are no longer based on the name but on a unique id, existing categories.json files are automatically migrated on plugin update
 - Added an option to enable panel view always for mobile devices, enabled by default, not recommended to disable (Breakpoint is: 800px)
 - Added a Custom Class input field under Advanced Options, allowing a category to be assigned its own CSS class for individual styling via Plugin Settings
+- Added a global Subcategory Position setting (Above/Below), can be overridden individually per category in the Category Settings dialog
+- Added a Maximum Category Depth setting (1-10) (Warning: the higher the depth, the worse it gets for mobile responsiveness)
 - Removed the individual category buttons, replaced with a gear icon in the category header that opens a settings dialog
-- Removed the Move Up & Down Buttons, Order can be now changed with the "Change Order" Button
+- Removed the Move Up & Down Buttons, Order can now be changed with the "Change Order" Button, using Sortable.js for drag and drop
+- Script assignment in the Category Settings dialog now also uses Sortable.js for drag and drop
 - Removed ability to set save delay, it's now instant
 - Every character is now allowed for the category name
+- When foregroundOnly or backgroundOnly is used the button in panel view is now centered
 - Category header text now truncates with ellipsis instead of overflowing when the name is too long to fit
+- Replaced the plain "What Is Cron" link with a native styled button placed next to "How To Add Scripts"
+- Replaced the original "Credits" tooltip link with a rebuilt native styled "About U.S" button
+- The Settings button now supports middle click to open the settings page in a new tab
 - Fixed several HTML injections
 - Fixed the redirect to "Error: File not found" page when attempting to export a non-existent config or categories file.
 - Removed config_loader.php, its now using the default.cfg
 - Removed ability to hide Credits
+
 - Added PayPal donation link and About U.S.E Button into Scripts page
 
 ###2025.12.26 - Hotfix
@@ -81,10 +90,10 @@
             rm -f $(ls /boot/config/plugins/&name;/&name;*.txz | grep -v '&version;')
             echo "----------------------------------------------------"
             echo "User Scripts Enhanced has been installed."
-            echo "Version: &version;"
+            echo "Version: &version;"cd
             echo "----------------------------------------------------"
             echo ""
-            php /usr/local/emhttp/plugins/&name;/php/migrate_categories.php
+            php /usr/local/emhttp/plugins/&name;/php/validate_categories.php
         </INLINE>
     </FILE>
 

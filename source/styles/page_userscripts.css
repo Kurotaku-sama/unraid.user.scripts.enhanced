@@ -293,6 +293,19 @@
     margin-left: 10px;
 }
 
+/* If second or third td is empty full width on the other one */
+.category-scripts.vm-panel tr:has(td:nth-child(2):empty) td:nth-child(3),
+.category-scripts.vm-panel tr:has(td:nth-child(3):empty) td:nth-child(2) {
+    width: 100%;
+}
+
+.category-scripts.vm-panel tr:has(td:nth-child(2):empty) td:nth-child(3) > input,
+.category-scripts.vm-panel tr:has(td:nth-child(3):empty) td:nth-child(2) > input {
+    max-width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .category-scripts.vm-panel tr td:nth-child(4),
 .category-scripts.vm-panel tr td:nth-child(5),
 .category-scripts.vm-panel tr td:nth-child(6),
@@ -325,6 +338,7 @@
 #category-order-root {
     text-align: left;
     margin-top: 15px;
+    padding-bottom: 15px; /* Needed to make it possible to drag items underneath the last item */
     gap: 10px;
     display: grid;
 }
@@ -395,6 +409,8 @@
 }
 
 .category-settings-script-list {
+    min-height: 100%;
+    align-content: start;
     text-align: left;
     gap: 10px;
     display: grid;
@@ -503,13 +519,23 @@
 }
 
 /* ========================
+   Search & About / Credits Wrapper
+   ======================== */
+
+#search_about_wrapper {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+/* ========================
    Search Function
    ======================== */
 
 .category-search-wrapper {
     position: relative;
     display: inline-block;
-    margin-bottom: 15px;
     width: 300px;
 }
 
@@ -526,6 +552,20 @@
     width: 100%;
     box-sizing: border-box;
 }
+
+/* ========================
+   About Wrapper
+   ======================== */
+.about-wrapper {
+    margin-left: auto;
+    display: flex;
+    gap: 15px;
+}
+
+.about-wrapper > input {
+    margin: unset;
+}
+
 
 /* ========================
    Custom Scrollbar: Chromium / WebKit
@@ -563,4 +603,12 @@
 #categories-container tr > td > select {
     line-height: 2rem;
     max-width: 90%;
+}
+
+.cron-info-swal > p {
+    text-align: left;
+}
+
+.cron-info-swal > p > tt {
+    font-size: 15px;
 }

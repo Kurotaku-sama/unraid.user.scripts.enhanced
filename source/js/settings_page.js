@@ -21,7 +21,7 @@ $(function() {
 
 async function export_data(trigger, type) {
     disable_button(trigger);
-    const url = `/plugins/${plugin}/php/export.php?plugin=${plugin}&type=${type}`;
+    const url = `/plugins/${plugin}/php/export.php?type=${type}`;
     try {
         const response = await fetch(url);
         if (!response.ok) return;
@@ -74,7 +74,6 @@ function reset_plugin_data(trigger, type) {
     confirmation_swal(title, text, async function() {
         try {
             const response = JSON.parse(await $.get(`/plugins/${plugin}/php/config_reset.php`, {
-                plugin: plugin,
                 type: type
             }));
             if (response.error)

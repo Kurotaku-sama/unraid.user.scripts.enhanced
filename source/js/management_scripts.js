@@ -68,6 +68,7 @@ function initialize_script_sortables(lists) {
             forceFallback: true,
             fallbackOnBody: true,
             swapThreshold: 0.65,
+            emptyInsertThreshold: 50,
             ghostClass: "category-settings-script-dragging"
         });
         script_sortable_instances.push(instance);

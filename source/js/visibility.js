@@ -58,6 +58,9 @@ function hide_elements() {
     style.id = "dynamic-hide-styles";
     let css_rules = "";
 
+    // Hide original What is Cron and Credits
+    css_rules += ".content > p:nth-of-type(2) { display: none !important; }";
+
     // Hide empty lines
     if (cfg_use['hide_empty_lines'] === "yes") {
         css_rules += ".content > p:first-of-type { display: none !important; } ";
@@ -66,13 +69,13 @@ function hide_elements() {
         css_rules += ".content > p:nth-of-type(4) > br { display: none !important; } ";
     }
 
-    // What is cron
-    if (cfg_use['hide_what_is_cron'] === "yes")
-        css_rules += ".ca_cron { display: none !important; }";
-
-    // How to add scripts button
-    if (cfg_use['hide_how_to_add_scripts'] === "yes")
-        css_rules += ".content > center:first-of-type { display: none !important; }";
+    // What is cron and how to add scripts button
+    if (cfg_use['hide_what_is_cron'] === "yes" && cfg_use['hide_how_to_add_scripts'] === "yes")
+        css_rules += ".content > center { display: none !important; }";
+    else if (cfg_use['hide_how_to_add_scripts'] === "yes")
+        css_rules += ".content > center > :nth-child(1) { display: none !important; }";
+    else if (cfg_use['hide_what_is_cron'] === "yes")
+        css_rules += ".content > center > :nth-child(2) { display: none !important; }";
 
     // Help section
     if (cfg_use['hide_help'] === "yes")

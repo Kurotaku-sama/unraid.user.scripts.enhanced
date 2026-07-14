@@ -15,6 +15,7 @@ let uncategorized_category = null; // Global variable to cache the uncategorized
 
 (async function() {
     hide_elements();
+
     original_categories = await categories_load();
     categories = $.extend(true, [], original_categories); // Deep copy using jQuery
 
@@ -32,10 +33,15 @@ function main() {
     if (!main_table) return;
     if (cfg_use['custom_css']?.trim() != "")
         insert_custom_css();
+    
+    // Container for Search Box and About/Credits Buttons
+    main_table.insertAdjacentHTML("beforebegin", "<div id=search_about_wrapper></div>");
 
+    add_cron_button();
+    add_search_input();
+    add_about_buttons();
     handle_description_visibility();
-    bugfixes();
-    add_search_input(main_table);
+    bugfixes(); // Fixes that affect the original user scripts plugin
     container_overhaul(main_table);
 
     const add_script_button = content.querySelector("input[type='button'][value='Add New Script']");
@@ -43,13 +49,6 @@ function main() {
         add_settings_button(add_script_button);
         add_change_order_button(add_script_button);
         add_category_button(add_script_button);
-    }
-
-    const done_button = content.querySelector("input[type='button'][value='Done']");
-    if (done_button) {
-        done_button.parentNode.style.display = "flex";
-        done_button.parentNode.style.flexWrap = 'wrap';
-        add_about_button(done_button);
     }
 
     categories.forEach(cat => {create_category(cat)});

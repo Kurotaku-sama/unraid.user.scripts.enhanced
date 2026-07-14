@@ -1,9 +1,5 @@
 <?
-if (!isset($_GET['plugin'])) {
-    http_response_code(400); // Bad request
-    die("Error: 'plugin' parameter is required.");
-}
-$plugin = $_GET['plugin'];
+$plugin = "user.scripts.enhanced";
 
 // Define paths
 $source_dir = "/boot/config/plugins/user.scripts";

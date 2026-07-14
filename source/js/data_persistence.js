@@ -54,7 +54,7 @@ async function perform_save(categories_to_save) {
 
 async function categories_load() {
     try {
-        const data = await $.getJSON(`/plugins/${plugin}/php/categories_load.php?plugin=${plugin}`);
+        const data = await $.getJSON(`/plugins/${plugin}/php/categories_load.php`);
 
         // Check if the response contains an error
         if (data.error)
@@ -88,7 +88,6 @@ async function categories_save(categories_to_save) {
         // Use the passed categories or fall back to the global `categories` variable
         const categories_data = JSON.stringify(categories_to_save || categories);
         const response = JSON.parse(await $.post(`/plugins/${plugin}/php/categories_save.php`, {
-            plugin: plugin,
             categories: categories_data
         }));
 

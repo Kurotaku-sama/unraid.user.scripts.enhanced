@@ -1,8 +1,5 @@
 <?
-// Check if plugin name is provided
-if (!isset($_POST['plugin']))
-    die(json_encode(["error" => "Plugin name is missing."]));
-$plugin = $_POST['plugin'];
+$plugin = "user.scripts.enhanced";
 
 // Define paths
 $plugin_dir = "/boot/config/plugins/{$plugin}";

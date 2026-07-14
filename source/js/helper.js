@@ -139,3 +139,64 @@ function generate_unique_category_id() {
         new_id = `${Date.now()}`;
     return new_id;
 }
+
+// Opens a popup explaining the custom cron schedule format, content is static and therefore safe to hardcode without escaping
+function open_cron_info() {
+    const html = `
+        Custom schedule format (standard cron entry):<br>
+        <tt>┌───────────── minute (0 - 59)<br></tt>
+        <tt>│ ┌───────────── hour (0 - 23)<br></tt>
+        <tt>│ │ ┌───────────── day of month (1 - 31)<br></tt>
+        <tt>│ │ │ ┌───────────── month (1 - 12)<br></tt>
+        <tt>│ │ │ │ ┌───────────── day of week (0 - 6) (Sunday to Saturday)<br></tt>
+        <tt>│ │ │ │ │<br></tt>
+        <tt>│ │ │ │ │<br></tt>
+        <tt>│ │ │ │ │<br></tt>
+        <tt>* * * * *</tt><br>
+        See <a href="https://en.wikipedia.org/wiki/Cron" target="_blank">here</a> for examples, or <a href="https://crontab.guru/" target="_blank">here</a> for an online generator.
+    `;
+
+    swal({
+        title: "What is Cron",
+        text: html,
+        html: true,
+        customClass: "swal-responsive-fix cron-info-swal",
+    });
+}
+
+// Rebuilds the original "User Scripts" credits popup as a native styled swal, content is static and mirrors the original plugin's tooltip exactly
+function open_credits() {
+    const html = `
+        <center>
+            <img src="/plugins/user.scripts/images/user.scripts.png" width="96px"><br>
+            <h2>CA User Scripts</h2><br>
+            <center>
+                <table align="center" style="background-color:initial;">
+                    <tbody>
+                        <tr>
+                            <td><img src="https://github.com/Squidly271/plugin-repository/raw/master/Chode_300.gif" width="50px" height="48px"></td>
+                            <td style="background-color:initial;"><strong>Andrew Zawadzki</strong></td>
+                            <td>Main Development</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+            <br>
+            <center><em><font size="1">Copyright 2016-2024 Andrew Zawadzki</font></em></center>
+            <center>
+                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7M7CBCVU732XG" target="_blank">
+                    <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif">
+                </a>
+            </center>
+            <br>
+            <center><a href="https://forums.lime-technology.com/topic/48286-plugin-ca-user-scripts/" target="_blank">Plugin Support Thread</a></center>
+        </center>
+    `;
+
+    swal({
+        title: "",
+        text: html,
+        html: true,
+        customClass: "swal-responsive-fix",
+    });
+}

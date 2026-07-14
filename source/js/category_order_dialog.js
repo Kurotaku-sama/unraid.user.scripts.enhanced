@@ -123,6 +123,7 @@ function initialize_order_sortables() {
             forceFallback: true,
             fallbackOnBody: true,
             swapThreshold: 0.65,
+            emptyInsertThreshold: 50,
             onMove: order_dialog_on_move,
             onEnd: order_dialog_on_end
         });

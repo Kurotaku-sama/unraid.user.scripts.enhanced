@@ -15,6 +15,8 @@ function about_plugin() {
     `;
 
     const html = `
+        <img src="/plugins/${plugin}/images/user.scripts.enhanced.png" width="96px"><br>
+        <h2>${plugin_name}</h2><br>
         <strong>Author:</strong> Kurotaku<br>
         <strong>Homepage:</strong> <a href="https://kurotaku.de" target="_blank">kurotaku.de</a><br><br>
         <strong>More Projects:</strong> <a href="https://github.com/Kurotaku-sama" target="_blank">GitHub</a><br><br>
@@ -29,10 +31,9 @@ function about_plugin() {
     `;
 
     swal({
-        title: plugin_name,
+        title: "",
         html: true,
         text: html,
-        type: "success",
         confirmButtonText: "Close",
         customClass: "swal-responsive-fix",
     });
