@@ -33,7 +33,7 @@ function about_plugin() {
         html: true,
         text: html,
         confirmButtonText: "Close",
-        imageUrl: `/plugins/${plugin}/images/user.scripts.enhanced.png`,
+        imageUrl: `/plugins/${plugin}/images/icon.png`,
         customClass: "swal-responsive-fix",
     });
 }
