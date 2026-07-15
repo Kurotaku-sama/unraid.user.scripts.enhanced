@@ -1,12 +1,12 @@
 function about_plugin() {
-    const paypal = `
+    const btn_paypal = `
         <a href="https://www.paypal.me/Kurotaku1337" target="_blank" rel="noopener" class="donation-button link-paypal">
             <img src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-200px.png" alt="PayPal" class="donation-icon" />
             <div class="donation-shine"></div>
         </a>
     `;
 
-    const ko_fi = `
+    const btn_ko_fi = `
         <a href="https://ko-fi.com/kurotaku1337" target="_blank" rel="noopener" class="donation-button link-kofi">
             <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Ko-fi" class="donation-icon" />
             <span class="donation-text">Ko-fi</span>
@@ -23,8 +23,8 @@ function about_plugin() {
         <b>Contact:</b> Discord – <strong>Kurotaku</strong><br><br>
         <b>If you like my work feel free to support me:</b>
         <div class="donation-wrapper">
-            ${paypal}
-            ${ko_fi}
+            ${btn_paypal}
+            ${btn_ko_fi}
         </div>
     `;
 

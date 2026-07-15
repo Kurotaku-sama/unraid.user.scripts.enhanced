@@ -54,11 +54,13 @@ function get_elements_by_category(category_id) {
 // Recursively searches the category tree for a category with the given id, returns the category object or null
 function find_category_by_id(category_id, list = categories) {
     for (const category of list) {
-        if (category.id === category_id) return category;
+        if (category.id === category_id) 
+            return category;
 
         if (category.subcategories?.length) {
             const found = find_category_by_id(category_id, category.subcategories);
-            if (found) return found;
+            if (found) 
+                return found;
         }
     }
     return null;
@@ -67,11 +69,13 @@ function find_category_by_id(category_id, list = categories) {
 // Recursively searches the category tree and returns the array that directly contains the category with the given id, either the top level categories array or a parent's subcategories array
 function get_category_siblings(category_id, list = categories) {
     for (const category of list) {
-        if (category.id === category_id) return list;
+        if (category.id === category_id) 
+            return list;
 
         if (category.subcategories?.length) {
             const found = get_category_siblings(category_id, category.subcategories);
-            if (found) return found;
+            if (found) 
+                return found;
         }
     }
     return null;
@@ -80,11 +84,13 @@ function get_category_siblings(category_id, list = categories) {
 // Recursively calculates the nesting depth of a category, top level categories are depth 1
 function get_category_depth(category_id, list = categories, depth = 1) {
     for (const category of list) {
-        if (category.id === category_id) return depth;
+        if (category.id === category_id) 
+            return depth;
 
         if (category.subcategories?.length) {
             const found_depth = get_category_depth(category_id, category.subcategories, depth + 1);
-            if (found_depth) return found_depth;
+            if (found_depth) 
+                return found_depth;
         }
     }
     return null;
@@ -102,7 +108,8 @@ function flatten_subcategories(category) {
 
 // Recursively calculates how many additional levels a category's deepest nested subcategory occupies relative to the category itself, a category without subcategories returns 0
 function get_subtree_relative_depth(category) {
-    if (!category.subcategories.length) return 0;
+    if (!category.subcategories.length) 
+        return 0;
     return 1 + Math.max(...category.subcategories.map(get_subtree_relative_depth));
 }
 
@@ -124,7 +131,8 @@ function resolve_subcategory_position(category) {
 // Recursively checks whether the given id already exists anywhere in the category tree, top level categories or nested subcategories at any depth
 function is_id_taken(id, list = categories) {
     for (const category of list) {
-        if (category.id === id) return true;
+        if (category.id === id) 
+            return true;
 
         if (category.subcategories?.length && is_id_taken(id, category.subcategories))
             return true;

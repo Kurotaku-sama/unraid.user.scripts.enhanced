@@ -12,10 +12,10 @@ let order_sortable_instances = [];
 function open_change_order_dialog() {
     order_dialog_categories = structuredClone(categories);
 
-    const tree_html = build_order_tree_html(order_dialog_categories, 1);
+    const html_tree = build_order_html_tree(order_dialog_categories, 1);
     const html = `
         <div class="category-order-info">You can drag & drop categories to reorder them, or move them into another category to nest them as a subcategory, up to ${max_category_depth} levels deep.</div>
-        <div id="category-order-root" class="category-order-list">${tree_html}</div>
+        <div id="category-order-root" class="category-order-list">${html_tree}</div>
     `;
 
     swal({
@@ -46,9 +46,8 @@ function open_change_order_dialog() {
         if (save_success) {
             apply_category_tree_dom_order(categories);
             swal.close();
-        } else {
+        } else
             categories = previous_categories_backup;
-        }
     });
 
     initialize_order_sortables();
@@ -56,12 +55,12 @@ function open_change_order_dialog() {
 }
 
 // Recursively builds the nested list markup for the order dialog, every category always gets its own sublist container regardless of depth, so Sortable can move a category back out of it later, the container is only visually hidden inline once the maximum depth is reached, the row itself gets its bottom corners rounded in that case since no sublist will visually attach below it
-function build_order_tree_html(list, depth) {
+function build_order_html_tree(list, depth) {
     let html = "";
 
     for (const category of list) {
         const safe_name = escape_html(category.name);
-        const children_html = build_order_tree_html(category.subcategories, depth + 1);
+        const html_children = build_order_html_tree(category.subcategories, depth + 1);
         const at_max_depth = depth >= max_category_depth;
         const sublist_hidden_style = at_max_depth ? 'style="display: none;"' : "";
         const row_radius_style = at_max_depth ? 'style="border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;"' : "";
@@ -72,7 +71,7 @@ function build_order_tree_html(list, depth) {
                     <span class="category-order-handle">⋮ ⋮</span>
                     <span class="category-order-name">${safe_name}</span>
                 </div>
-                <div class="category-order-sublist" data-parent="${category.id}" ${sublist_hidden_style}>${children_html}</div>
+                <div class="category-order-sublist" data-parent="${category.id}" ${sublist_hidden_style}>${html_children}</div>
             </div>
         `;
     }
@@ -139,7 +138,8 @@ function destroy_order_sortables() {
 
 // Resolves the array of category objects that directly belong to a given order dialog list element, either the top level tree or a parent's subcategories array
 function get_order_target_category_list(list_element) {
-    if (list_element.id === "category-order-root") return order_dialog_categories;
+    if (list_element.id === "category-order-root") 
+        return order_dialog_categories;
 
     const parent_id = list_element.dataset.parent;
     const parent_category = find_category_by_id(parent_id, order_dialog_categories);
@@ -151,14 +151,17 @@ function order_dialog_on_move(event) {
     const dragged_item = event.dragged;
     const target_list = event.to;
 
-    if (dragged_item.contains(target_list)) return false;
+    if (dragged_item.contains(target_list)) 
+        return false;
 
     const target_depth = get_order_list_depth(target_list);
     const dragged_category = find_category_by_id(dragged_item.dataset.category, order_dialog_categories);
-    if (!dragged_category) return false;
+    if (!dragged_category) 
+        return false;
 
     const subtree_relative_depth = get_subtree_relative_depth(dragged_category);
-    if ((target_depth + subtree_relative_depth) > max_category_depth) return false;
+    if ((target_depth + subtree_relative_depth) > max_category_depth) 
+        return false;
 
     const target_siblings = get_order_target_category_list(target_list);
     const name_conflict = target_siblings.some(category => category.id !== dragged_category.id && category.name.toLowerCase() === dragged_category.name.toLowerCase());

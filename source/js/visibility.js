@@ -81,7 +81,6 @@ function hide_elements() {
     if (cfg_use['hide_help'] === "yes")
         css_rules += ".content > center:nth-of-type(2) { display: none !important; }";
 
-
     style.textContent = css_rules;
     document.head.appendChild(style);
 }

@@ -61,8 +61,8 @@ function insert_custom_css() {
 }
 
 function container_overhaul(table) {
-    const categories_container_html = "<div id='categories-container'></div>";
-    table.insertAdjacentHTML("beforebegin", categories_container_html);
+    const html_categories_container = "<div id='categories-container'></div>";
+    table.insertAdjacentHTML("beforebegin", html_categories_container);
 
     const categories_container = document.getElementById("categories-container");
 
@@ -72,7 +72,7 @@ function container_overhaul(table) {
     const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
 
     const uncategorized_name = escape_html(cfg_use['capitalized'] === "yes" ? cfg_use['uncategorized_name'].toUpperCase() : cfg_use['uncategorized_name'])
-    const uncategorized_userscripts_header_html = `
+    const html_uncategorized_userscripts_header = `
         <div class="category ${cfg_use['uncategorized_collapsed'] === "yes" ? "collapsed uncategorized_empty" : ""}" data-category="uncategorized">
             <div class="category-header">
                 <span class="category-header-text">${uncategorized_name}</span>
@@ -83,7 +83,7 @@ function container_overhaul(table) {
             </div>
         </div>
     `;
-    categories_container.insertAdjacentHTML("beforeend", uncategorized_userscripts_header_html);
+    categories_container.insertAdjacentHTML("beforeend", html_uncategorized_userscripts_header);
 
     // Get the uncategorized scripts container
     const uncategorized_category = categories_container.querySelector(".category[data-category='uncategorized']");

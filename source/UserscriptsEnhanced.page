@@ -22,7 +22,6 @@ const plugin_name = "User Scripts Enhanced";
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/page_settings.css")?>">
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/donate.css")?>">
 
-
 <!-- CodeMirror -->
 <script src="<?=autov("/plugins/$plugin/vendor/codemirror/js/codemirror.min.js")?>"></script>
 <script src="<?=autov("/plugins/$plugin/vendor/codemirror/js/css.min.js")?>"></script>
@@ -99,6 +98,10 @@ const plugin_name = "User Scripts Enhanced";
         </dd>
     </dl>
     
+    <blockquote class="inline_help">
+        <p>Select which view modes should have hover highlighting enabled.</p>
+    </blockquote>
+
     <!-- Force panel view on mobile -->
     <? render_select_field("Force panel view on mobile", "mobile_force_panel", $cfg_use['mobile_force_panel']); ?>
 
@@ -113,11 +116,6 @@ const plugin_name = "User Scripts Enhanced";
 
     <blockquote class="inline_help">
         <p>When enabled, separators are displayed between scripts in List View mode for better visual separation.</p>
-    </blockquote>
-
-
-    <blockquote class="inline_help">
-        <p>Select which view modes should have hover highlighting enabled.</p>
     </blockquote>
 
     <!-- Collapse Categories by default -->

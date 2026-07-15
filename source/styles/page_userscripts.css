@@ -262,7 +262,6 @@
     min-width: 0;
 }
 
-
 .category-scripts.vm-panel tr td input {
     margin: 10px 0 0;
 }
@@ -399,13 +398,16 @@
     margin: 15px 0;
 }
 
-.category-settings-scripts-column {
+.category-settings-scripts-column-container {
     min-width: 0;
 }
 
-.category-settings-scripts-column p {
+.category-settings-scripts-column-headline {
     font-weight: bold;
-    margin-bottom: 5px;
+    padding: 0 15px 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .category-settings-script-list {
@@ -565,7 +567,6 @@
 .about-wrapper > input {
     margin: unset;
 }
-
 
 /* ========================
    Custom Scrollbar: Chromium / WebKit

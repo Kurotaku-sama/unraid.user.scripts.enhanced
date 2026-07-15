@@ -23,7 +23,6 @@ if (file_exists($target_path)) {
     if (!unlink($target_path))
         die(json_encode(["error" => "Failed to remove file."]));
     die(json_encode(["success" => "File successfully deleted."]));
-} else {
+} else
     die(json_encode(["warning" => "File does not exist, nothing to delete."]));
-}
 ?>

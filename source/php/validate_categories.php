@@ -143,9 +143,8 @@ function normalize_categories($list, $schema, &$reserved_ids, &$id_counter, &$ch
                 if ($is_invalid) {
                     $changed = true;
                     $id = generate_unique_id($id_counter, $reserved_ids);
-                } else {
+                } else
                     $reserved_ids[$id] = true;
-                }
 
                 $normalized_category[$key] = $id;
                 continue;

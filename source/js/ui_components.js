@@ -27,13 +27,13 @@ function add_settings_button(reference_button) {
 function add_search_input() {
     if (cfg_use['enable_search'] === "yes") {
         const container = document.getElementById("search_about_wrapper");
-        const search_input_field_html = `
+        const html_search_input_field = `
             <div class="category-search-wrapper">
                 <b class="icon-u-search system category-search-icon"></b>
                 <input type="text" id="category-search-input" class="category-search-input" placeholder="Search">
             </div>
         `;
-        container.insertAdjacentHTML("afterbegin", search_input_field_html);
+        container.insertAdjacentHTML("afterbegin", html_search_input_field);
         document.getElementById("category-search-input")?.addEventListener("input", e => search_script(e.target.value));
     }
 }

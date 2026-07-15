@@ -10,13 +10,13 @@ function create_category(category, parent_id = null) {
     const effective_view_mode = resolve_effective_view_mode(category.view_mode);
     const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
 
-    const subcategories_html = `<div class="category-subcategories"></div>`;
-    const scripts_html = `<div class="category-scripts ${view_mode_classes}"></div>`;
+    const html_subcategories = `<div class="category-subcategories"></div>`;
+    const html_scripts = `<div class="category-scripts ${view_mode_classes}"></div>`;
 
     // The subcategories container is placed above or below the category's own scripts container based on the resolved subcategory position
     const content_inner_html = resolve_subcategory_position(category) === "below"
-        ? `${scripts_html}${subcategories_html}`
-        : `${subcategories_html}${scripts_html}`;
+        ? `${html_scripts}${html_subcategories}`
+        : `${html_subcategories}${html_scripts}`;
 
     const html = `
         <div class="category ${category.collapsed === "yes" ? "collapsed" : ""} ${custom_class}" data-category="${category.id}" data-order="${category.order}">
@@ -86,9 +86,8 @@ function add_category(parent_id = null) {
         if (parent_depth >= max_category_depth) return; // Safety guard, the UI already hides this option at max depth
 
         sibling_list = parent_category.subcategories;
-    } else {
+    } else
         sibling_list = categories;
-    }
 
     swal({
         title: "Add New Category",
@@ -108,7 +107,8 @@ function add_category(parent_id = null) {
         }
 
         let category_name = validate_category_name(input, sibling_list);
-        if (!category_name) return false;
+        if (!category_name) 
+            return false;
 
         let new_category = {
             id: generate_unique_category_id(),
