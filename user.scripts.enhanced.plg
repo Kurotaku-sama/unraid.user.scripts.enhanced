@@ -23,6 +23,7 @@
 - Added a Custom Class input field under Advanced Options, allowing a category to be assigned its own CSS class for individual styling via Plugin Settings
 - Added a global Subcategory Position setting (Above/Below), can be overridden individually per category in the Category Settings dialog
 - Added a Maximum Category Depth setting (1-10) (Warning: the higher the depth, the worse it gets for mobile responsiveness)
+- Added ability to change the "Uncategorized Userscripts" category name via Settings
 - Removed the individual category buttons, replaced with a gear icon in the category header that opens a settings dialog
 - Removed the Move Up & Down Buttons, Order can now be changed with the "Change Order" Button, using Sortable.js for drag and drop
 - Script assignment in the Category Settings dialog now also uses Sortable.js for drag and drop
@@ -37,8 +38,7 @@
 - Fixed the redirect to "Error: File not found" page when attempting to export a non-existent config or categories file.
 - Removed config_loader.php, its now using the default.cfg
 - Removed ability to hide Credits
-
-- Added PayPal donation link and About U.S.E Button into Scripts page
+- Added PayPal donation link and About U.S.E Button
 
 ###2025.12.26 - Hotfix
 - Fixed an issue where the 'user.scripts.enhanced.cfg' file was missing, causing the JS script to crash and preventing the page from being properly adjusted.
