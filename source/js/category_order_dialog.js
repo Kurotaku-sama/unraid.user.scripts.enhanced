@@ -137,7 +137,16 @@ function destroy_order_sortables() {
     order_sortable_instances = [];
 }
 
-// Blocks a drag operation from landing on an invalid target, either because it would nest a category inside one of its own descendants, or because it would push its deepest subcategory beyond max_category_depth
+// Resolves the array of category objects that directly belong to a given order dialog list element, either the top level tree or a parent's subcategories array
+function get_order_target_category_list(list_element) {
+    if (list_element.id === "category-order-root") return order_dialog_categories;
+
+    const parent_id = list_element.dataset.parent;
+    const parent_category = find_category_by_id(parent_id, order_dialog_categories);
+    return parent_category ? parent_category.subcategories : [];
+}
+
+// Blocks a drag operation from landing on an invalid target, either because it would nest a category inside one of its own descendants, because it would push its deepest subcategory beyond max_category_depth, or because a category with the same name already exists on the target level
 function order_dialog_on_move(event) {
     const dragged_item = event.dragged;
     const target_list = event.to;
@@ -149,8 +158,12 @@ function order_dialog_on_move(event) {
     if (!dragged_category) return false;
 
     const subtree_relative_depth = get_subtree_relative_depth(dragged_category);
+    if ((target_depth + subtree_relative_depth) > max_category_depth) return false;
 
-    return (target_depth + subtree_relative_depth) <= max_category_depth;
+    const target_siblings = get_order_target_category_list(target_list);
+    const name_conflict = target_siblings.some(category => category.id !== dragged_category.id && category.name.toLowerCase() === dragged_category.name.toLowerCase());
+
+    return !name_conflict;
 }
 
 // Determines the depth a category would end up at if placed directly inside the given order dialog list element, the root list is depth 1

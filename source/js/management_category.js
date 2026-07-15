@@ -6,7 +6,7 @@
 function create_category(category, parent_id = null) {
     const safe_name = escape_html(category.name);
     const style_attr = category.collapsed === "yes" ? 'style="max-height: 0px;"' : "";
-    const custom_class = sanitize_category_classes(category.custom_class || "");
+    const custom_class = category.custom_class || "";
     const effective_view_mode = resolve_effective_view_mode(category.view_mode);
     const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
 
@@ -29,17 +29,28 @@ function create_category(category, parent_id = null) {
             </div>
         </div>`;
 
+    let category_element;
+
     if (parent_id) {
         const parent_element = get_category_element(parent_id);
         const parent_subcategories_container = parent_element.querySelector(":scope > .category-content > .category-subcategories");
         parent_subcategories_container.insertAdjacentHTML("beforeend", html.trim());
+        category_element = parent_subcategories_container.lastElementChild;
     } else {
         const category_container = document.getElementById("categories-container");
         const uncategorized = category_container.querySelector(":scope > .category[data-category='uncategorized']");
-        uncategorized
-            ? uncategorized.insertAdjacentHTML("beforebegin", html.trim())
-            : category_container.insertAdjacentHTML("beforeend", html.trim());
+
+        if (uncategorized) {
+            uncategorized.insertAdjacentHTML("beforebegin", html.trim());
+            category_element = uncategorized.previousElementSibling;
+        } else {
+            category_container.insertAdjacentHTML("beforeend", html.trim());
+            category_element = category_container.lastElementChild;
+        }
     }
+
+    // Register the newly created element in the cache so later lookups by id are O(1) instead of scanning the DOM
+    category_element_cache.set(category.id, category_element);
 
     initialize_category_controls(category);
 
@@ -124,12 +135,14 @@ function add_category(parent_id = null) {
 
 // Deletes a category, cascading into every nested subcategory, all affected scripts are moved back to the top level uncategorized section
 function delete_category(category) {
+    const subcategories = flatten_subcategories(category);
+
     // Clear the scripts of the category itself, this moves its scripts back to uncategorized
     category.scripts = [];
     organize_userscripts_category(category);
 
     // Do the same for every nested subcategory at any depth, so no script silently disappears when its parent category gets deleted
-    flatten_subcategories(category).forEach(subcategory => {
+    subcategories.forEach(subcategory => {
         subcategory.scripts = [];
         organize_userscripts_category(subcategory);
     });
@@ -148,6 +161,10 @@ function delete_category(category) {
 
     // Removes the category element and every nested subcategory element along with it
     get_category_element(category.id)?.remove();
+
+    // Remove the category and every nested subcategory from the element cache, their DOM elements no longer exist
+    category_element_cache.delete(category.id);
+    subcategories.forEach(subcategory => category_element_cache.delete(subcategory.id));
 
     update_uncategorized_visibility();
     perform_save();

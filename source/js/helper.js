@@ -3,6 +3,9 @@
 // ========================
 // Generic utilities shared across multiple scripts, script specific logic belongs in its own dedicated file instead
 
+// Cache mapping category id to its DOM element, avoids scanning every .category element on every lookup
+const category_element_cache = new Map();
+
 function wait_for_element(selector, container = document.documentElement) {
     return new Promise(resolve => {
         const node = container.querySelector(selector)
@@ -34,13 +37,20 @@ function escape_html(string) {
     return string.replace(/[&<>"']/g, character => map[character]);
 }
 
-// Finds the DOM element of a category by its id without relying on CSS attribute selectors, since ids can theoretically contain characters that would break selector syntax
+// Finds the DOM element of a category by its id via the cache instead of scanning the whole DOM tree
 function get_category_element(category_id) {
-    for (const element of content.querySelectorAll(".category"))
-        if (element.dataset.category === category_id)
-            return element;
-    return null;
+    return category_element_cache.get(category_id) || null;
 }
+
+// Returns all elements (category container and its control buttons) that share the given category id in their data-category attribute
+function get_elements_by_category(category_id) {
+    const elements = [];
+    for (const element of content.querySelectorAll("[data-category]"))
+        if (element.dataset.category === category_id)
+            elements.push(element);
+    return elements;
+}
+
 // Recursively searches the category tree for a category with the given id, returns the category object or null
 function find_category_by_id(category_id, list = categories) {
     for (const category of list) {
