@@ -45,7 +45,7 @@ function build_script_item_html(script_id, script_name) {
     const safe_truncated_text = escape_html(truncated_text);
 
     const html = `
-        <div class="category-settings-script-item" data-script-id="${script_id}" data-script-name="${safe_title}">
+        <div class="category-settings-script-item" data-script-id="${script_id}">
             <span class="category-settings-script-handle">⋮ ⋮</span>
             <span class="category-settings-script-name" title="${safe_title}">${safe_truncated_text}</span>
         </div>
@@ -97,8 +97,9 @@ function organize_userscripts_category(category) {
     // Create a Map of script rows in the category container for fast access
     const script_rows = new Map();
     script_container.querySelectorAll("tr").forEach(row => {
-        const script_id = row.querySelector("span.ca_nameEdit").id;
-        script_rows.set(script_id, row);
+        const script_span = row.querySelector("span.ca_nameEdit");
+        if (!script_span) return;
+        script_rows.set(script_span.id, row);
     });
 
     // Move scripts back to the uncategorized section if they are no longer in the category

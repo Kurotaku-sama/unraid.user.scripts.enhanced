@@ -55,7 +55,6 @@ function add_cron_button() {
     if (cfg_use['hide_what_is_cron'] === "yes") return;
 
     const how_to_add_scripts_container = content.querySelector(":scope > center:first-of-type");
-    console.log(how_to_add_scripts_container)
     if (!how_to_add_scripts_container) return;
 
     const html = `<input type="button" id="cron-info-button" value="What Is Cron" onclick="open_cron_info();">`;

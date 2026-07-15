@@ -6,7 +6,7 @@
 function create_category(category, parent_id = null) {
     const safe_name = escape_html(category.name);
     const style_attr = category.collapsed === "yes" ? 'style="max-height: 0px;"' : "";
-    const custom_class = category.custom_class || "";
+    const custom_class = sanitize_category_classes(category.custom_class || "");
     const effective_view_mode = resolve_effective_view_mode(category.view_mode);
     const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
 

@@ -41,16 +41,6 @@ function get_category_element(category_id) {
             return element;
     return null;
 }
-
-// Returns all elements (category container and its control buttons) that share the given category id in their data-category attribute
-function get_elements_by_category(category_id) {
-    const elements = [];
-    for (const element of content.querySelectorAll("[data-category]"))
-        if (element.dataset.category === category_id)
-            elements.push(element);
-    return elements;
-}
-
 // Recursively searches the category tree for a category with the given id, returns the category object or null
 function find_category_by_id(category_id, list = categories) {
     for (const category of list) {
