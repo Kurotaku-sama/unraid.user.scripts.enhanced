@@ -28,8 +28,12 @@ You can either install it from the Community Applications in your Unraid Server 
 
 ## Features
 
-- **Script Categories**: Organize scripts into collapsible categories
-- **View Modes**: Two view modes can be used List & Panel
+- **Script Categories**: Organize scripts into collapsible categories, with support for nested subcategories up to a configurable depth
+- **Drag & Drop Ordering**: Reorder and reparent categories via a dedicated "Change Order" dialog powered by Sortable.js
+- **Drag & Drop Script Assignment**: Assign scripts to categories via drag and drop in the Category Settings dialog
+- **View Modes**: Two view modes can be used, List & Panel, configurable globally or per category
+- **Mobile Optimized**: Panel view can be forced automatically on mobile devices to keep List View from overflowing
+- **Custom Category Styling**: Assign a custom CSS class to individual categories via Advanced Options for individual styling
 - **Search**: Search directly within the User Scripts page for your scripts
 - **Clean Interface**: Hide unwanted elements to reduce page size
 - **Custom CSS**: Adjust the appearance to match your theme
@@ -66,6 +70,8 @@ You can restore them by placing the backed-up files into
 
 - **[CodeMirror](https://codemirror.net/)**
   Used to provide a clean, responsive, syntax-highlighted editor for the *Custom CSS* field, making it easier to write and maintain custom styles directly within the plugin settings.
+- **[Sortable.js](https://sortablejs.github.io/Sortable/)**
+  Used to provide drag and drop functionality for category ordering and script assignment.
 
 ---
 
