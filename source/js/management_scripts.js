@@ -4,12 +4,12 @@
 
 // Extracts the id and name of every script row inside the given scripts container, shared by both the uncategorized and the category specific lookups
 function get_scripts_from_container(script_container) {
-    let scripts = [];
+    const scripts = [];
     if (!script_container) return scripts;
 
     script_container.querySelectorAll("tr").forEach(row => {
-        let script_span = row.querySelector("span.ca_nameEdit");
-        let script_name = row.querySelector("font > b > span")?.textContent?.trim();
+        const script_span = row.querySelector("span.ca_nameEdit");
+        const script_name = row.querySelector("font > b > span")?.textContent?.trim();
 
         if (script_span && script_name) {
             scripts.push({

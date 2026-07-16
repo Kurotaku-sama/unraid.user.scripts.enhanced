@@ -37,8 +37,8 @@ function apply_view_mode_to_container(scripts_container, view_mode) {
 
 // Toggles a category's collapsed state with an animated max-height transition, triggered by clicking anywhere on the category header
 function toggle_category_visibility(event) {
-    let category = event.target.closest(".category");
-    let content_element = category.querySelector(":scope > .category-content");
+    const category = event.target.closest(".category");
+    const content_element = category.querySelector(":scope > .category-content");
 
     if (content_element.dataset.animating) return; // Block spam clicks
 

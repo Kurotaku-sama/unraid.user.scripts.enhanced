@@ -56,7 +56,7 @@ function main() {
 }
 
 function insert_custom_css() {
-    let style = document.createElement("style");
+    const style = document.createElement("style");
     style.textContent = cfg_use['custom_css'];
     document.head.appendChild(style);
 }

@@ -108,7 +108,7 @@ function add_category(parent_id = null) {
             return;
         }
 
-        let category_name = validate_category_name(input, sibling_list);
+        const category_name = validate_category_name(input, sibling_list);
         if (!category_name) 
             return false;
 

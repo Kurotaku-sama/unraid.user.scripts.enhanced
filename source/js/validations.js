@@ -4,7 +4,7 @@
 
 // Validates a category name, uniqueness is only checked within the given sibling list (same level of the tree), not globally
 function validate_category_name(input, sibling_list, original_name = null) {
-    let category_name = input.trim();
+    const category_name = input.trim();
     if (!category_name) {
         swal.showInputError("❌ The category name cannot be empty!");
         return false;
@@ -22,7 +22,7 @@ function validate_category_name(input, sibling_list, original_name = null) {
         return false;
     }
     // Checks case insensitively whether a sibling with the same name already exists, since category names only need to be unique among their own siblings, not across the whole tree
-    let category_exists = sibling_list.some(cat => cat.name.toLowerCase() === category_name.toLowerCase());
+    const category_exists = sibling_list.some(cat => cat.name.toLowerCase() === category_name.toLowerCase());
     if (category_exists) {
         swal.showInputError("❌ A category with this name already exists on this level!");
         return false;

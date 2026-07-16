@@ -10,7 +10,7 @@ $(function() {
     });
 
     // CodeMirror
-    let custom_css = CodeMirror.fromTextArea(document.getElementById("custom_css"), {
+    const custom_css = CodeMirror.fromTextArea(document.getElementById("custom_css"), {
         lineNumbers: true,
         mode: "css",
         theme: theme,
@@ -63,7 +63,7 @@ function confirmation_swal(title, text, callback) {
 // Resets either the plugin configuration or the categories file back to their defaults on the server, after the user confirms the destructive action
 function reset_plugin_data(trigger, type) {
     disable_button(trigger);
-    let title = "Are you sure?"
+    const title = "Are you sure?"
     let text;
     switch (type) {
         case "config":
@@ -170,7 +170,7 @@ async function get_not_matching_scriptnames(trigger) {
         // Create list items for not matching script names
         if (response.not_matching.length > 0) {
             // Builds one list item per mismatched folder, escaping both names since they come directly from the filesystem and could contain HTML unsafe characters
-            let not_matching = response.not_matching.map(folder => {
+            const not_matching = response.not_matching.map(folder => {
                 const safe_old_name = escape_html(folder.old_name);
                 const safe_new_name = escape_html(folder.new_name);
                 return `<li>"${safe_old_name}" <span class="li-arrow">→</span> "${safe_new_name}"</li>`;
