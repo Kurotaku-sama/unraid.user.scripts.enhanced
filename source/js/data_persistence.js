@@ -11,7 +11,7 @@ async function perform_save(categories_to_save) {
     while (is_saving)
         await new Promise(resolve => setTimeout(resolve, 100));
 
-    if (can_save == false) {
+    if (can_save === false) {
         swal("Save not possible", "The categories had changed on another instance, reload the page to be able to save again!", "error");
         return false;
     }
@@ -83,7 +83,7 @@ async function categories_load() {
 }
 
 async function categories_save(categories_to_save) {
-    if (can_save == false) {
+    if (can_save === false) {
         swal("Save not possible", "The categories had changed on another instance, reload the page to be able to save again!", "error");
         return false;
     }

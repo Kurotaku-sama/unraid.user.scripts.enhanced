@@ -32,7 +32,7 @@ let uncategorized_category = null; // Global variable to cache the uncategorized
 function main() {
     const main_table = content.querySelector("table");
     if (!main_table) return;
-    if (cfg_use['custom_css']?.trim() != "")
+    if (cfg_use['custom_css']?.trim() !== "")
         insert_custom_css();
     
     // Container for Search Box and About/Credits Buttons

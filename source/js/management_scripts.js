@@ -4,12 +4,12 @@
 
 // Extracts the id and name of every script row inside the given scripts container, shared by both the uncategorized and the category specific lookups
 function get_scripts_from_container(script_container) {
-    const scripts = [];
+    let scripts = [];
     if (!script_container) return scripts;
 
     script_container.querySelectorAll("tr").forEach(row => {
-        const script_span = row.querySelector("span.ca_nameEdit");
-        const script_name = row.querySelector("font > b > span")?.textContent?.trim();
+        let script_span = row.querySelector("span.ca_nameEdit");
+        let script_name = row.querySelector("font > b > span")?.textContent?.trim();
 
         if (script_span && script_name) {
             scripts.push({
@@ -104,28 +104,22 @@ function organize_userscripts_category(category) {
         script_rows.set(script_span.id, row);
     });
 
+    // Snapshot the currently sorted uncategorized rows once instead of re-querying the DOM inside the loop below, the array is kept manually in sync after every insertion so it always reflects the current state without another querySelectorAll call
+    let uncategorized_rows_sorted = Array.from(uncategorized_scripts_container.querySelectorAll("tr"));
+
     // Any row still physically inside the category container that is no longer listed in category.scripts must have been unassigned, move it back to uncategorized
     script_rows.forEach((row, script_id) => {
         if (!category_script_ids.has(script_id)) {
             // Uncategorized rows are kept sorted by script id, find the first existing row whose id sorts after the moved script id to insert before it and keep that order intact
-            const rows = uncategorized_scripts_container.querySelectorAll("tr");
-            let insert_before = null;
+            const insert_index = uncategorized_rows_sorted.findIndex(existing_row => existing_row.querySelector("span.ca_nameEdit").id.localeCompare(script_id) > 0);
 
-            for (const existing_row of rows) {
-                const existing_id = existing_row.querySelector("span.ca_nameEdit").id;
-
-                // Compare IDs as strings (lexicographically)
-                if (existing_id.localeCompare(script_id) > 0) {
-                    insert_before = existing_row;
-                    break;
-                }
-            }
-
-            // Insert the row at the correct position
-            if (insert_before)
-                uncategorized_scripts_container.insertBefore(row, insert_before);
-            else
+            if (insert_index !== -1) {
+                uncategorized_scripts_container.insertBefore(row, uncategorized_rows_sorted[insert_index]);
+                uncategorized_rows_sorted.splice(insert_index, 0, row);
+            } else {
                 uncategorized_scripts_container.appendChild(row);
+                uncategorized_rows_sorted.push(row);
+            }
         }
     });
 

@@ -153,13 +153,22 @@ function open_category_settings(category) {
         add_category(category.id);
     });
 
-    // Sanitizes the custom class input live while typing, since directly overwriting event.target.value resets the caret to the end, the caret position is manually recalculated and restored based on how many characters were stripped out
+    // Sanitizes the custom class input live while typing, since directly overwriting event.target.value resets the caret to the end of the field, the caret position is manually recalculated and restored based on how many characters were stripped out
     document.getElementById("category-settings-class-input").addEventListener("input", event => {
+        // Caret position before sanitizing, this is where the browser had put it right after the keystroke or paste
         const cursor_position = event.target.selectionStart;
+        // Length of the raw, not yet sanitized value, needed afterward to calculate exactly how many characters got removed
         const original_length = event.target.value.length;
+
+        // Overwriting .value always moves the caret to the end of the field, this is why it has to be manually restored below
         event.target.value = sanitize_category_classes(event.target.value);
+
         const new_length = event.target.value.length;
-        const new_cursor_position = cursor_position - (original_length - new_length);
+        // How many characters were removed during sanitizing, subtracting this from the original caret position keeps the caret sitting right after the same character the user just typed instead of jumping to the end
+        const removed_character_count = original_length - new_length;
+        // Clamped to 0 as a safety net, e.g. pasting a large block of invalid characters entirely before the caret could otherwise push the calculated position below 0
+        const new_cursor_position = Math.max(0, cursor_position - removed_character_count);
+
         event.target.setSelectionRange(new_cursor_position, new_cursor_position);
     });
 }
