@@ -5,6 +5,7 @@
 let can_save = true;
 let is_saving = false;
 
+// Central save entry point used by every feature that mutates the category tree, prevents overlapping saves and detects if another browser tab or instance already changed the data on the server before this save can go through
 async function perform_save(categories_to_save) {
     // If another save is already running, wait until it finishes before starting this one
     while (is_saving)
@@ -19,6 +20,7 @@ async function perform_save(categories_to_save) {
 
     let save_success;
     try {
+        // Re-fetches the currently stored categories and compares them against the snapshot taken the last time this tab successfully loaded or saved, if they differ someone else has written to the file in the meantime and this save must be blocked to avoid silently overwriting their changes
         const fetched_categories = await categories_load();
 
         if (JSON.stringify(fetched_categories) !== JSON.stringify(original_categories)) {
@@ -41,6 +43,7 @@ async function perform_save(categories_to_save) {
 
         save_success = await categories_save(categories_to_save);
 
+        // Only refresh the comparison snapshot after a confirmed successful write, updating it earlier (e.g. right when the save starts) would make a legitimate concurrent change on another tab go undetected
         if (save_success)
             original_categories = $.extend(true, [], categories_to_save || categories);
 

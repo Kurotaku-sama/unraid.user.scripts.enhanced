@@ -36,7 +36,7 @@ function create_directory($dir, $error_message) {
     }
 }
 
-// Function to generate the ZIP file path
+// Generates a unique, timestamp based filename for the export ZIP inside the export directory, retries up to 3 times a second apart in the rare case two exports of the same type get triggered within the same second
 function generate_zip_file_path() {
     global $export_dir, $type; // Access global variables
 
@@ -53,6 +53,7 @@ function generate_zip_file_path() {
         if (!file_exists($zip_file_path))
             return $zip_file_path; // Return the unique file path
 
+        // A filename collision can only happen if the timestamp string did not change yet, sleeping 1 second guarantees the next attempt produces a different timestamp
         $attempt++; // Increment attempt counter
         sleep(1); // Wait 1 second to update the timestamp
     }
@@ -74,7 +75,7 @@ function send_file($file_path, $content_type) {
     die(readfile($file_path));
 }
 
-// Function to create a ZIP file
+// Adds every given file or folder into the target ZIP archive, files are added flat via -j (junk paths) since they are picked out of different script subfolders and should sit directly in the ZIP root, folders are added via -r (recursive) to preserve their internal structure
 function create_zip($zip_file_path, $items_to_add, $source_dir) {
     chdir($source_dir); // Change to the source directory to ensure relative paths
     foreach ($items_to_add as $item) {
@@ -96,12 +97,12 @@ function create_zip($zip_file_path, $items_to_add, $source_dir) {
     }
 }
 
-// Function to delete the ZIP file, the temp directory with sh scripts and the /tmp/user.scripts.enhanced folder itself if not empty
+// Schedules the export artifacts to be removed a while after the download started, runs as a detached background process so the HTTP request does not have to wait for the delay before returning the file to the browser
 function cleanup_after_download($zip_file_path, $temp_dir = null) {
     global $export_dir; // Use the global $export_dir variable
     $delete_delay = 60; // Delay in seconds before deletion starts
 
-    // Build the cleanup command
+    // Builds one shell command chained with && so every step only runs if the previous one succeeded: wait out the delay, remove the temporary .sh folder (bash export only), remove the ZIP itself, then only remove the whole /tmp/plugin export directory if it turns out to be completely empty afterward, leaving it in place if another export is running concurrently
     $command = "(sleep {$delete_delay}"; // Start the command with a delay (sleep for $delete_delay seconds)
     if ($temp_dir !== null) // Check if a temporary directory is provided
         $command .= " && rm -rf " . escapeshellarg($temp_dir); // If provided, add a command to delete the temporary directory and its contents
@@ -109,7 +110,7 @@ function cleanup_after_download($zip_file_path, $temp_dir = null) {
     $command .= " && [ -z \"$(ls -A " . escapeshellarg($export_dir) . ")\" ]"; // Check if the export directory is empty (no files or subdirectories)
     $command .= " && rm -rf " . escapeshellarg($export_dir); // If the export directory is empty, delete it and its contents
     $command .= ") > /dev/null 2>&1 &"; // Suppress all output (stdout and stderr) and run the command in the background
-    // Execute the command in the background using nohup
+    // Execute the command in the background using nohup, nohup plus the trailing & together detach the process from the current PHP request so it keeps running after the response has already been sent
     exec("nohup bash -c '{$command}' > /dev/null 2>&1 &");
 }
 
@@ -170,7 +171,7 @@ switch ($type) {
                         $sh_filename = "{$script_name}.sh";
                         $sh_file_path = "{$temp_dir}/{$sh_filename}";
 
-                        // Check if the file already exists
+                        // Two different scripts can end up with the same shortened, underscored name, microtime() is appended on a collision to keep every .sh file from a different script folder
                         $counter = 1;
                         while (file_exists($sh_file_path)) {
                             $sh_filename = "{$script_name}_" . microtime(true) . ".sh"; // Add microtime to ensure uniqueness

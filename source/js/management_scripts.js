@@ -37,6 +37,7 @@ function get_scripts_from_category(category) {
 // Builds a single draggable list item representing one script inside the category settings dialog, dragging itself is handled by SortableJS via the dedicated handle element
 function build_script_item_html(script_id, script_name) {
     const max_length = 30;
+    // Shortens overly long script names for display purposes only, the full name is still available via the title attribute on hover
     const truncated_text = script_name.length > max_length
         ? `${script_name.substring(0, max_length)}...`
         : script_name;
@@ -82,6 +83,7 @@ function destroy_script_sortables() {
 }
 
 // Moves scripts in the DOM to reflect the category's saved script order, also moves scripts back to uncategorized when removed from a category
+// Runs after every save that could have changed a category's script assignment, since the settings dialog only edits the in memory category.scripts array, the actual <tr> rows still need to be physically relocated in the DOM to match
 function organize_userscripts_category(category) {
     const category_element = get_category_element(category.id);
     // Scoped to the category's own scripts container, since a category can contain nested subcategories with their own .category-scripts
@@ -91,10 +93,10 @@ function organize_userscripts_category(category) {
     const uncategorized_scripts_container = content.querySelector(".category[data-category='uncategorized'] .category-scripts");
     if (!uncategorized_scripts_container) return;
 
-    // Create a Set of script IDs in the category for fast lookup
+    // Set of script ids that are supposed to remain in this category, used for a fast lookup instead of an array search on every row
     const category_script_ids = new Set(category.scripts);
 
-    // Create a Map of script rows in the category container for fast access
+    // Maps every script id currently rendered inside the category container to its actual <tr> row, so rows can be looked up and moved without repeatedly querying the DOM
     const script_rows = new Map();
     script_container.querySelectorAll("tr").forEach(row => {
         const script_span = row.querySelector("span.ca_nameEdit");
@@ -102,10 +104,10 @@ function organize_userscripts_category(category) {
         script_rows.set(script_span.id, row);
     });
 
-    // Move scripts back to the uncategorized section if they are no longer in the category
+    // Any row still physically inside the category container that is no longer listed in category.scripts must have been unassigned, move it back to uncategorized
     script_rows.forEach((row, script_id) => {
         if (!category_script_ids.has(script_id)) {
-            // Find the correct position to insert the row based on ID
+            // Uncategorized rows are kept sorted by script id, find the first existing row whose id sorts after the moved script id to insert before it and keep that order intact
             const rows = uncategorized_scripts_container.querySelectorAll("tr");
             let insert_before = null;
 
@@ -127,7 +129,7 @@ function organize_userscripts_category(category) {
         }
     });
 
-    // Organize scripts in the container based on the order in category.scripts
+    // Walks category.scripts in its saved order and makes sure every row physically sits at the matching index inside the category container, newly assigned scripts are pulled in from uncategorized on demand
     category.scripts.forEach((script_id, index) => {
         let script_row = script_rows.get(script_id);
 
@@ -138,11 +140,12 @@ function organize_userscripts_category(category) {
                 script_rows.set(script_id, script_row);
         }
 
+        // Only touch the DOM if the row is not already sitting at its correct position, avoids unnecessary reflows for rows that never moved
         if (script_row && script_row !== script_container.children[index])
             script_container.insertBefore(script_row, script_container.children[index]);
     });
 
-    // Remove non-existent scripts from the category in case a script got deleted, this will be saved whenever the save triggers
+    // A script referenced in category.scripts might no longer exist at all (e.g. it was deleted through the original User Scripts UI), drop those stale ids so they do not get persisted on the next save
     const existing_script_ids = new Set(script_rows.keys());
     category.scripts = category.scripts.filter(script_id => existing_script_ids.has(script_id));
 

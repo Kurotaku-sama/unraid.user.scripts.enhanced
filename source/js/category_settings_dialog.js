@@ -14,6 +14,7 @@ function open_category_settings(category) {
     const safe_name = escape_html(category.name);
     const safe_custom_class = escape_html(category.custom_class || "");
 
+    // Subcategory creation and the position selector are only offered if this category has not already reached the configured maximum nesting depth
     const current_depth = get_category_depth(category.id);
     const can_have_subcategories = current_depth < max_category_depth;
 
@@ -152,6 +153,7 @@ function open_category_settings(category) {
         add_category(category.id);
     });
 
+    // Sanitizes the custom class input live while typing, since directly overwriting event.target.value resets the caret to the end, the caret position is manually recalculated and restored based on how many characters were stripped out
     document.getElementById("category-settings-class-input").addEventListener("input", event => {
         const cursor_position = event.target.selectionStart;
         const original_length = event.target.value.length;
@@ -183,10 +185,11 @@ async function save_category_settings(category) {
     }
 
     const category_element = get_category_element(category.id);
+    // Reads the final script order and assignment straight out of the DOM, since SortableJS only ever moves the actual list items and never touches category.scripts directly
     const new_scripts = [...category_list.querySelectorAll(".category-settings-script-item")].map(item => item.dataset.scriptId);
     const new_custom_class = sanitize_category_classes(class_input.value);
 
-    // Backup current values in case the save request fails and needs to be reverted
+    // Snapshot every field the dialog can change before touching the live category object, so it can be restored exactly as is if the server rejects the save
     const backup = {
         name: category.name,
         collapsed: category.collapsed,

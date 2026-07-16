@@ -10,6 +10,7 @@ let order_sortable_instances = [];
 
 // Opens a drag and drop dialog showing the entire nested category tree at once, categories can be reordered within their level or reparented into a different category, or out to the top level
 function open_change_order_dialog() {
+    // Deep clone so dragging and dropping inside the dialog never mutates the live tree before the user actually confirms
     order_dialog_categories = structuredClone(categories);
 
     const html_tree = build_order_html_tree(order_dialog_categories, 1);
@@ -33,6 +34,7 @@ function open_change_order_dialog() {
             return swal.close();
         }
 
+        // Rebuilds the final tree straight from the current DOM order, this always reflects every drag operation performed during the dialog session regardless of how many drops happened
         const root_list = document.getElementById("category-order-root");
         const category_map = build_category_id_map(order_dialog_categories);
         const new_tree = build_tree_from_order_dom(root_list, category_map);
@@ -44,6 +46,7 @@ function open_change_order_dialog() {
         destroy_order_sortables();
 
         if (save_success) {
+            // Relocates the existing category elements to match the newly saved order instead of recreating them, preserving already rendered script rows
             apply_category_tree_dom_order(categories);
             swal.close();
         } else
@@ -151,9 +154,11 @@ function order_dialog_on_move(event) {
     const dragged_item = event.dragged;
     const target_list = event.to;
 
+    // A category can never be dropped into its own sublist, contains() would be true if target_list is nested anywhere inside the dragged item itself
     if (dragged_item.contains(target_list)) 
         return false;
 
+    // The dragged category can carry its own entire subtree with it, so the check must account for how many levels deep that subtree already reaches beyond the dragged category itself
     const target_depth = get_order_list_depth(target_list);
     const dragged_category = find_category_by_id(dragged_item.dataset.category, order_dialog_categories);
     if (!dragged_category) 
@@ -163,6 +168,7 @@ function order_dialog_on_move(event) {
     if ((target_depth + subtree_relative_depth) > max_category_depth) 
         return false;
 
+    // Names only need to be unique among siblings, so the conflict check only looks at the categories that already live in the target list, excluding the dragged category itself in case it is just being reordered within the same level
     const target_siblings = get_order_target_category_list(target_list);
     const name_conflict = target_siblings.some(category => category.id !== dragged_category.id && category.name.toLowerCase() === dragged_category.name.toLowerCase());
 
@@ -174,6 +180,7 @@ function get_order_list_depth(list_element) {
     let depth = 1;
     let ancestor_item = list_element.closest(".category-order-item");
 
+    // Walks up through every ancestor .category-order-item, each one adds one more level of nesting on top of the root list
     while (ancestor_item) {
         depth++;
         ancestor_item = ancestor_item.parentElement.closest(".category-order-item");
@@ -203,6 +210,7 @@ function build_tree_from_order_dom(list_element, category_map) {
 
 // Relocates every existing category element to match the saved tree structure by moving the elements themselves rather than recreating them, this preserves script rows and any other content already rendered inside, only position and parent container change
 function apply_category_tree_dom_order(list, parent_id = null) {
+    // Resolves the actual container that direct children of this level need to live in, either a parent category's own subcategories container or the top level categories container
     const container = parent_id
         ? get_category_element(parent_id).querySelector(":scope > .category-content > .category-subcategories")
         : document.getElementById("categories-container");
@@ -215,6 +223,7 @@ function apply_category_tree_dom_order(list, parent_id = null) {
 
         category_element.dataset.order = category.order;
 
+        // appendChild / insertBefore on an element that already exists elsewhere in the DOM moves it rather than creating a duplicate, top level categories are always kept above the fixed uncategorized section
         if (parent_id)
             container.appendChild(category_element);
         else

@@ -28,6 +28,7 @@ function compute_view_mode_classes(effective_view_mode) {
 function apply_view_mode_to_container(scripts_container, view_mode) {
     if (!scripts_container) return;
 
+    // Always strip every possible view mode / modifier class first, since a plain CSS override would not work here, the container keeps its originally assigned class unless it is actually removed and replaced in the DOM
     scripts_container.classList.remove("vm-list", "vm-panel", "vo-separator", "vo-highlight");
 
     const effective_view_mode = resolve_effective_view_mode(view_mode);
@@ -113,6 +114,7 @@ function apply_subcategory_position(category) {
 
     const position = resolve_subcategory_position(category);
 
+    // insertBefore with a null reference node simply appends at the end, that is how "below" is achieved by inserting after the scripts container's next sibling
     position === "below"
         ? category_content.insertBefore(subcategories_container, scripts_container.nextSibling)
         : category_content.insertBefore(subcategories_container, scripts_container);

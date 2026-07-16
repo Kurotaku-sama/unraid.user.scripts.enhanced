@@ -26,6 +26,7 @@ function update_description_visibility(element) {
             break;
 
         case "without":
+            // Only hide descriptions that still contain the plugin's default placeholder text or are completely empty, a description the user actually wrote stays visible
             if (description_text.startsWith("No description") || description_text === "")
                 // Add the .desc-hidden class to hide the text
                 element.classList.add("desc-hidden");
@@ -36,13 +37,14 @@ function update_description_visibility(element) {
     }
 }
 
+// Watches a description element for content changes so the "without" mode can re-evaluate visibility live, e.g. right after the user types a real description into a previously empty field
 function observe_text_changes(element) {
     // Watch for changes in the element itself and its children (except <textarea>)
     const config = { childList: true, subtree: true }; // Watch for added/removed nodes and text changes
 
     const callback = (mutations_list, observer) => {
         for (const mutation of mutations_list) {
-            // Ignore changes that involve the <textarea>
+            // Ignore mutations originating from the <textarea>, since typing inside it fires constant DOM mutations that would otherwise trigger a visibility check on every keystroke
             if (mutation.target.tagName?.toLowerCase() === "textarea") continue;
             // Text or child nodes have changed, update visibility based on hide_description
             update_description_visibility(element);
@@ -63,6 +65,7 @@ function hide_elements() {
 
     // Hide empty lines
     if (cfg_use['hide_empty_lines'] === "yes") {
+        // Targets the specific empty <p> and <hr> tags that the original User Scripts page renders around its header and button rows, purely cosmetic cleanup with no functional impact
         css_rules += ".content > p:first-of-type { display: none !important; } ";
         css_rules += ".content > p:nth-of-type(3) { display: none !important; } ";
         css_rules += ".content > hr { display: none !important; } ";
@@ -70,6 +73,7 @@ function hide_elements() {
     }
 
     // What is cron and how to add scripts button
+    // The original User Scripts plugin renders "How To Add Scripts" as the first child and "What Is Cron" as the second child inside the same <center> container, so they can only be targeted individually by their child index; when both settings are enabled the whole container is hidden at once instead
     if (cfg_use['hide_what_is_cron'] === "yes" && cfg_use['hide_how_to_add_scripts'] === "yes")
         css_rules += ".content > center { display: none !important; }";
     else if (cfg_use['hide_how_to_add_scripts'] === "yes")

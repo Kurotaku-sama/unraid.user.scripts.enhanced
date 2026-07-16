@@ -2,21 +2,25 @@
 // UI Components
 // ========================
 
+// Inserts the "Add New Category" button right after the reference button, clicking it opens the add category dialog for a new top level category
 function add_category_button(reference_button) {
     const html = `<input type="button" id="add-category" value="Add New Category" onclick="add_category();">`;
     reference_button.insertAdjacentHTML("afterend", html);
 }
 
+// Inserts the "Change Order" button right after the reference button, clicking it opens the drag and drop category order dialog
 function add_change_order_button(reference_button) {
     const html = `<input type="button" id="change-category-order" value="Change Order" onclick="open_change_order_dialog();">`;
     reference_button.insertAdjacentHTML("afterend", html);
 }
 
+// Inserts the "Settings" button right after the reference button and wires up its click behavior manually instead of via onclick, since a plain left click and a middle click need to trigger different navigation behavior
 function add_settings_button(reference_button) {
     const html = `<input type="button" id="add-settings" value="Settings">`;
     reference_button.insertAdjacentHTML("afterend", html);
 
     document.getElementById("add-settings").addEventListener("mousedown", event => {
+        // event.button reports which mouse button triggered the event, 1 is the middle button (mouse wheel click) and 0 is the regular left button
         if (event.button === 1)
             window.open("/Settings/UserscriptsEnhanced", "_blank");
         else if (event.button === 0)
@@ -24,6 +28,7 @@ function add_settings_button(reference_button) {
     });
 }
 
+// Inserts the search input field into the shared wrapper above the categories, only when the search feature is enabled in the plugin settings
 function add_search_input() {
     if (cfg_use['enable_search'] === "yes") {
         const container = document.getElementById("search_about_wrapper");

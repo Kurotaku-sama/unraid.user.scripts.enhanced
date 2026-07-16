@@ -1,4 +1,5 @@
 <?
+// Renders a labeled <select> field for the settings page, generic enough to build every dropdown on the page from a single function, the currently active value gets the "selected" attribute so the saved setting shows up pre-selected on page load
 function render_select_field($title, $id, $variable, $options = ["yes" => "Yes", "no" => "No"], $class = "narrow") {
     echo "
     <dl>

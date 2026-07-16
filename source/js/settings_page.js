@@ -19,6 +19,7 @@ $(function() {
     custom_css.setSize(300, 100);
 });
 
+// Triggers a file download for the given export type by fetching the PHP endpoint as a blob and simulating a click on a temporary hidden download link, since a plain navigation would just open the response in the browser tab instead of downloading it
 async function export_data(trigger, type) {
     disable_button(trigger);
     const url = `/plugins/${plugin}/php/export.php?type=${type}`;
@@ -26,17 +27,21 @@ async function export_data(trigger, type) {
         const response = await fetch(url);
         if (!response.ok) return;
         const blob = await response.blob();
+        // Creates a temporary local URL pointing to the downloaded blob data, this is what the hidden link actually points to
         const object_url = URL.createObjectURL(blob);
+        // Extracts the filename the server generated from the Content-Disposition header, falls back to a generic name if the header is missing or malformed
         const filename = response.headers.get("Content-Disposition")?.split("filename=")[1] ?? `export_${type}`;
         document.body.insertAdjacentHTML("beforeend", `<a id="tmp-export-link" href="${object_url}" download="${filename}" style="display:none;"></a>`);
         document.getElementById("tmp-export-link").click();
         document.getElementById("tmp-export-link").remove();
+        // Releases the temporary blob URL from memory now that the download has been triggered
         URL.revokeObjectURL(object_url);
     } catch (error) {
         console.error("❌ Export error:", error);
     }
 }
 
+// Shows a shared warning style confirmation dialog before running a destructive action, the callback only runs if the user actually confirms
 function confirmation_swal(title, text, callback) {
     swal({
         title: title,
@@ -55,6 +60,7 @@ function confirmation_swal(title, text, callback) {
     });
 }
 
+// Resets either the plugin configuration or the categories file back to their defaults on the server, after the user confirms the destructive action
 function reset_plugin_data(trigger, type) {
     disable_button(trigger);
     let title = "Are you sure?"
@@ -163,6 +169,7 @@ async function get_not_matching_scriptnames(trigger) {
 
         // Create list items for not matching script names
         if (response.not_matching.length > 0) {
+            // Builds one list item per mismatched folder, escaping both names since they come directly from the filesystem and could contain HTML unsafe characters
             let not_matching = response.not_matching.map(folder => {
                 const safe_old_name = escape_html(folder.old_name);
                 const safe_new_name = escape_html(folder.new_name);
@@ -213,6 +220,7 @@ async function get_duplicate_scriptnames(trigger) {
 
         // Build the message with script names and folder names
         if (Object.keys(response.duplicates).length > 0) {
+            // Builds a nested list per duplicated name, an outer <ul> holding the script name as headline and an inner <li> for every folder that uses that name, both name and folder are escaped since they come directly from the filesystem
             message += `<ul id="ul-output">`;
             for (const [script_name, folders] of Object.entries(response.duplicates)) {
                 const safe_script_name = escape_html(script_name);
@@ -237,6 +245,7 @@ async function get_duplicate_scriptnames(trigger) {
     }
 }
 
+// Disables a trigger button and strips its inline onclick handler, prevents the same action from being fired again while it is already running
 function disable_button(trigger) {
     const btn = $(trigger);
     btn.prop("disabled", true);

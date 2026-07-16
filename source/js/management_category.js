@@ -32,11 +32,13 @@ function create_category(category, parent_id = null) {
     let category_element;
 
     if (parent_id) {
+        // Nested category, append it inside its parent's own subcategories container instead of the top level categories container
         const parent_element = get_category_element(parent_id);
         const parent_subcategories_container = parent_element.querySelector(":scope > .category-content > .category-subcategories");
         parent_subcategories_container.insertAdjacentHTML("beforeend", html.trim());
         category_element = parent_subcategories_container.lastElementChild;
     } else {
+        // Top level category, always keep it above the fixed "uncategorized" section which must stay the last entry in the container
         const category_container = document.getElementById("categories-container");
         const uncategorized = category_container.querySelector(":scope > .category[data-category='uncategorized']");
 
@@ -122,6 +124,7 @@ function add_category(parent_id = null) {
             subcategories: []
         };
 
+        // Push into the in memory tree and persist first, only render the new element in the DOM once the save actually succeeded, otherwise roll back the in memory change
         sibling_list.push(new_category);
         const success = await perform_save(categories);
         if (success) {
@@ -135,6 +138,7 @@ function add_category(parent_id = null) {
 
 // Deletes a category, cascading into every nested subcategory, all affected scripts are moved back to the top level uncategorized section
 function delete_category(category) {
+    // Collects every nested subcategory at any depth below this one, since they all get deleted along with their parent and none of their scripts should be silently lost
     const subcategories = flatten_subcategories(category);
 
     // Clear the scripts of the category itself, this moves its scripts back to uncategorized
@@ -159,7 +163,7 @@ function delete_category(category) {
     siblings.splice(index, 1);
     siblings.forEach((cat, i) => (cat.order = i + 1));
 
-    // Removes the category element and every nested subcategory element along with it
+    // Removes the category element and every nested subcategory element along with it, since subcategory DOM elements live inside the parent's own container
     get_category_element(category.id)?.remove();
 
     // Remove the category and every nested subcategory from the element cache, their DOM elements no longer exist

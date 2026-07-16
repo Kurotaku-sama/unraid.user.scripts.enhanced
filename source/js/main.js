@@ -13,6 +13,7 @@ let categories = [];
 let content; // For even faster element selection
 let uncategorized_category = null; // Global variable to cache the uncategorized category element
 
+// Loads the saved category tree and waits for the original User Scripts markup to exist before running any DOM setup, since the plugin injects itself before the original page content has necessarily finished rendering
 (async function() {
     hide_elements();
 
@@ -60,6 +61,7 @@ function insert_custom_css() {
     document.head.appendChild(style);
 }
 
+// Replaces the original single flat table with the categories container structure, moving every existing script row into the "uncategorized" section first since category assignment happens afterward via organize_userscripts_category for each category
 function container_overhaul(table) {
     const html_categories_container = "<div id='categories-container'></div>";
     table.insertAdjacentHTML("beforebegin", html_categories_container);
@@ -89,7 +91,7 @@ function container_overhaul(table) {
     const uncategorized_category = categories_container.querySelector(".category[data-category='uncategorized']");
     const uncategorized_userscripts_scripts_container = uncategorized_category.querySelector(".category-scripts");
 
-    // Move all rows from the table into the uncategorized scripts container
+    // Move all rows from the table into the uncategorized scripts container, appendChild moves the existing node instead of cloning it, so all original event listeners and jQuery data on each row stay intact
     const tbody = table.querySelector("tbody");
     if (tbody)
         while (tbody.firstChild)

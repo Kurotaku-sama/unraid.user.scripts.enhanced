@@ -6,6 +6,7 @@
 // Cache mapping category id to its DOM element, avoids scanning every .category element on every lookup
 const category_element_cache = new Map();
 
+// Resolves once the given selector exists inside the container, either immediately or by watching the DOM for it to be added later, used during startup since the original User Scripts markup is not guaranteed to already exist when this plugin's scripts run
 function wait_for_element(selector, container = document.documentElement) {
     return new Promise(resolve => {
         const node = container.querySelector(selector)
@@ -107,6 +108,7 @@ function flatten_subcategories(category) {
 }
 
 // Recursively calculates how many additional levels a category's deepest nested subcategory occupies relative to the category itself, a category without subcategories returns 0
+// Used to check whether moving or nesting a category would push its own deepest child past max_category_depth, since a category can carry an entire subtree with it when reparented
 function get_subtree_relative_depth(category) {
     if (!category.subcategories.length) 
         return 0;
@@ -140,7 +142,7 @@ function is_id_taken(id, list = categories) {
     return false;
 }
 
-// Generates a new category id based on the current timestamp, retrying until an id is found that is not already used anywhere in the category tree
+// Generates a new category id based on the current timestamp, retrying until an id is found that is not already used anywhere in the category tree, the retry only matters if two categories were created within the same millisecond
 function generate_unique_category_id() {
     let new_id = `${Date.now()}`;
     while (is_id_taken(new_id))
