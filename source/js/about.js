@@ -16,7 +16,7 @@ function about_plugin() {
 
     const html = `
         <strong>Author:</strong> Kurotaku<br>
-        <strong>Homepage:</strong> <a href="https://kurotaku.de" target="_blank">kurotaku.de</a><br><br>
+        <strong>Homepage:</strong> <a href="https://kurotaku.dev" target="_blank">kurotaku.dev</a><br><br>
         <strong>More Projects:</strong> <a href="https://github.com/Kurotaku-sama" target="_blank">GitHub</a><br><br>
         <em>If you enjoy my work, please consider leaving a star!</em><br>
         <em>For support or bug reports, check out the <a href="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/" target="_blank">Unraid forum thread</a>.</em><br><br>
