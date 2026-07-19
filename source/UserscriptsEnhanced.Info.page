@@ -7,7 +7,10 @@ Tag="info-circle"
 <div class="title"><span class="left"><i class="fa fa-info-circle title"></i>Info</span></div>
 
 <div class="panel-info-text">
-    <b>If the User Scripts page doesn't change its appearance, read this:</b><br><br>
+    A special thanks goes to Andrew Zawadzki (Squid) for the original User Scripts plugin, and even more so for implementing native injection support in his plugin, making this enhancement possible in the first place.
+</div>
+<div class="panel-info-text">
+    <b>If the User Scripts page doesn't change its appearance, read this:</b><br>
     1. You need version 2025.06.21 or newer of User Scripts, as the injection feature is integrated starting with that version.<br>
-    2. If you're using the Custom Tab for Scripts, the .page files aren't updated instantly. After installing the new User Scripts version, you may need to select a different page instead of Userscripts.page, save it, and then switch back to Userscripts.page.<br><br>
+    2. If you're using the Custom Tab for Scripts, the .page file from User Scripts isn't updated instantly. After installing the new User Scripts version, you may need to select a different page instead of Userscripts.page, save it, and then switch back to Userscripts.page.<br><br>
 </div>
