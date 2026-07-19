@@ -60,17 +60,16 @@
 }
 
 /* ========================
-   Info Panel
+   About & Info Panel
    ======================== */
 
-@media (min-width: 922px) {
-    .panel-info-wrapper {
-        display: flex;
-    }
+.about-button {
+    position: absolute;
+    right: 30px;
 }
 
-.panel-info-button-wrapper {
-    flex-grow: 1;
+.panel-info-text {
+    font-size: 20px;
 }
 
 /* ========================

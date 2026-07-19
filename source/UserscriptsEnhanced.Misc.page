@@ -1,0 +1,68 @@
+Menu="UserscriptsEnhanced:3"
+Title="Miscellaneous"
+Tag="cogs"
+---
+
+<!-- Miscellaneous Section -->
+<div class="title"><span class="left"><i class="fa fa-cogs title"></i>Miscellaneous</span></div>
+
+<p>
+    Use the buttons below to perform various maintenance tasks. Click on the text next to the buttons for more information about its function.<br>
+    <strong>Info:</strong> These actions are irreversible. Make sure to back up your data before proceeding.<br>
+</p>
+
+<!-- Reset config to default -->
+<dl class="centered-dt">
+    <dt>Reset config to default:</dt>
+    <dd><span><input type="button" id="btn_reset_config" value="Reset" onclick="reset_plugin_data(this, 'config')"></span></dd>
+</dl>
+<blockquote class="inline_help">
+    <p>This will reset all configuration settings on this page to their default values.</p>
+</blockquote>
+
+<!-- Delete all categories -->
+<dl class="centered-dt">
+    <dt>Reset all categories:</dt>
+    <dd><span><input type="button" id="btn_reset_all_categories" value="Reset" onclick="reset_plugin_data(this, 'categories')"></span></dd>
+</dl>
+<blockquote class="inline_help">
+    <p>This will delete the <code>categories.json</code> file, removing all categories from the plugin.<br>
+</blockquote>
+
+<!-- Delete "/tmp/user.scripts/" folder -->
+<dl class="centered-dt">
+    <dt>Delete "/tmp/user.scripts/" folder:</dt>
+    <dd><span><input type="button" id="btn_delete_tmp_userscripts" value="Delete" onclick="delete_tmp_userscripts(this)"></span></dd>
+</dl>
+<blockquote class="inline_help">
+    <p>This will delete the "/tmp/user.scripts/" folder and all its contents.<br>
+    This is useful because old scripts that were already deleted might still exist in this folder until a server reboot.<br>
+    This button forces the cleanup.</p>
+</blockquote>
+
+<!-- Delete description files without description -->
+<dl class="centered-dt">
+    <dt>Delete description files without description:</dt>
+    <dd><span><input type="button" id="btn_delete_description_files_without_description" value="Delete" onclick="delete_description_files_without_description(this)"></span></dd>
+</dl>
+<blockquote class="inline_help">
+    <p>This will delete all "description" files that contain the default text "No description".</p>
+</blockquote>
+
+<!-- Show not matching script names -->
+<dl class="centered-dt">
+    <dt>Show not matching script names:</dt>
+    <dd><span><input type="button" id="btn_get_not_matching_scriptnames" value="Show" onclick="get_not_matching_scriptnames(this)"></span></dd>
+</dl>
+<blockquote class="inline_help">
+    <p>This will check which script folders do not match their corresponding "name" file.</p>
+</blockquote>
+
+<!-- Show duplicate script names -->
+<dl class="centered-dt">
+    <dt>Show duplicate script names:</dt>
+    <dd><span><input type="button" id="btn_get_duplicate_scriptnames" value="Show" onclick="get_duplicate_scriptnames(this)"></span></dd>
+</dl>
+<blockquote class="inline_help">
+    <p>This will check for duplicate script names in the "/boot/config/plugins/user.scripts/scripts/" folder.</p>
+</blockquote>

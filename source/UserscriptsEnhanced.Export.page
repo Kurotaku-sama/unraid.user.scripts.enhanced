@@ -1,0 +1,28 @@
+Menu="UserscriptsEnhanced:2"
+Title="Export"
+Tag="file-archive-o"
+---
+
+<!-- Export Section -->
+<div class="title"><span class="left"><i class="fa fa-file-archive-o title"></i>Export</span></div>
+
+<div>
+    Click the buttons below to download a ZIP file containing your scripts or the configuration itself.<br>
+    <br>
+    - <strong>Export as Raw</strong>: Downloads the scripts exactly as they are stored on the USB stick.<br>
+    - <strong>Export as Bash Scripts</strong>: Downloads the scripts as ready-to-use <code>.sh</code> files. Script names longer than 50 characters will be shortened.<br>
+    - <strong>Export Config</strong>: Downloads the plugin configuration files.<br>
+    - <strong>Export Categories</strong>: Downloads the plugin categories configuration.<br>
+    <br>
+    <strong>Info:</strong> Chromium-based browsers (e.g., Chrome, Edge) might block the download. If the download doesn't start, you might need to allow the download manually.<br>
+    <br>
+    If you uninstall the plugin, all configuration and category data will be deleted. <br>
+    Therefore, it's recommended to back up the config and categories beforehand if you plan to reinstall the plugin later.<br>
+    You can restore them by placing the backed-up files into <code>/boot/config/plugins/user.scripts.enhanced</code>.
+</div>
+<div>
+    <input type="button" id="btn_export_raw" value="Export as Raw" onclick="export_data(this, 'raw')">
+    <input type="button" id="btn_export_sh" value="Export as Bash Scripts" onclick="export_data(this, 'bash')">
+    <input type="button" id="btn_export_config" value="Export Config" onclick="export_data(this, 'config')">
+    <input type="button" id="btn_export_categories" value="Export Categories" onclick="export_data(this, 'categories')">
+</div>

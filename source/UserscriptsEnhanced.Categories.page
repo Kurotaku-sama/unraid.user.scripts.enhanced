@@ -1,0 +1,177 @@
+Menu="UserscriptsEnhanced:1"
+Title="Categories"
+Tag="folder-o"
+---
+<?
+$plugin = "user.scripts.enhanced";
+$cfg_use = parse_plugin_cfg($plugin);
+
+$php_path = "/usr/local/emhttp/plugins/user.scripts.enhanced/php";
+require_once "$php_path/settings_page.php";
+?>
+
+<script>
+const plugin = "<?=$plugin?>";
+const plugin_name = "User Scripts Enhanced";
+</script>
+
+<script src="<?=autov("/plugins/$plugin/js/settings_page.js")?>"></script>
+<script src="<?=autov("/plugins/$plugin/js/helper.js")?>"></script>
+<script src="<?=autov("/plugins/$plugin/js/about.js")?>"></script>
+<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/page_settings.css")?>">
+<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/donate.css")?>">
+
+<!-- CodeMirror -->
+<script src="<?=autov("/plugins/$plugin/vendor/codemirror/js/codemirror.min.js")?>"></script>
+<script src="<?=autov("/plugins/$plugin/vendor/codemirror/js/css.min.js")?>"></script>
+<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/vendor/codemirror/css/codemirror.min.css")?>">
+<link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/vendor/codemirror/css/dracula.min.css")?>">
+
+<!-- Categories Section -->
+<div class="title"><span class="left"><i class="fa fa-folder-o title"></i>Categories</span></div>
+
+<form method="POST" action="/update.php" target="progressFrame">
+    <input type="hidden" name="#file" value="<?=$plugin?>/<?=$plugin?>.cfg">
+    <input type="hidden" name="#include" value="plugins/<?=$plugin?>/php/pre_save_hook.php">
+    <input type="hidden" id="command" name="#command" value="">
+
+    <input type="button" value="About U.S.E" onclick="about_plugin()" class="about-button">
+
+    <!-- Enable Plugin -->
+    <? render_select_field("Enable Plugin", "enabled", $cfg_use['enabled']); ?>
+
+    <blockquote class="inline_help">
+        <p>You can disable the plugin without uninstalling it. When disabled, all enhancements are fully turned off on the User Scripts page.</p>
+    </blockquote>
+
+    <!-- Maximum subcategory depth -->
+    <? render_select_field("Maximum subcategory depth", "max_category_depth", $cfg_use['max_category_depth'], array_combine(range(1, 10), range(1, 10))); ?>
+
+    <blockquote class="inline_help">
+        <p><strong>Warning:</strong> Increasing the maximum nesting depth beyond the default of 3 can cause layout issues with deeply nested subcategories, especially on smaller screens.<br>
+        Only change this if you actually plan to use deeper nesting.</p>
+    </blockquote>
+
+    <!-- Default subcategory position -->
+    <? render_select_field("Default subcategory position", "default_subcategory_position", $cfg_use['default_subcategory_position'], [
+        "above" => "Above",
+        "below" => "Below"
+    ]); ?>
+
+    <blockquote class="inline_help">
+        <p>Determines whether subcategories are displayed above or below the scripts of their parent category by default.<br>
+        This can be adjusted individually for each category in the Category Settings dialog.</p>
+    </blockquote>
+
+    <!-- View Mode Selection -->
+    <? render_select_field("Default view mode", "default_view_mode", $cfg_use['default_view_mode'], [
+        "list" => "List View",
+        "panel" => "Panel View"
+    ]); ?>
+
+    <blockquote class="inline_help">
+        <p>This determines which mode new categories will use by default.<br>
+        This can be adjusted individually for each category on the Userscripts page.<br>
+        Uncategorized scripts will always use this mode.</p>
+    </blockquote>
+
+    <!-- View Mode Highlighting -->
+    <? $vmode_hl = explode(",", $cfg_use['view_mode_highlighting']); ?>
+    <dl>
+        <dt>View Mode Highlighting:</dt>
+        <dd>
+            <select id="view_mode_highlighting" name="view_mode_highlighting[]" multiple>
+                <option value="list" <?=in_array("list", $vmode_hl) ? "selected" : ""?>>List</option>
+                <option value="panel" <?=in_array("panel", $vmode_hl) ? "selected" : ""?>>Panel</option>
+            </select>
+        </dd>
+    </dl>
+    
+    <blockquote class="inline_help">
+        <p>Select which view modes should have hover highlighting enabled.</p>
+    </blockquote>
+
+    <!-- Force panel view on mobile -->
+    <? render_select_field("Force panel view on mobile", "mobile_force_panel", $cfg_use['mobile_force_panel']); ?>
+
+    <blockquote class="inline_help">
+        <p>List View uses a table based layout that can overflow on small screens.<br>
+        This option ensures a responsive design so List View also works properly on mobile devices without layout issues.<br>
+        It is not recommended to turn this off, since the view automatically switches to a Panel View like layout below 800px width.</p>
+    </blockquote>
+
+    <!-- List View Separators -->
+    <? render_select_field("List View Separators", "list_view_separators", $cfg_use['list_view_separators']); ?>
+
+    <blockquote class="inline_help">
+        <p>When enabled, separators are displayed between scripts in List View mode for better visual separation.</p>
+    </blockquote>
+
+    <!-- Collapse Categories by default -->
+    <? render_select_field("Collapse new categories by default", "default_collapsed", $cfg_use['default_collapsed']); ?>
+
+    <!-- Collapse uncategorized scripts -->
+    <? render_select_field("Collapse uncategorized scripts", "uncategorized_collapsed", $cfg_use['uncategorized_collapsed']); ?>
+
+    <!-- Capitalized category names -->
+    <? render_select_field("Capitalized category names", "capitalized", $cfg_use['capitalized']); ?>
+
+    <!-- Enable search function -->
+    <? render_select_field("Enable search function", "enable_search", $cfg_use['enable_search']); ?>
+
+    <!-- Custom Uncategorized Name -->
+    <dl>
+        <dt>Custom Uncategorized Name:</dt>
+        <dd>
+            <input type="text" id="uncategorized_name" name="uncategorized_name" maxlength="40" value="<?=htmlspecialchars(cfg_base64_decode($cfg_use['uncategorized_name']))?>">
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+        <p>Custom title for the uncategorized scripts section. Leave it empty and save to reset it back to the default "Uncategorized Userscripts".</p>
+    </blockquote>
+
+    <!-- Custom CSS -->
+    <script>const theme = <?=($display["theme"] == 'white' || $display["theme"] == 'azure') ? '"default"' : '"dracula"'; ?>;</script>
+    <dl>
+        <dt>Custom CSS:</dt>
+        <dd>
+            <textarea id="custom_css" name="custom_css" class="narrow"><?=htmlspecialchars(cfg_base64_decode($cfg_use['custom_css']))?></textarea>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+        <p>Depending on the theme you use, you may need to adjust a bit of CSS yourself for a perfect fit.<br>
+        Avoid using !important and instead use #categories-container as a prefix for each CSS rule.</p>
+    </blockquote>
+
+    <div class="title"><span class="left"><i class="fa fa-eye-slash title"></i>Hide default Elements</span></div>
+
+    <!-- Hide Description Option -->
+    <? render_select_field("Hide script descriptions", "hide_description", $cfg_use['hide_description'], [
+        "without" => "Only without description",
+        "yes" => "Hide all",
+        "no" => "No"
+    ]); ?>
+
+    <!-- Hide empty lines -->
+    <? render_select_field("Hide empty lines", "hide_empty_lines", $cfg_use['hide_empty_lines']); ?>
+
+    <blockquote class="inline_help">
+        <p>This option hides empty <code>&lt;p&gt;</code> and <code>&lt;hr&gt;</code> tags to reduce visual clutter and make the page appear more compact.</p>
+    </blockquote>
+
+    <!-- Hide "What is cron" -->
+    <? render_select_field("Hide \"What is cron\"", "hide_what_is_cron", $cfg_use['hide_what_is_cron']); ?>
+
+    <!-- Hide "How to add scripts" Button -->
+    <? render_select_field("Hide \"How to add scripts Button\"", "hide_how_to_add_scripts", $cfg_use['hide_how_to_add_scripts']); ?>
+
+    <!-- Hide Help -->
+    <? render_select_field("Hide \"For help with this plugin\"", "hide_help", $cfg_use['hide_help']); ?>
+
+    <!-- Apply & Done Buttons -->
+    <input id="btnApply" type="submit" value="Apply" disabled>
+    <input type="button" value="Done" onclick="window.location.href='/Settings';">
+    <input type="button" value="Open Userscripts" onclick="window.location.href='/Settings/Userscripts';">
+</form>
