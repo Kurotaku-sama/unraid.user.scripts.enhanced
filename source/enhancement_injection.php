@@ -7,6 +7,7 @@ function cfg_base64_decode($value) {
     return (base64_encode(base64_decode($value, true)) === $value) ? base64_decode($value) : $value;
 }
 
+// Prevent execution if user disabled the plugin
 if ($cfg_use['enabled'] == "no")
     return;
 
@@ -19,7 +20,7 @@ $cfg_use['custom_css'] = cfg_base64_decode($cfg_use['custom_css']);
 <script>
 const plugin = "<?=$plugin?>";
 const plugin_name = "User Scripts Enhanced";
-const cfg_use = <?=json_encode($cfg_use)?>;
+const cfg_use = <?=json_encode($cfg_use)?>; // Expose the PHP config as a JS object
 </script>
 
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/styles/page_userscripts.css")?>">
