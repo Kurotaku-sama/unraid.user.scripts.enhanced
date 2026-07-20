@@ -7,7 +7,8 @@ const mobile_force_panel_media_query = window.matchMedia("(max-width: 800px)");
 
 // Resolves the view mode that should actually be rendered, forcing panel view when mobile_force_panel is enabled and the viewport is currently at or below the mobile breakpoint, since the List View table layout can overflow on small screens
 function resolve_effective_view_mode(view_mode) {
-    if (cfg_use['mobile_force_panel'] === "yes" && mobile_force_panel_media_query.matches) return "panel";
+    if (cfg_use['mobile_force_panel'] === "yes" && mobile_force_panel_media_query.matches)
+        return "panel";
     return view_mode;
 }
 
