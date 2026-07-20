@@ -35,7 +35,7 @@ async function perform_save(categories_to_save) {
                 cancelButtonText: "Cancel",
                 dangerMode: true
             }, function(confirm) {
-                if (confirm) 
+                if (confirm)
                     location.reload();
             });
             return false;

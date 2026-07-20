@@ -189,7 +189,7 @@ async function save_category_settings(category) {
     if (name_changed) {
         const siblings = get_category_siblings(category.id);
         const validated_name = validate_category_name(new_name, siblings, original_name);
-        if (!validated_name) 
+        if (!validated_name)
             return false;
     }
 
@@ -213,7 +213,7 @@ async function save_category_settings(category) {
     category.view_mode = viewmode_select.value;
     category.scripts = new_scripts;
     category.custom_class = new_custom_class;
-    if (subposition_select) 
+    if (subposition_select)
         category.subcategory_position = subposition_select.value;
 
     const success = await perform_save();
@@ -225,14 +225,14 @@ async function save_category_settings(category) {
     // The category id never changes on rename, so only the displayed text needs updating, not any data-category attribute
     if (name_changed) {
         const header_text = category_element.querySelector(":scope > .category-header > .category-header-text");
-        if (header_text) 
+        if (header_text)
             header_text.textContent = cfg_use['capitalized'] === "yes" ? new_name.toUpperCase() : new_name;
     }
 
     // Split on whitespace and filter out empty strings, otherwise a class string with multiple consecutive spaces would produce empty entries and classList.add/remove would throw a DOMException
-    if (backup.custom_class) 
+    if (backup.custom_class)
         category_element.classList.remove(...backup.custom_class.split(" ").filter(Boolean));
-    if (new_custom_class) 
+    if (new_custom_class)
         category_element.classList.add(...new_custom_class.split(" ").filter(Boolean));
 
     apply_collapsed_state(category);
@@ -256,7 +256,7 @@ function request_delete_category(category) {
         cancelButtonText: "No",
         dangerMode: true
     }, function (confirm) {
-        if (!confirm) 
+        if (!confirm)
             return open_category_settings(category);
         delete_category(category);
     });

@@ -109,7 +109,7 @@ function add_category(parent_id = null) {
         }
 
         const category_name = validate_category_name(input, sibling_list);
-        if (!category_name) 
+        if (!category_name)
             return false;
 
         let new_category = {

@@ -86,7 +86,7 @@ const plugin_name = "User Scripts Enhanced";
             </select>
         </dd>
     </dl>
-    
+
     <blockquote class="inline_help">
         <p>Select which view modes should have hover highlighting enabled.</p>
     </blockquote>

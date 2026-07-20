@@ -71,7 +71,7 @@ function normalize_category_level(list) {
         if (Array.isArray(category.subcategories) && category.subcategories.length) {
             const child_result = normalize_category_level(category.subcategories);
             category.subcategories = child_result.list;
-            if (child_result.changed) 
+            if (child_result.changed)
                 level_changed = true;
         }
     });

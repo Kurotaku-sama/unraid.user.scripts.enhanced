@@ -34,7 +34,7 @@ function main() {
     if (!main_table) return;
     if (cfg_use['custom_css']?.trim() !== "")
         insert_custom_css();
-    
+
     // Container for Search Box and About/Credits Buttons
     main_table.insertAdjacentHTML("beforebegin", "<div id=search_about_wrapper></div>");
 

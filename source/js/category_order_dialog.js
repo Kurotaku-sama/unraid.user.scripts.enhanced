@@ -141,7 +141,7 @@ function destroy_order_sortables() {
 
 // Resolves the array of category objects that directly belong to a given order dialog list element, either the top level tree or a parent's subcategories array
 function get_order_target_category_list(list_element) {
-    if (list_element.id === "category-order-root") 
+    if (list_element.id === "category-order-root")
         return order_dialog_categories;
 
     const parent_id = list_element.dataset.parent;
@@ -155,17 +155,17 @@ function order_dialog_on_move(event) {
     const target_list = event.to;
 
     // A category can never be dropped into its own sublist, contains() would be true if target_list is nested anywhere inside the dragged item itself
-    if (dragged_item.contains(target_list)) 
+    if (dragged_item.contains(target_list))
         return false;
 
     // The dragged category can carry its own entire subtree with it, so the check must account for how many levels deep that subtree already reaches beyond the dragged category itself
     const target_depth = get_order_list_depth(target_list);
     const dragged_category = find_category_by_id(dragged_item.dataset.category, order_dialog_categories);
-    if (!dragged_category) 
+    if (!dragged_category)
         return false;
 
     const subtree_relative_depth = get_subtree_relative_depth(dragged_category);
-    if ((target_depth + subtree_relative_depth) > max_category_depth) 
+    if ((target_depth + subtree_relative_depth) > max_category_depth)
         return false;
 
     // Names only need to be unique among siblings, so the conflict check only looks at the categories that already live in the target list, excluding the dragged category itself in case it is just being reordered within the same level
