@@ -51,6 +51,21 @@
 }
 
 /* ========================
+   Uncategorized Name Textarea
+   ======================== */
+
+#uncategorized_name {
+    min-width: 300px;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    resize: none;
+    border: none;
+    border-bottom: 1px solid var(--input-border-color);
+}
+
+/* ========================
    CodeMirror
    ======================== */
 

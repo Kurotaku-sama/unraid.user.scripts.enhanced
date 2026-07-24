@@ -123,7 +123,7 @@ const plugin_name = "User Scripts Enhanced";
     <dl>
         <dt>Custom Uncategorized Name:</dt>
         <dd>
-            <input type="text" id="uncategorized_name" name="uncategorized_name" maxlength="40" value="<?=htmlspecialchars(cfg_base64_decode($cfg_use['uncategorized_name']))?>">
+            <textarea id="uncategorized_name" name="uncategorized_name" maxlength="40" rows="1" onkeydown="if (event.key === 'Enter') event.preventDefault();"><?=htmlspecialchars(cfg_base64_decode($cfg_use['uncategorized_name']))?></textarea>
         </dd>
     </dl>
 
