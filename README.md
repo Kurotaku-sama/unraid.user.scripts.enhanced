@@ -41,11 +41,17 @@ You can either install it from the Community Applications in your Unraid Server 
 - **Bugfixes**: this fixes some bugs that are in the User Scripts Plugin
 - **And a much more**
 
+*Enhanced Userscripts interface*<br>
 ![UserScripts Page](images/page_userscripts.png)
-*Enhanced Userscripts interface*
 
-![Settings Page](images/page_settings.png)
-*Settings interface*
+*Categories Settings interface*<br>
+![Categories Settings Page](images/page_settings_1.png)
+
+*Export Settings interface*<br>
+![Export Settings Page](images/page_settings_2.png)
+
+*Miscellaneous Settings interface*<br>
+![Misc Settings Page](images/page_settings_3.png)
 
 ---
 
