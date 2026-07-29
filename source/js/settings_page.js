@@ -17,6 +17,7 @@ $(function() {
         indentUnit: 2,
     });
     custom_css.setSize(300, 100);
+    custom_css.getWrapperElement().style.resize = "both";
 });
 
 // Triggers a file download for the given export type by fetching the PHP endpoint as a blob and simulating a click on a temporary hidden download link, since a plain navigation would just open the response in the browser tab instead of downloading it
