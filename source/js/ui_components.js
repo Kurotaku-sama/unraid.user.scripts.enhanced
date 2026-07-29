@@ -16,16 +16,9 @@ function add_change_order_button(reference_button) {
 
 // Inserts the "Settings" button right after the reference button and wires up its click behavior manually instead of via onclick, since a plain left click and a middle click need to trigger different navigation behavior
 function add_settings_button(reference_button) {
-    const html = `<input type="button" id="add-settings" value="Settings">`;
+    const html = `<input type="button" id="open-settings" value="Settings">`;
     reference_button.insertAdjacentHTML("afterend", html);
-
-    document.getElementById("add-settings").addEventListener("mousedown", event => {
-        // event.button reports which mouse button triggered the event, 1 is the middle button (mouse wheel click) and 0 is the regular left button
-        if (event.button === 1)
-            window.open("/Settings/UserscriptsEnhanced", "_blank");
-        else if (event.button === 0)
-            window.location.href = "/Settings/UserscriptsEnhanced";
-    });
+    bind_click_navigation("#open-settings", "/Settings/UserscriptsEnhanced");
 }
 
 // Inserts the search input field into the shared wrapper above the categories, only when the search feature is enabled in the plugin settings

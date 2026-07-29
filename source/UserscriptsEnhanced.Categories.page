@@ -173,5 +173,6 @@ const plugin_name = "User Scripts Enhanced";
     <!-- Apply & Done Buttons -->
     <input id="btnApply" type="submit" value="Apply" disabled>
     <input type="button" value="Done" onclick="window.location.href='/Settings';">
-    <input type="button" value="Open Userscripts" onclick="window.location.href='/Settings/Userscripts';">
+    <input type="button" value="Open Userscripts" id="open-settings">
+    <script>bind_click_navigation("#open-settings", "/Settings/Userscripts");</script>
 </form>

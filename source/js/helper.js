@@ -38,6 +38,17 @@ function escape_html(string) {
     return string.replace(/[&<>"']/g, character => map[character]);
 }
 
+// Wires up an element so left click navigates in the same tab and middle click opens the target url in a new tab
+function bind_click_navigation(selector, url) {
+    document.querySelector(selector).addEventListener("mousedown", event => {
+        // event.button reports which mouse button triggered the event, 1 is the middle button (mouse wheel click) and 0 is the regular left button
+        if (event.button === 1)
+            window.open(url, "_blank");
+        else if (event.button === 0)
+            window.location.href = url;
+    });
+}
+
 // Finds the DOM element of a category by its id via the cache instead of scanning the whole DOM tree
 function get_category_element(category_id) {
     return category_element_cache.get(category_id) || null;
