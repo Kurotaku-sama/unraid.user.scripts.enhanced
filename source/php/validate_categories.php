@@ -24,7 +24,6 @@ $category_schema = [
 $plugin = "user.scripts.enhanced";
 $plugin_dir = "/boot/config/plugins/{$plugin}";
 $categories_file = "{$plugin_dir}/categories.json";
-$backup_file = "{$plugin_dir}/categories_before_schema_migration.json";
 
 // Nothing to validate on a fresh install, categories.json does not exist yet
 if (!file_exists($categories_file))
@@ -32,6 +31,7 @@ if (!file_exists($categories_file))
 
 $categories_data = json_decode(file_get_contents($categories_file), true);
 
+// Invalid JSON is left untouched here, categories_load.php already handles this case at runtime by backing up the corrupted file and creating a fresh empty one
 if ($categories_data === null || !is_array($categories_data)) {
     echo "User Scripts Enhanced: categories.json contains invalid JSON, skipping validation.\n";
     exit(1);
@@ -181,15 +181,6 @@ if (!$changed) {
 }
 
 echo "User Scripts Enhanced: categories.json does not match the current schema, repairing it...\n";
-
-// Keep the very first pre-repair backup, never overwrite it on a later run
-if (!file_exists($backup_file)) {
-    if (!copy($categories_file, $backup_file)) {
-        echo "User Scripts Enhanced: Failed to create a backup of categories.json, aborting.\n";
-        exit(1);
-    }
-    echo "User Scripts Enhanced: Backup created at categories_before_schema_migration.json\n";
-}
 
 if (file_put_contents($categories_file, json_encode($normalized_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
     echo "User Scripts Enhanced: Failed to write the repaired categories.json file.\n";
