@@ -13,11 +13,11 @@ $category_schema = [
     "id" => ["type" => "id", "default" => null],
     "name" => ["type" => "string", "default" => ""],
     "order" => ["type" => "int", "default" => 0],
+    "expanded" => ["type" => "enum", "default" => "no", "values" => ["yes", "no"]],
     "view_mode" => ["type" => "enum", "default" => "list", "values" => ["list", "panel"]],
-    "collapsed" => ["type" => "enum", "default" => "no", "values" => ["yes", "no"]],
-    "custom_class" => ["type" => "string", "default" => ""],
     "subcategory_position" => ["type" => "enum", "default" => "default", "values" => ["default", "above", "below"]],
     "scripts" => ["type" => "string_array", "default" => []],
+    "custom_class" => ["type" => "string", "default" => ""],
     "subcategories" => ["type" => "subcategories", "default" => []],
 ];
 

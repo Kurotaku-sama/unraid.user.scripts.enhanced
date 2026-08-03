@@ -69,13 +69,13 @@ function container_overhaul(table) {
     const categories_container = document.getElementById("categories-container");
 
     // Style
-    const style_attr = cfg_use['uncategorized_collapsed'] === "yes" ? 'style="max-height: 0px;"' : "";
+    const style_attr = cfg_use['uncategorized_expanded'] !== "yes" ? 'style="max-height: 0px;"' : "";
     const effective_view_mode = resolve_effective_view_mode(cfg_use['default_view_mode']);
     const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
 
     const uncategorized_name = escape_html(cfg_use['capitalized'] === "yes" ? cfg_use['uncategorized_name'].toUpperCase() : cfg_use['uncategorized_name'])
     const html_uncategorized_userscripts_header = `
-        <div class="category ${cfg_use['uncategorized_collapsed'] === "yes" ? "collapsed uncategorized_empty" : ""}" data-category="uncategorized">
+        <div class="category ${cfg_use['uncategorized_expanded'] !== "yes" ? "uncategorized_empty" : "expanded"}" data-category="uncategorized">
             <div class="category-header">
                 <span class="category-header-text">${uncategorized_name}</span>
             </div>

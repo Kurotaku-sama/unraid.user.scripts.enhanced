@@ -36,7 +36,7 @@ function apply_view_mode_to_container(scripts_container, view_mode) {
     scripts_container.classList.add(...compute_view_mode_classes(effective_view_mode));
 }
 
-// Toggles a category's collapsed state with an animated max-height transition, triggered by clicking anywhere on the category header
+// Toggles a category's expanded state with an animated max-height transition, triggered by clicking anywhere on the category header
 function toggle_category_visibility(event) {
     const category = event.target.closest(".category");
     const content_element = category.querySelector(":scope > .category-content");
@@ -46,29 +46,29 @@ function toggle_category_visibility(event) {
     content_element.dataset.animating = "true"; // Lock for animation
     setTimeout(() => delete content_element.dataset.animating, 500); // Unlock after 0.5s
 
-    if (category.classList.contains("collapsed")) {
-        // Open the category with animation if it's collapsed
-        category.classList.remove("collapsed");
+    if (!category.classList.contains("expanded")) {
+        // Open the category with animation if it's currently collapsed
+        category.classList.add("expanded");
         content_element.style.maxHeight = `${content_element.scrollHeight}px`; // Initial opening
         setTimeout(() => content_element.style.maxHeight = null, 500); // Reset max-height after animation
     } else {
-        // Collapse the category with animation if it's open
+        // Collapse the category with animation if it's currently expanded
         content_element.style.maxHeight = `${content_element.scrollHeight}px`;
         setTimeout(() => {
-            category.classList.add("collapsed");
+            category.classList.remove("expanded");
             content_element.style.maxHeight = "0"; // Collapse with animation
         }, 10);
     }
 }
 
-// Applies the collapsed state to a category element based on the category's current collapsed value
-function apply_collapsed_state(category) {
+// Applies the expanded state to a category element based on the category's current expanded value
+function apply_expanded_state(category) {
     const category_element = get_category_element(category.id);
     if (!category_element) return;
 
-    category.collapsed === "yes"
-        ? category_element.classList.add("collapsed")
-        : category_element.classList.remove("collapsed");
+    category.expanded === "yes"
+        ? category_element.classList.add("expanded")
+        : category_element.classList.remove("expanded");
 }
 
 // Applies the view mode classes together with the separator and highlighting modifiers to a category's own scripts container

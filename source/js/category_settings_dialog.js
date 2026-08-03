@@ -2,7 +2,7 @@
 // Category Settings Dialog
 // ========================
 
-// Opens the settings dialog for a category, containing renaming, collapsed state, view mode, subcategory position, script assignment via drag and drop, subcategory creation, advanced options and deletion
+// Opens the settings dialog for a category, containing renaming, expanded state, view mode, subcategory position, script assignment via drag and drop, subcategory creation, advanced options and deletion
 function open_category_settings(category) {
     const category_scripts = get_scripts_from_category(category);
     const uncategorized_scripts = get_uncategorized_userscripts();
@@ -25,14 +25,14 @@ function open_category_settings(category) {
                 <dd><input type="text" id="category-settings-name-input" class="swal-force-visible" maxlength="40" value="${safe_name}"></dd>
             </dl>`;
 
-    // Default collapsed state
-    const html_collapsed = `
+    // Default expanded state
+    const html_expanded = `
             <dl>
-                <dt>Collapsed by default:</dt>
+                <dt>Expanded by default:</dt>
                 <dd>
-                    <select id="category-settings-collapsed-select" class="narrow">
-                        <option value="no" ${category.collapsed === "no" ? "selected" : ""}>No</option>
-                        <option value="yes" ${category.collapsed === "yes" ? "selected" : ""}>Yes</option>
+                    <select id="category-settings-expanded-select" class="narrow">
+                        <option value="no" ${category.expanded === "no" ? "selected" : ""}>No</option>
+                        <option value="yes" ${category.expanded === "yes" ? "selected" : ""}>Yes</option>
                     </select>
                 </dd>
             </dl>`;
@@ -104,7 +104,7 @@ function open_category_settings(category) {
     const html = `
         <div class="category-settings">
             ${html_category_name}
-            ${html_collapsed}
+            ${html_expanded}
             ${html_view_mode}
             ${html_subcategory_position}
             ${html_scripts}
@@ -176,7 +176,7 @@ function open_category_settings(category) {
 // Applies all changes made in the category settings dialog, reverts them if saving fails
 async function save_category_settings(category) {
     const name_input = document.getElementById("category-settings-name-input");
-    const collapsed_select = document.getElementById("category-settings-collapsed-select");
+    const expanded_select = document.getElementById("category-settings-expanded-select");
     const viewmode_select = document.getElementById("category-settings-viewmode-select");
     const subposition_select = document.getElementById("category-settings-subposition-select");
     const class_input = document.getElementById("category-settings-class-input");
@@ -201,7 +201,7 @@ async function save_category_settings(category) {
     // Snapshot every field the dialog can change before touching the live category object, so it can be restored exactly as is if the server rejects the save
     const backup = {
         name: category.name,
-        collapsed: category.collapsed,
+        expanded: category.expanded,
         view_mode: category.view_mode,
         subcategory_position: category.subcategory_position,
         scripts: [...category.scripts],
@@ -209,7 +209,7 @@ async function save_category_settings(category) {
     };
 
     category.name = new_name;
-    category.collapsed = collapsed_select.value;
+    category.expanded = expanded_select.value;
     category.view_mode = viewmode_select.value;
     category.scripts = new_scripts;
     category.custom_class = new_custom_class;
@@ -235,7 +235,7 @@ async function save_category_settings(category) {
     if (new_custom_class)
         category_element.classList.add(...new_custom_class.split(" ").filter(Boolean));
 
-    apply_collapsed_state(category);
+    apply_expanded_state(category);
     apply_view_mode(category);
     apply_subcategory_position(category);
     organize_userscripts_category(category);

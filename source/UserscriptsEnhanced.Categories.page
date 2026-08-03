@@ -107,11 +107,11 @@ const plugin_name = "User Scripts Enhanced";
         <p>When enabled, separators are displayed between scripts in List View mode for better visual separation.</p>
     </blockquote>
 
-    <!-- Collapse Categories by default -->
-    <? render_select_field("Collapse new categories by default", "default_collapsed", $cfg_use['default_collapsed']); ?>
+    <!-- Expand new categories by default -->
+    <? render_select_field("Expand new categories by default", "default_expanded", $cfg_use['default_expanded']); ?>
 
-    <!-- Collapse uncategorized scripts -->
-    <? render_select_field("Collapse uncategorized scripts", "uncategorized_collapsed", $cfg_use['uncategorized_collapsed']); ?>
+    <!-- Expand uncategorized scripts -->
+    <? render_select_field("Expand uncategorized scripts", "uncategorized_expanded", $cfg_use['uncategorized_expanded']); ?>
 
     <!-- Capitalized category names -->
     <? render_select_field("Capitalized category names", "capitalized", $cfg_use['capitalized']); ?>

@@ -5,7 +5,7 @@
 // Renders a category element, recursively rendering its subcategories afterward, parent_id is null for top level categories
 function create_category(category, parent_id = null) {
     const safe_name = escape_html(category.name);
-    const style_attr = category.collapsed === "yes" ? 'style="max-height: 0px;"' : "";
+    const style_attr = category.expanded !== "yes" ? 'style="max-height: 0px;"' : "";
     const custom_class = category.custom_class || "";
     const effective_view_mode = resolve_effective_view_mode(category.view_mode);
     const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
@@ -19,7 +19,7 @@ function create_category(category, parent_id = null) {
         : `${html_subcategories}${html_scripts}`;
 
     const html = `
-        <div class="category ${category.collapsed === "yes" ? "collapsed" : ""} ${custom_class}" data-category="${category.id}" data-order="${category.order}">
+        <div class="category ${category.expanded === "yes" ? "expanded" : ""} ${custom_class}" data-category="${category.id}" data-order="${category.order}">
             <div class="category-header">
                 <span class="category-header-text">${cfg_use['capitalized'] === "yes" ? safe_name.toUpperCase() : safe_name}</span>
                 <i class="fa fa-cog category-settings-cog" data-category="${category.id}"></i>
@@ -117,7 +117,7 @@ function add_category(parent_id = null) {
             name: category_name,
             order: sibling_list.length + 1,
             view_mode: cfg_use['default_view_mode'],
-            collapsed: cfg_use['default_collapsed'],
+            expanded: cfg_use['default_expanded'],
             custom_class: "",
             subcategory_position: "default",
             scripts: [],
