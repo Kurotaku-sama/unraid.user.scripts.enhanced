@@ -159,6 +159,11 @@
     white-space: nowrap;
 }
 
+/* Remove padding when category shows only subcategory and no scripts while searching */
+.category-scripts:not(:has(> tr:not([style*="display: none"]))) {
+    padding: 0;
+}
+
 /* ========================
    View Modes: Optionals
    ======================== */
