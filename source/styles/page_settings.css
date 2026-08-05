@@ -87,7 +87,7 @@
     display: block !important;
 }
 
-.swal-responsive-fix > p {
+.swal-responsive-fix p {
     white-space: normal !important;
     overflow-wrap: normal !important;
 }
