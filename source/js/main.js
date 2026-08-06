@@ -17,8 +17,14 @@ let uncategorized_category = null; // Global variable to cache the uncategorized
 (async function() {
     hide_elements();
 
-    original_categories = await categories_load();
+    // original_categories must be assigned before any save can run, perform_save's internal conflict check compares against this snapshot, saving an order correction before it is assigned would compare against a stale empty array and raise a false "Conflict Detected" warning
+    const { list, changed } = await load_and_normalize_categories();
+    original_categories = list;
     categories = $.extend(true, [], original_categories); // Deep copy using jQuery
+
+    // Only persist the order correction now that original_categories reflects the actual loaded data
+    if (changed)
+        await perform_save(categories);
 
     await Promise.all([
         wait_for_element(".content > table"),

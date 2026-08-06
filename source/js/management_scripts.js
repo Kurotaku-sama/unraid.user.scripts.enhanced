@@ -22,15 +22,21 @@ function get_scripts_from_container(script_container) {
     return scripts;
 }
 
-function get_uncategorized_userscripts() {
+// Resolves a category's own scripts container by its DOM element, scoped to :scope > .category-content > .category-scripts so nested subcategories with their own .category-scripts are never matched, returns null if the category element itself is not found
+function get_category_scripts_container(category) {
+    const category_element = get_category_element(category.id);
+    return category_element ? category_element.querySelector(":scope > .category-content > .category-scripts") : null;
+}
+
+// Collects every script currently rendered inside the uncategorized section
+function get_userscripts_uncategorized() {
     const uncategorized_scripts_container = content.querySelector(".category[data-category='uncategorized'] .category-scripts");
     return get_scripts_from_container(uncategorized_scripts_container);
 }
 
-function get_scripts_from_category(category) {
-    const category_element = get_category_element(category.id);
-    // Scoped to the category's own scripts container, since a category can contain nested subcategories with their own .category-scripts
-    const script_container = category_element ? category_element.querySelector(":scope > .category-content > .category-scripts") : null;
+// Collects every script currently rendered inside the given category's own scripts container
+function get_userscripts_category(category) {
+    const script_container = get_category_scripts_container(category);
     return get_scripts_from_container(script_container);
 }
 
@@ -83,11 +89,9 @@ function destroy_script_sortables() {
 }
 
 // Moves scripts in the DOM to reflect the category's saved script order, also moves scripts back to uncategorized when removed from a category
-// Runs after every save that could have changed a category's script assignment, since the settings dialog only edits the in memory category.scripts array, the actual <tr> rows still need to be physically relocated in the DOM to match
+// Runs after every save that could have changed a category's script asszignment, since the settings dialog only edits the in memory category.scripts array, the actual <tr> rows still need to be physically relocated in the DOM to match
 function organize_userscripts_category(category) {
-    const category_element = get_category_element(category.id);
-    // Scoped to the category's own scripts container, since a category can contain nested subcategories with their own .category-scripts
-    const script_container = category_element ? category_element.querySelector(":scope > .category-content > .category-scripts") : null;
+    const script_container = get_category_scripts_container(category);
     if (!script_container) return;
 
     const uncategorized_scripts_container = content.querySelector(".category[data-category='uncategorized'] .category-scripts");

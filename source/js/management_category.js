@@ -6,6 +6,7 @@
 function create_category(category, parent_id = null) {
     const safe_name = escape_html(category.name);
     const style_attr = category.expanded !== "yes" ? 'style="max-height: 0px;"' : "";
+    // Re-sanitizes the custom class on every render instead of trusting the stored value, categories.json can be manually edited or affected by a corrupted schema, sanitize_category_classes strips anything that is not a valid CSS class character
     const custom_class = sanitize_category_classes(category.custom_class || "");
     const effective_view_mode = resolve_effective_view_mode(category.view_mode);
     const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
@@ -137,31 +138,45 @@ function add_category(parent_id = null) {
 }
 
 // Deletes a category, cascading into every nested subcategory, all affected scripts are moved back to the top level uncategorized section
-function delete_category(category) {
+// The in memory tree is mutated and persisted first, DOM changes only happen once the save is confirmed, on failure every in memory change is rolled back so the tree and the DOM never diverge from the server
+// Returns true on success and false on failure instead of closing the confirmation dialog itself, the caller decides when it is safe to close it, mirroring save_category_settings
+async function delete_category(category) {
     // Collects every nested subcategory at any depth below this one, since they all get deleted along with their parent and none of their scripts should be silently lost
     const subcategories = flatten_subcategories(category);
 
-    // Clear the scripts of the category itself, this moves its scripts back to uncategorized
-    category.scripts = [];
-    organize_userscripts_category(category);
-
-    // Do the same for every nested subcategory at any depth, so no script silently disappears when its parent category gets deleted
-    subcategories.forEach(subcategory => {
-        subcategory.scripts = [];
-        organize_userscripts_category(subcategory);
-    });
-
     // Find the array that directly contains this category, either the top level list or a parent's subcategories array
     const siblings = get_category_siblings(category.id);
-    if (!siblings) return;
+    if (!siblings) return false;
 
     // Locate the category's own position inside that array
     const index = siblings.findIndex(cat => cat.id === category.id);
-    if (index === -1) return;
+    if (index === -1) return false;
+
+    // Snapshot every field this operation touches before mutating it, so it can be fully restored if the server rejects the save
+    const scripts_backup = category.scripts;
+    const subcategory_scripts_backup = subcategories.map(subcategory => subcategory.scripts);
+
+    // Clear the scripts of the category itself and every nested subcategory in memory first, the actual DOM row relocation only happens after the save is confirmed
+    category.scripts = [];
+    subcategories.forEach(subcategory => (subcategory.scripts = []));
 
     // Remove the category from the tree and renumber the remaining siblings so order stays sequential
     siblings.splice(index, 1);
     siblings.forEach((cat, i) => (cat.order = i + 1));
+
+    const success = await perform_save();
+    if (!success) {
+        // Roll back every in memory change since the server rejected the save, restores scripts, tree position and order
+        category.scripts = scripts_backup;
+        subcategories.forEach((subcategory, i) => (subcategory.scripts = subcategory_scripts_backup[i]));
+        siblings.splice(index, 0, category);
+        siblings.forEach((cat, i) => (cat.order = i + 1));
+        return false;
+    }
+
+    // Only touch the DOM after the deletion was actually persisted, moves the now unassigned scripts back to uncategorized
+    organize_userscripts_category(category);
+    subcategories.forEach(subcategory => organize_userscripts_category(subcategory));
 
     // Removes the category element and every nested subcategory element along with it, since subcategory DOM elements live inside the parent's own container
     get_category_element(category.id)?.remove();
@@ -171,8 +186,7 @@ function delete_category(category) {
     subcategories.forEach(subcategory => category_element_cache.delete(subcategory.id));
 
     update_uncategorized_visibility();
-    perform_save();
-    swal.close();
+    return true;
 }
 
 function update_uncategorized_visibility() {

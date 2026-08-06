@@ -30,21 +30,10 @@ function validate_category_name(input, sibling_list, original_name = null) {
     return category_name;
 }
 
-// Normalizes the order field at every level of the category tree, reordering and persisting only if any level was not sequential
-function validate_categories_order(data) {
-    const { list, changed } = normalize_category_level(data);
-
-    if (changed) {
-        console.log("🔄 Reordering categories to maintain correct order...");
-        perform_save(list);
-    }
-
-    return list;
-}
-
 // Recursively normalizes the "order" field of a single level of the category tree so it always forms a gapless sequence starting at 1
 // A level is only rewritten when needed: the current order values are checked for being already sequential first, avoiding an unnecessary sort and save on every page load
 // Sorting is done by the existing order value so the relative order the user last saved is preserved, only the numeric values themselves get corrected
+// Does not persist the correction itself, the caller decides when it is safe to save (e.g. only after original_categories has been assigned during startup)
 function normalize_category_level(list) {
     // Assume the level is already sequential until a mismatch is found
     let is_sequential = true;

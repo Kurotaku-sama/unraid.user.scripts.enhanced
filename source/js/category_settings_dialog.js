@@ -4,8 +4,8 @@
 
 // Opens the settings dialog for a category, containing renaming, expanded state, view mode, subcategory position, script assignment via drag and drop, subcategory creation, advanced options and deletion
 function open_category_settings(category) {
-    const category_scripts = get_scripts_from_category(category);
-    const uncategorized_scripts = get_uncategorized_userscripts();
+    const category_scripts = get_userscripts_category(category);
+    const uncategorized_scripts = get_userscripts_uncategorized();
 
     const html_category_scripts = category_scripts.map(script => build_script_item_html(script.id, script.name)).join("");
     const html_uncategorized_scripts = uncategorized_scripts.map(script => build_script_item_html(script.id, script.name)).join("");
@@ -245,6 +245,7 @@ async function save_category_settings(category) {
 }
 
 // Opens a confirmation dialog before deleting a category, reopens the settings dialog if the deletion is canceled
+// closeOnConfirm is disabled and swal.close() is only called once delete_category actually resolves, mirroring save_category_settings above, this keeps the dialog open for the whole async duration of the delete instead of letting it auto-close immediately on click, which previously caused a conflict dialog raised by perform_save inside delete_category to get caught mid-close and dismissed instantly
 function request_delete_category(category) {
     swal({
         title: "Are you sure?",
@@ -254,10 +255,14 @@ function request_delete_category(category) {
         showCancelButton: true,
         confirmButtonText: "Yes",
         cancelButtonText: "No",
-        dangerMode: true
-    }, function (confirm) {
+        dangerMode: true,
+        closeOnConfirm: false
+    }, async function (confirm) {
         if (!confirm)
             return open_category_settings(category);
-        delete_category(category);
+
+        const success = await delete_category(category);
+        if (success)
+            swal.close();
     });
 }
