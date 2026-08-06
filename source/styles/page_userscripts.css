@@ -159,8 +159,8 @@
     white-space: nowrap;
 }
 
-/* Remove padding when category shows only subcategory and no scripts while searching */
-.category-scripts:not(:has(> tr:not([style*="display: none"]))) {
+/* Removes the default padding on a category's own scripts container when it has no visible script rows and the category already shows content via its subcategories, prevents an unnecessary empty gap next to a subcategory listing; a category with genuinely zero scripts and zero subcategories keeps its padding so it still shows a visible empty area when expanded */
+.category-content:has(> .category-subcategories:not(:empty)) > .category-scripts:not(:has(> tr:not([style*="display: none"]))) {
     padding: 0;
 }
 
