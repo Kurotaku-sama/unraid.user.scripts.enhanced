@@ -50,6 +50,11 @@
 	width: 100%;
 }
 
+#ddcl-disabled_limits {
+    max-width: 300px;
+	width: 100%;
+}
+
 /* ========================
    Uncategorized Name Textarea
    ======================== */

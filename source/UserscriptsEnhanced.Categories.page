@@ -145,6 +145,29 @@ const plugin_name = "User Scripts Enhanced";
         Avoid using !important and instead use #categories-container as a prefix for each CSS rule.</p>
     </blockquote>
 
+    <!-- Remove Limits -->
+    <? $disabled_limits_arr = explode(",", $cfg_use['disabled_limits']); ?>
+    <dl>
+        <dt>Remove Limits:</dt>
+        <dd>
+            <select id="disabled_limits" name="disabled_limits[]" multiple>
+                <option value="category_name_length" <?=in_array("category_name_length", $disabled_limits_arr) ? "selected" : ""?>>Category Name Character Limit</option>
+                <option value="custom_class_length" <?=in_array("custom_class_length", $disabled_limits_arr) ? "selected" : ""?>>Custom Class Character Limit</option>
+                <option value="render_html_in_category_names" <?=in_array("render_html_in_category_names", $disabled_limits_arr) ? "selected" : ""?>>Render HTML in Category Names</option>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+        <p><strong>Not recommended unless you know exactly what you are doing.</strong></p>
+        <ul>
+            <li><strong>Category Name Character Limit:</strong> Removes the 40 character limit from category and uncategorized names.</li>
+            <li><strong>Custom Class Character Limit:</strong> Removes the 40 character limit from a category's custom CSS classes.</li>
+            <li><strong>Render HTML in Category Names:</strong> Renders category and uncategorized names as raw HTML instead of plain text.</li>
+        </ul>
+        <p><strong>Warning:</strong> Rendering raw HTML can break the page layout or introduce self-XSS if you paste untrusted markup into a name. Turning this option off again re-enables escaping and fixes the layout, the name will then just show up as plain text with the tags visible instead of being rendered. Use at your own risk.</p>
+    </blockquote>
+
     <div class="title"><span class="left"><i class="fa fa-eye-slash title"></i>Hide default Elements</span></div>
 
     <!-- Hide Description Option -->

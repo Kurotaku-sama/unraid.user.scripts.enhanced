@@ -9,7 +9,8 @@ function validate_category_name(input, sibling_list, original_name = null) {
         swal.showInputError("❌ The category name cannot be empty!");
         return false;
     }
-    if (category_name.length > 40) {
+    // The character limit can be disabled via the plugin settings, only enforced here when the user did not opt out of it
+    if (!cfg_use['disabled_limits'].includes("category_name_length") && category_name.length > 40) {
         swal.showInputError("❌ The category name cannot be longer than 40 characters!");
         return false;
     }
@@ -74,6 +75,8 @@ function sanitize_category_classes(input) {
     const cleaned = input.replace(/[^a-zA-Z0-9_\- ]/g, "");
     // Splits the cleaned string into individual class names and strips any leading digits from each one, since a CSS class name is not allowed to start with a number
     const classes = cleaned.split(" ").map(class_name => class_name.replace(/^[0-9]+/, ""));
-    // Rejoins the sanitized class names back into a single string and enforces the overall 30 character limit
-    return classes.join(" ").substring(0, 30);
+    const joined_classes = classes.join(" ");
+
+    // The overall character limit can be disabled via the plugin settings, otherwise it is capped at 40 characters
+    return cfg_use['disabled_limits'].includes("custom_class_length") ? joined_classes : joined_classes.substring(0, 40);
 }

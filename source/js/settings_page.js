@@ -9,6 +9,12 @@ $(function() {
         width: "auto",
     });
 
+    // Turn Remove Limits to multi select
+    $("#disabled_limits").dropdownchecklist({
+        emptyText: "None",
+        width: "auto",
+    });
+
     // CodeMirror
     const custom_css = CodeMirror.fromTextArea(document.getElementById("custom_css"), {
         lineNumbers: true,

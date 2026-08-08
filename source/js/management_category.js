@@ -4,7 +4,8 @@
 
 // Renders a category element, recursively rendering its subcategories afterward, parent_id is null for top level categories
 function create_category(category, parent_id = null) {
-    const safe_name = escape_html(category.name);
+    // HTML in names can be explicitly allowed via the plugin settings, the name is otherwise escaped before being rendered into the header
+    const safe_name = cfg_use['disabled_limits'].includes("render_html_in_category_names") ? category.name : escape_html(category.name);
     const style_attr = category.expanded !== "yes" ? 'style="max-height: 0px;"' : "";
     // Re-sanitizes the custom class on every render instead of trusting the stored value, categories.json can be manually edited or affected by a corrupted schema, sanitize_category_classes strips anything that is not a valid CSS class character
     const custom_class = sanitize_category_classes(category.custom_class || "");
@@ -92,6 +93,9 @@ function add_category(parent_id = null) {
     } else
         sibling_list = categories;
 
+    // The character limit on the input field can be disabled via the plugin settings, omitting the attribute entirely removes the restriction
+    const input_attributes = cfg_use['disabled_limits'].includes("category_name_length") ? {} : { maxlength: "40" };
+
     swal({
         title: "Add New Category",
         text: "Enter a name for the new category:",
@@ -100,9 +104,7 @@ function add_category(parent_id = null) {
         inputPlaceHolder: "Category Name",
         showCancelButton: true,
         closeOnConfirm: false,
-        inputAttributes: {
-            maxlength: "40"
-        }
+        inputAttributes: input_attributes
     }, async function (input) {
         if (input === false || input === null) {
             swal.close();

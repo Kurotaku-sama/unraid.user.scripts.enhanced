@@ -79,7 +79,9 @@ function container_overhaul(table) {
     const effective_view_mode = resolve_effective_view_mode(cfg_use['default_view_mode']);
     const view_mode_classes = compute_view_mode_classes(effective_view_mode).join(" ");
 
-    const uncategorized_name = escape_html(cfg_use['capitalized'] === "yes" ? cfg_use['uncategorized_name'].toUpperCase() : cfg_use['uncategorized_name'])
+    const uncategorized_display_name = cfg_use['capitalized'] === "yes" ? cfg_use['uncategorized_name'].toUpperCase() : cfg_use['uncategorized_name'];
+    // HTML in names can be explicitly allowed via the plugin settings, the name is otherwise escaped before being rendered into the header
+    const uncategorized_name = cfg_use['disabled_limits'].includes("render_html_in_category_names") ? uncategorized_display_name : escape_html(uncategorized_display_name);
     const html_uncategorized_userscripts_header = `
         <div class="category ${cfg_use['uncategorized_expanded'] !== "yes" ? "uncategorized_empty" : "expanded"}" data-category="uncategorized">
             <div class="category-header">

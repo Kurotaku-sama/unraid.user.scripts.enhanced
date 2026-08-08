@@ -14,6 +14,10 @@ function open_category_settings(category) {
     const safe_name = escape_html(category.name);
     const safe_custom_class = escape_html(category.custom_class || "");
 
+    // Both character limits can be disabled via the plugin settings, an empty attribute string simply omits the maxlength restriction from the input field entirely
+    const name_maxlength_attr = cfg_use['disabled_limits'].includes("category_name_length") ? "" : 'maxlength="40"';
+    const class_maxlength_attr = cfg_use['disabled_limits'].includes("custom_class_length") ? "" : 'maxlength="40"';
+
     // Subcategory creation and the position selector are only offered if this category has not already reached the configured maximum nesting depth
     const current_depth = get_category_depth(category.id);
     const can_have_subcategories = current_depth < max_category_depth;
@@ -22,7 +26,7 @@ function open_category_settings(category) {
     const html_category_name = `
             <dl>
                 <dt>Category Name:</dt>
-                <dd><input type="text" id="category-settings-name-input" class="swal-force-visible" maxlength="40" value="${safe_name}"></dd>
+                <dd><input type="text" id="category-settings-name-input" class="swal-force-visible" ${name_maxlength_attr} value="${safe_name}"></dd>
             </dl>`;
 
     // Default expanded state
@@ -85,7 +89,7 @@ function open_category_settings(category) {
     const html_custom_classes = `
                     <dl>
                         <dt>Custom Classes:</dt>
-                        <dd><input type="text" id="category-settings-class-input" class="swal-force-visible" maxlength="30" value="${safe_custom_class}"></dd>
+                        <dd><input type="text" id="category-settings-class-input" class="swal-force-visible" ${class_maxlength_attr} value="${safe_custom_class}"></dd>
                     </dl>`;
 
     // Advanced options section
@@ -225,8 +229,15 @@ async function save_category_settings(category) {
     // The category id never changes on rename, so only the displayed text needs updating, not any data-category attribute
     if (name_changed) {
         const header_text = category_element.querySelector(":scope > .category-header > .category-header-text");
-        if (header_text)
-            header_text.textContent = cfg_use['capitalized'] === "yes" ? new_name.toUpperCase() : new_name;
+        const display_name = cfg_use['capitalized'] === "yes" ? new_name.toUpperCase() : new_name;
+
+        // HTML in names can be explicitly allowed via the plugin settings, textContent is used by default since it can never inject markup, innerHTML is only used once the user knowingly opted into raw HTML rendering
+        if (header_text) {
+            if (cfg_use['disabled_limits'].includes("render_html_in_category_names"))
+                header_text.innerHTML = display_name;
+            else
+                header_text.textContent = display_name;
+        }
     }
 
     // Split on whitespace and filter out empty strings, otherwise a class string with multiple consecutive spaces would produce empty entries and classList.add/remove would throw a DOMException

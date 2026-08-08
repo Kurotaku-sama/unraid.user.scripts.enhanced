@@ -11,8 +11,9 @@ function cfg_base64_decode($value) {
 if ($cfg_use['enabled'] == "no")
     return;
 
-// Build processed config array, overriding the 3 special cases before JS output
+// Build processed config array, overriding the special cases before JS output
 $cfg_use['view_mode_highlighting'] = explode(",", $cfg_use['view_mode_highlighting']);
+$cfg_use['disabled_limits'] = explode(",", $cfg_use['disabled_limits']);
 $cfg_use['uncategorized_name'] = cfg_base64_decode($cfg_use['uncategorized_name']);
 $cfg_use['custom_css'] = cfg_base64_decode($cfg_use['custom_css']);
 ?>
