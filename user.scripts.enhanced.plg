@@ -16,7 +16,7 @@
         support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
-###2026.08.08
+###2026.08.08 - New Setting: Remove Limits and adjustments
 - Added a "Remove Limits" setting: category name length, custom class length, and HTML rendering in category/uncategorized names can now be individually disabled for advanced users
 - Custom Class character limit raised from 30 to 40
 - Fixed wrong alignment of the Cron fields underlines
