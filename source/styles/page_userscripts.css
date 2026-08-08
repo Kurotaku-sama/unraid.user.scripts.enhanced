@@ -267,10 +267,6 @@
     min-width: 0;
 }
 
-.category-scripts.vm-panel tr td input {
-    margin: 10px 0 0;
-}
-
 .category-scripts.vm-panel tr td:first-child {
     width: 100%;
     display: flex;
