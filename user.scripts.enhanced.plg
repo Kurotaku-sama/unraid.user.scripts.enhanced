@@ -2,8 +2,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "user.scripts.enhanced">
 <!ENTITY author    "Kurotaku">
-<!ENTITY version   "2026.08.07">
-<!ENTITY md5       "437783be6fcaa06033b4cfba80c3a55c">
+<!ENTITY version   "2026.08.08">
+<!ENTITY md5       "8e67d9d68d4c88902e27c5b21c6837ac">
 <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
 <!ENTITY github    "Kurotaku-sama/unraid.user.scripts.enhanced">
 <!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/main/&name;.plg">
@@ -16,6 +16,11 @@
         support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
+###2026.08.08
+- Added a "Remove Limits" setting: category name length, custom class length, and HTML rendering in category/uncategorized names can now be individually disabled for advanced users
+- Custom Class character limit raised from 30 to 40
+- Fixed wrong alignment of the Cron fields underlines
+
 ###2026.08.07 - Subcategories and UI Overhaul
 - Added ability to create subcategories
 - Category identifiers are no longer based on the name but on a unique id, existing categories.json files are automatically migrated on plugin update
