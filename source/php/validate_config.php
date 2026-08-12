@@ -77,4 +77,3 @@ if (file_put_contents($config_file, implode("\n", $rebuilt_lines) . "\n") === fa
 
 echo "User Scripts Enhanced: Config repair completed successfully.\n";
 exit(0);
-?>

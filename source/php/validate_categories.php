@@ -189,4 +189,3 @@ if (file_put_contents($categories_file, json_encode($normalized_data, JSON_PRETT
 
 echo "User Scripts Enhanced: Schema repair completed successfully.\n";
 exit(0);
-?>

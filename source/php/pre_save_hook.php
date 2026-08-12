@@ -28,4 +28,3 @@ if (isset($_POST["max_category_depth"])) {
     $is_valid_depth = is_numeric($raw_depth) && intval($raw_depth) == $raw_depth && $raw_depth >= 1 && $raw_depth <= 10;
     $_POST["max_category_depth"] = $is_valid_depth ? intval($raw_depth) : 3;
 }
-?>

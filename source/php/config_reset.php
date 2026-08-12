@@ -25,4 +25,3 @@ if (file_exists($target_path)) {
     die(json_encode(["success" => "File successfully deleted."]));
 } else
     die(json_encode(["warning" => "File does not exist, nothing to delete."]));
-?>

@@ -21,4 +21,3 @@ if ($categories_data === null || !is_array($categories_data))
 // Save new configuration
 file_put_contents($categories_file, json_encode($categories_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 die(json_encode(["success" => "Configuration saved successfully!"]));
-?>

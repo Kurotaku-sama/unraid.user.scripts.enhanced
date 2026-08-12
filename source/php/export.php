@@ -218,4 +218,3 @@ switch ($type) {
         send_file($categories_file, "application/json");
         break;
 }
-?>

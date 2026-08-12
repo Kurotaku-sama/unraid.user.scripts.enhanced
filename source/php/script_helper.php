@@ -13,4 +13,3 @@ function iterate_script_folders($dir_scripts, $callback) {
         $callback($script_folder, $script_path);
     }
 }
-?>

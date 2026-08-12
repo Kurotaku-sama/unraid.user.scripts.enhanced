@@ -19,4 +19,3 @@ if (!is_dir($tmp_directory))
 exec("rm -rf " . escapeshellarg($tmp_directory), $output, $return_var);
 
 die(json_encode(["success" => !file_exists($tmp_directory) ? "Directory deleted successfully." : "Failed to delete directory."]));
-?>

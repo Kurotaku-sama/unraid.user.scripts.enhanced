@@ -30,4 +30,3 @@ if (!is_dir("/usr/local/emhttp/plugins/user.scripts")) {
             The original \"User Scripts\" plugin <u>must be installed</u> for this to work!
           </div>";
 }
-?>

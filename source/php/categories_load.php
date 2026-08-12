@@ -49,4 +49,3 @@ if (!file_exists($categories_file)) {
 
 // Output JSON
 die(json_encode(["data" => $categories_data]));
-?>
