@@ -12,12 +12,14 @@
         author="&author;"
         version="&version;"
         pluginURL="&pluginURL;"
+        icon="images/icon.png"
         min="6.9.0"
         support="https://forums.unraid.net/topic/191294-plugin-user-scripts-enhanced/">
 
 <CHANGES>
 ###2026.08.29 - Fixed duplicate section titles
 - Fixed section titles (Categories, Export, Info, Miscellaneous) showing twice when using Unraid's "Non-tabbed" page view
+- Fixed missing icon in plugin list
 
 ###2026.08.09 - New Setting: Remove Limits and adjustments
 - Added a "Remove Limits" setting: category name length, custom class length, and HTML rendering in category/uncategorized names can now be individually disabled for advanced users
