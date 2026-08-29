@@ -4,7 +4,9 @@ Tag="file-archive-o"
 ---
 
 <!-- Export Section -->
+ <? if ($display['tabs'] == "0"): ?>
 <div class="title"><span class="left"><i class="fa fa-file-archive-o title"></i>Export</span></div>
+<? endif; ?>
 
 <div>
     Click the buttons below to download a ZIP file containing your scripts or the configuration itself.<br>

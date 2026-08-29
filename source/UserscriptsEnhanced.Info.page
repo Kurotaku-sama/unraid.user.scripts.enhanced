@@ -4,7 +4,9 @@ Tag="info-circle"
 ---
 
 <!-- Info Section -->
+ <? if ($display['tabs'] == "0"): ?>
 <div class="title"><span class="left"><i class="fa fa-info-circle title"></i>Info</span></div>
+<? endif; ?>
 
 <div class="panel-info-text">
     A special thanks goes to Andrew Zawadzki (Squid) for the original User Scripts plugin, and even more so for implementing native injection support in his plugin, making this enhancement possible in the first place.

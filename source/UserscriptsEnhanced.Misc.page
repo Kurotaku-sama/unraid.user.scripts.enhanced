@@ -4,7 +4,9 @@ Tag="cogs"
 ---
 
 <!-- Miscellaneous Section -->
+ <? if ($display['tabs'] == "0"): ?>
 <div class="title"><span class="left"><i class="fa fa-cogs title"></i>Miscellaneous</span></div>
+<? endif; ?>
 
 <p>
     Use the buttons below to perform various maintenance tasks. Click on the text next to the buttons for more information about its function.<br>

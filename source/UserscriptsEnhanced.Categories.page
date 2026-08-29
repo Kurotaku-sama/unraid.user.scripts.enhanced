@@ -28,7 +28,9 @@ const plugin_name = "User Scripts Enhanced";
 <link type="text/css" rel="stylesheet" href="<?=autov("/plugins/$plugin/vendor/codemirror/css/dracula.min.css")?>">
 
 <!-- Categories Section -->
+ <? if ($display['tabs'] == "0"): ?>
 <div class="title"><span class="left"><i class="fa fa-folder-o title"></i>Categories</span></div>
+<? endif; ?>
 
 <form method="POST" action="/update.php" target="progressFrame">
     <input type="hidden" name="#file" value="<?=$plugin?>/<?=$plugin?>.cfg">
