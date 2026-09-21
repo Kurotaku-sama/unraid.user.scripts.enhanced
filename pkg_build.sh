@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Get script dir and basic variables
+plugin="user.scripts.enhanced"
+
 DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 tmpdir="/tmp/tmp.$(( RANDOM * 19318203981230 + 40 ))"
-plugin="user.scripts.enhanced"
 version=$(date +"%Y.%m.%d")
 archive="$DIR/archive"
 target="$tmpdir/usr/local/emhttp/plugins/$plugin"
